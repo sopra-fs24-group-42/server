@@ -1,9 +1,9 @@
 package ch.uzh.ifi.hase.soprafs24.controller;
 
 import ch.uzh.ifi.hase.soprafs24.constant.UserStatus;
-import ch.uzh.ifi.hase.soprafs24.entity.User;
-import ch.uzh.ifi.hase.soprafs24.rest.dto.UserPostDTO;
-import ch.uzh.ifi.hase.soprafs24.service.UserService;
+import ch.uzh.ifi.hase.soprafs24.entity.Player;
+import ch.uzh.ifi.hase.soprafs24.rest.dto.PlayerPostDTO;
+import ch.uzh.ifi.hase.soprafs24.service.PlayerService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -34,24 +34,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * request without actually sending them over the network.
  * This tests if the UserController works.
  */
-@WebMvcTest(UserController.class)
+@WebMvcTest(SetupController.class)
 public class UserControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
 
   @MockBean
-  private UserService userService;
+  private PlayerService userService;
 
   @Test
   public void givenUsers_whenGetUsers_thenReturnJsonArray() throws Exception {
     // given
-    User user = new User();
+    Player user = new Player();
     user.setName("Firstname Lastname");
     user.setUsername("firstname@lastname");
     user.setStatus(UserStatus.OFFLINE);
 
-    List<User> allUsers = Collections.singletonList(user);
+    List<Player> allUsers = Collections.singletonList(user);
 
     // this mocks the UserService -> we define above what the userService should
     // return when getUsers() is called
@@ -71,14 +71,14 @@ public class UserControllerTest {
   @Test
   public void createUser_validInput_userCreated() throws Exception {
     // given
-    User user = new User();
+    Player user = new Player();
     user.setId(1L);
     user.setName("Test User");
     user.setUsername("testUsername");
     user.setToken("1");
     user.setStatus(UserStatus.ONLINE);
 
-    UserPostDTO userPostDTO = new UserPostDTO();
+    PlayerPostDTO userPostDTO = new PlayerPostDTO();
     userPostDTO.setName("Test User");
     userPostDTO.setUsername("testUsername");
 

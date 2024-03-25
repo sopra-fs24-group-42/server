@@ -1,7 +1,7 @@
 package ch.uzh.ifi.hase.soprafs24.service;
 
 import ch.uzh.ifi.hase.soprafs24.constant.UserStatus;
-import ch.uzh.ifi.hase.soprafs24.entity.User;
+import ch.uzh.ifi.hase.soprafs24.entity.Player;
 import ch.uzh.ifi.hase.soprafs24.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Test class for the UserResource REST resource.
  *
- * @see UserService
+ * @see PlayerService
  */
 @WebAppConfiguration
 @SpringBootTest
@@ -27,7 +27,7 @@ public class UserServiceIntegrationTest {
   private UserRepository userRepository;
 
   @Autowired
-  private UserService userService;
+  private PlayerService userService;
 
   @BeforeEach
   public void setup() {
@@ -39,12 +39,12 @@ public class UserServiceIntegrationTest {
     // given
     assertNull(userRepository.findByUsername("testUsername"));
 
-    User testUser = new User();
+    Player testUser = new Player();
     testUser.setName("testName");
     testUser.setUsername("testUsername");
 
     // when
-    User createdUser = userService.createUser(testUser);
+    Player createdUser = userService.createUser(testUser);
 
     // then
     assertEquals(testUser.getId(), createdUser.getId());
@@ -58,13 +58,13 @@ public class UserServiceIntegrationTest {
   public void createUser_duplicateUsername_throwsException() {
     assertNull(userRepository.findByUsername("testUsername"));
 
-    User testUser = new User();
+    Player testUser = new Player();
     testUser.setName("testName");
     testUser.setUsername("testUsername");
-    User createdUser = userService.createUser(testUser);
+    Player createdUser = userService.createUser(testUser);
 
     // attempt to create second user with same username
-    User testUser2 = new User();
+    Player testUser2 = new Player();
 
     // change the name but forget about the username
     testUser2.setName("testName2");

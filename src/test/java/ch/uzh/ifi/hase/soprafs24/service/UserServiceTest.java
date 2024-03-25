@@ -1,7 +1,7 @@
 package ch.uzh.ifi.hase.soprafs24.service;
 
 import ch.uzh.ifi.hase.soprafs24.constant.UserStatus;
-import ch.uzh.ifi.hase.soprafs24.entity.User;
+import ch.uzh.ifi.hase.soprafs24.entity.Player;
 import ch.uzh.ifi.hase.soprafs24.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,16 +19,16 @@ public class UserServiceTest {
   private UserRepository userRepository;
 
   @InjectMocks
-  private UserService userService;
+  private PlayerService userService;
 
-  private User testUser;
+  private Player testUser;
 
   @BeforeEach
   public void setup() {
     MockitoAnnotations.openMocks(this);
 
     // given
-    testUser = new User();
+    testUser = new Player();
     testUser.setId(1L);
     testUser.setName("testName");
     testUser.setUsername("testUsername");
@@ -42,7 +42,7 @@ public class UserServiceTest {
   public void createUser_validInputs_success() {
     // when -> any object is being save in the userRepository -> return the dummy
     // testUser
-    User createdUser = userService.createUser(testUser);
+    Player createdUser = userService.createUser(testUser);
 
     // then
     Mockito.verify(userRepository, Mockito.times(1)).save(Mockito.any());
