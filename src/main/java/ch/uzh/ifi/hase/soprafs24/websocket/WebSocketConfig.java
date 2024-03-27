@@ -18,10 +18,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(final StompEndpointRegistry registry) {
-       registry.addEndpoint("/game");
+       registry.addEndpoint("/game")
                 //.setAllowedOriginPatterns("*")
-                //.withSockJS()
-               //.setHeartbeatTime(10000);;
+                .withSockJS()
+                .setHeartbeatTime(10000);
     }
 
 }
