@@ -8,26 +8,26 @@ $(document).ready(function() {
     $("#send").click(function() {
         sendMessage();
     });
-
+    /*
     $("#send-private").click(function() {
         sendPrivateMessage();
     });
-
+    */
     $("#notifications").click(function() {
         resetNotificationCount();
     });
 });
 
 function connect() {
-    var socket = new SockJS('/our-websocket');
+    var socket = new SockJS('/game');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
         updateNotificationDisplay();
-        stompClient.subscribe('/topic/messages', function (message) {
+        stompClient.subscribe('/topic/test', function (message) {
             showMessage(JSON.parse(message.body).content);
         });
-
+        /*
         stompClient.subscribe('/user/topic/private-messages', function (message) {
             showMessage(JSON.parse(message.body).content);
         });
@@ -41,6 +41,7 @@ function connect() {
             notificationCount = notificationCount + 1;
             updateNotificationDisplay();
         });
+        */
     });
 }
 
@@ -50,13 +51,15 @@ function showMessage(message) {
 
 function sendMessage() {
     console.log("sending message");
-    stompClient.send("/ws/message", {}, JSON.stringify({'messageContent': $("#message").val()}));
+    stompClient.send("/app/test", {}, JSON.stringify({'messageContent': $("#message").val()}));
 }
 
+/*
 function sendPrivateMessage() {
     console.log("sending private message");
     stompClient.send("/ws/private-message", {}, JSON.stringify({'messageContent': $("#private-message").val()}));
 }
+*/
 
 function updateNotificationDisplay() {
     if (notificationCount == 0) {

@@ -8,20 +8,24 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-
+import org.springframework.web.util.HtmlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs24.websocket.dto.SelectionRequest;
+import ch.uzh.ifi.hase.soprafs24.websocket.dto.TestMessage;
 
 @Controller
 public class StompController {
 
     private static final Logger logger = LoggerFactory.getLogger(StompController.class);
 
-    @Autowired
-    private SimpMessagingTemplate messagingTemplate;
-
+    //for testing
+    @MessageMapping("/test")
+    @SendTo("/topic/test")
+    public TestMessage getInfo(final SelectionRequest selectionRequest){
+        return new TestMessage(HtmlUtils.htmlEscape(selectionRequest.getSelection()));
+    }
 
     // Set or change lobby settings
     @MessageMapping("/settings")
@@ -43,15 +47,7 @@ public class StompController {
         System.out.println(username);
         //messagingTemplate.convertAndSend("/topic/test", username);
     }
-
-    /* //maybe need to define how payload is handled
-    @MessageMapping("/ready")
-    public void ready(@Payload UserPayload userPayload) {
-    String username = userPayload.getUsername();
-    messagingTemplate.convertAndSend("/topic/test", username);
-    }
-    */
-   
+  
     // Perform night action
     @MessageMapping("/nightaction")
     public void performNightAction(@Payload SelectionRequest request) {
@@ -70,10 +66,11 @@ public class StompController {
        return lobbyInfo;
     }
     
+    /*
     @MessageMapping("/*")
     public void handleUnrecognizedDestination(SimpMessageHeaderAccessor headerAccessor) {
     String destination = headerAccessor.getDestination();
     throw new IllegalArgumentException("Unrecognized destination: " + destination);
     }
-
+    */
 }
