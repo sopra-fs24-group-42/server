@@ -42,7 +42,12 @@ public class Player implements Serializable {
   @Column(nullable = false, unique = true)
   private String token;
 
+  @Column(name = "role_name")
+  private String roleName;
+
+  @Transient   // field is non - persistent
   private Role role;
+
 
     public Long getPlayerId() {
         return playerId;
@@ -106,5 +111,14 @@ public class Player implements Serializable {
 
   public void setRole(Role role) {
         this.role = role;
+        this.roleName = role != null ? role.getRoleName() : null ;// save the role to the pplayer DB
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 }

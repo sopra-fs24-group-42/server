@@ -1,5 +1,8 @@
 package ch.uzh.ifi.hase.soprafs24.utils;
 
+import javax.persistence.*;
+
+@Embeddable
 public class GameSettings {
     private int numberOfWerewolves;
     private int numberOfVillagers;

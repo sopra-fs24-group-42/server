@@ -18,12 +18,13 @@ public class Lobby implements Serializable {
     @GeneratedValue
     private Long lobbyId;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String hostName;
 
     @Column(nullable = false, unique = true)
     private String lobbyCode;
 
+    @Transient
     private List<Player> players;
 
     @Column(nullable = false)
@@ -32,7 +33,7 @@ public class Lobby implements Serializable {
     @Column(nullable = false)
     private int numberOfPlayers;
 
-    // add serialization in order to be able to put the data into the db
+    @Embedded
     private GameSettings gameSettings;
 
     public Long getLobbyId() {
