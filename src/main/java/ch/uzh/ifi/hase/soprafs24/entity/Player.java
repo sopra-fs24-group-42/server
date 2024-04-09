@@ -1,12 +1,11 @@
 package ch.uzh.ifi.hase.soprafs24.entity;
 
-import ch.uzh.ifi.hase.soprafs24.constant.UserStatus;
-
 import javax.persistence.*;
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * Internal User Representation
+ * Internal Player Representation
  * This class composes the internal representation of the user and defines how
  * the user is stored in the database.
  * Every variable will be mapped into a database field with the @Column
@@ -16,42 +15,42 @@ import java.io.Serializable;
  * the primary key
  */
 @Entity
-@Table(name = "USER")
+@Table(name = "PLAYER")
 public class Player implements Serializable {
-
+  @Serial
   private static final long serialVersionUID = 1L;
 
   @Id
   @GeneratedValue
-  private Long id;
-
-  @Column(nullable = false)
-  private String name;
+  private Long playerId;
 
   @Column(nullable = false, unique = true)
   private String username;
 
+  @Column(nullable = false)
+  private Boolean alive;
+
+  @Column(nullable = false)
+  private Boolean isProtected;
+
+  @Column(nullable = false)
+  private Boolean killed;
+
+  @Column(nullable = false)
+  private Boolean ready;
+
   @Column(nullable = false, unique = true)
   private String token;
 
-  @Column(nullable = false)
-  private UserStatus status;
+  private Role role;
 
-  public Long getId() {
-    return id;
-  }
+    public Long getPlayerId() {
+        return playerId;
+    }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
+    public void setPlayerId(Long playerId) {
+        this.playerId = playerId;
+    }
 
   public String getUsername() {
     return username;
@@ -69,11 +68,43 @@ public class Player implements Serializable {
     this.token = token;
   }
 
-  public UserStatus getStatus() {
-    return status;
-  }
 
-  public void setStatus(UserStatus status) {
-    this.status = status;
-  }
+    public Boolean getAlive() {
+        return alive;
+    }
+
+    public void setAlive(Boolean alive) {
+        this.alive = alive;
+    }
+
+    public Boolean getIsProtected() {
+        return isProtected;
+    }
+
+    public void setIsProtected(Boolean isProtected) {
+        this.isProtected = isProtected;
+    }
+
+    public Boolean getKilled() {
+        return killed;
+    }
+
+    public void setKilled(Boolean killed) {
+        this.killed = killed;
+    }
+
+    public Boolean getReady() {
+        return ready;
+    }
+
+    public void setReady(Boolean ready) {
+        this.ready = ready;
+    }
+  public Role getRole() {
+        return role;
+    }
+
+  public void setRole(Role role) {
+        this.role = role;
+    }
 }

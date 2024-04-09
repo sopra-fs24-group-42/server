@@ -1,8 +1,11 @@
 package ch.uzh.ifi.hase.soprafs24.rest.mapper;
 
 import ch.uzh.ifi.hase.soprafs24.entity.Player;
+import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.LobbyPostDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.PlayerPostDTO;
+import ch.uzh.ifi.hase.soprafs24.rest.dto.PlayerDTO;
+import ch.uzh.ifi.hase.soprafs24.rest.dto.LobbyDTO;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
@@ -22,12 +25,29 @@ public interface DTOMapper {
 
   DTOMapper INSTANCE = Mappers.getMapper(DTOMapper.class);
 
-  @Mapping(source = "name", target = "name")
   @Mapping(source = "username", target = "username")
   Player convertPlayerPostDTOtoEntity(PlayerPostDTO playerPostDTO);
 
-  @Mapping(source = "name", target = "name")
+  @Mapping(source = "hostName", target = "hostName")
+  @Mapping(source = "numberOfPlayers", target = "numberOfPlayers")
+  Lobby convertLobbyPostDTOtoEntity(LobbyPostDTO lobbyPostDTO);
+
+  // change here
+  @Mapping(source = "playerId", target = "playerId")
   @Mapping(source = "username", target = "username")
-  Player convertLobbyPostDTOtoEntity(LobbyPostDTO lobbyPostDTO);
+  @Mapping(source = "alive", target = "alive")
+  @Mapping(source = "isProtected", target = "isProtected")
+  @Mapping(source = "killed", target = "killed")
+  @Mapping(source = "ready", target = "ready")
+  @Mapping(source = "role", target = "role")
+  PlayerDTO convertEntityToPlayerDTO(Player player);
+
+  @Mapping(source = "lobbyId", target = "lobbyId")
+  @Mapping(source = "hostName", target = "hostName")
+  @Mapping(source = "lobbyCode", target = "lobbyCode")
+  // @Mapping(source = "gameState", target = "gameState")
+  @Mapping(source = "numberOfPlayers", target = "numberOfPlayers")
+  @Mapping(source = "gameSettings", target = "gameSettings")
+  LobbyDTO convertEntityToLobbyDTO(Lobby lobby);
 
 }
