@@ -35,9 +35,11 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
 
   // Keep this one disable for all testing purposes -> it shows more detail with
   // this one disabled
+  /*
   @ExceptionHandler(HttpServerErrorException.InternalServerError.class)
   public ResponseStatusException handleException(Exception ex) {
     log.error("Default Exception Handler -> caught:", ex);
     return new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), ex);
   }
+  */
 }

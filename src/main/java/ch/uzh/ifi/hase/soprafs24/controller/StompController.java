@@ -1,51 +1,82 @@
 package ch.uzh.ifi.hase.soprafs24.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
+import ch.uzh.ifi.hase.soprafs24.service.WebsocketService;
 import ch.uzh.ifi.hase.soprafs24.websocket.dto.SelectionRequest;
+import ch.uzh.ifi.hase.soprafs24.websocket.dto.TestMessage;
 
 @Controller
 public class StompController {
 
-       // Set or change lobby settings
-       @MessageMapping("/settings")
-       public void updateSettings(@Payload String lobbySettings) {
-           //will return Lobby
-       }
+    private static final Logger logger = LoggerFactory.getLogger(StompController.class);
+
+    @Autowired
+    private WebsocketService service;
+
+    //for testing only
+    @MessageMapping("/test")
+    @SendTo("/topic/test")
+    public SelectionRequest getInfo(final SelectionRequest selectionRequest) {
+        logger.info("user: {}, selected: {}", selectionRequest.getUsername(), selectionRequest.getSelection());
+
+        service.broadcastLobby("It works, this should be a lobby", 1L);
+        
+        return selectionRequest;
+    }
+
+    // Set or change lobby settings
+    @MessageMapping("/settings")
+    public void updateSettings(final String lobbySettings) {
+        //change settings
+        //broadcast Lobby
+    }
    
-       // Start game and distribute roles
-       @MessageMapping("/startgame")
-       public void startGame(@Payload Long lobbyId) {
-           // return List Players
-       }
+    // Start game and distribute roles
+    @MessageMapping("/startgame")
+    public void startGame(final Long lobbyId) {
+        // asign roles
+        //broadcast lobby
+    }
    
-       // Advance to next phase
-       @MessageMapping("/ready")
-       public void ready(@Payload String username) {
-           // Implement logic to advance to the next phase
-       }
+    // Advance to next phase
+    @MessageMapping("/ready")
+    public void ready(final String username) {
+        //implement readycheck
+        //set player to ready
+        //if all players ready broadcast lobby
+        logger.info("The 'ready' method was called by user: {}", username);
+
+    }
+  
+    // Perform night action
+    @MessageMapping("/nightaction")
+    public void performNightAction(final SelectionRequest request) {
+        // Implement night action logic
+        //set player to ready
+        //if all ready broadcast lobby
+    }
    
-       // Perform night action
-       @MessageMapping("/nightaction")
-       public void performNightAction(@Payload SelectionRequest request) {
-           // Implement night action logic
-       }
+    // Vote during voting phase
+    @MessageMapping("/voting")
+    public void vote(final SelectionRequest request) {
+        logger.info("The 'voting' method was called by user: {}", request.getUsername());
+        // Implement voting logic
+        //set player ready
+        //if all ready (voted) broadcast lobby
+    }
    
-       // Vote during voting phase
-       @MessageMapping("/voting")
-       public void vote(@Payload SelectionRequest request) {
-           // Implement voting logic
-       }
-   
-       // Broadcasting lobby information/changes
-       @SendTo("/lobby/{lobbyId}")
-       public Lobby broadcastLobbyInfo(@DestinationVariable Long lobbyId, @Payload Lobby lobbyInfo) {
-           return lobbyInfo;
-       }
- 
+    // Broadcasting lobby information/changes
+    //replace TestMessage with Lobby
+    @SendTo("/topic/lobby/{lobbyId}")
+    public TestMessage sendLobbyInfo(@DestinationVariable String lobbyId, TestMessage lobby) {
+       return lobby;
+    }
+    
 }
