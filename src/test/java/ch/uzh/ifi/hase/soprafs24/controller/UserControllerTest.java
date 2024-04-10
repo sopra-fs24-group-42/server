@@ -1,6 +1,5 @@
 package ch.uzh.ifi.hase.soprafs24.controller;
 
-import ch.uzh.ifi.hase.soprafs24.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs24.entity.Player;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.PlayerPostDTO;
 import ch.uzh.ifi.hase.soprafs24.service.PlayerService;
