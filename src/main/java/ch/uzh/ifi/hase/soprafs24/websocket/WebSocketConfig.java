@@ -12,9 +12,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-       registry.addEndpoint("/game")
-                .withSockJS()
-                .setHeartbeatTime(10000);
+       registry.addEndpoint("/game").withSockJS();
     }
 
     @Override
