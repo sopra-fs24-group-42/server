@@ -1,6 +1,9 @@
 var stompClient = null;
 var notificationCount = 0;
 
+//set lobbyId for testing
+var lobbyId = 1;
+
 $(document).ready(function() {
     console.log("Index page is ready");
     connect();
@@ -24,7 +27,7 @@ function connect() {
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
         updateNotificationDisplay();
-        stompClient.subscribe('/topic/test', function (message) {
+        stompClient.subscribe(`/topic/lobby/${lobbyId}`, function (message) {
             showMessage(JSON.parse(message.body).content);
         });
         /*
@@ -51,7 +54,7 @@ function showMessage(message) {
 
 function sendMessage() {
     console.log("sending message");
-    stompClient.send("/app/test", {}, JSON.stringify({'messageContent': $("#message").val()}));
+    stompClient.send("/app/test", {}, JSON.stringify({'username': $("#username").val(), 'selection': $("#selection").val()}));
 }
 
 /*
