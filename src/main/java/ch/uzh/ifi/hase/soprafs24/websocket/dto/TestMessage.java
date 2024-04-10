@@ -1,5 +1,6 @@
 package ch.uzh.ifi.hase.soprafs24.websocket.dto;
 
+//only used for testing websocket - delete later
 public class TestMessage {
     private String message;
 
