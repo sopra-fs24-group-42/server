@@ -3,15 +3,12 @@ package ch.uzh.ifi.hase.soprafs24.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.util.HtmlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
+import ch.uzh.ifi.hase.soprafs24.service.WebsocketService;
 import ch.uzh.ifi.hase.soprafs24.websocket.dto.SelectionRequest;
 import ch.uzh.ifi.hase.soprafs24.websocket.dto.TestMessage;
 
@@ -20,57 +17,66 @@ public class StompController {
 
     private static final Logger logger = LoggerFactory.getLogger(StompController.class);
 
-    //for testing
+    @Autowired
+    private WebsocketService service;
+
+    //for testing only
     @MessageMapping("/test")
     @SendTo("/topic/test")
-    public TestMessage getInfo(final SelectionRequest selectionRequest){
-        return new TestMessage(HtmlUtils.htmlEscape(selectionRequest.getSelection()));
+    public SelectionRequest getInfo(final SelectionRequest selectionRequest) {
+        logger.info("user: {}, selected: {}", selectionRequest.getUsername(), selectionRequest.getSelection());
+
+        service.broadcastLobby("It works, this should be a lobby", 1L);
+        
+        return selectionRequest;
     }
 
     // Set or change lobby settings
     @MessageMapping("/settings")
-    public void updateSettings(@Payload String lobbySettings) {
-        //will return Lobby
+    public void updateSettings(final String lobbySettings) {
+        //change settings
+        //broadcast Lobby
     }
    
     // Start game and distribute roles
     @MessageMapping("/startgame")
-    public void startGame(@Payload Long lobbyId) {
-        // return List Players
+    public void startGame(final Long lobbyId) {
+        // asign roles
+        //broadcast lobby
     }
    
     // Advance to next phase
     @MessageMapping("/ready")
-    public void ready(@Payload String username) {
+    public void ready(final String username) {
         //implement readycheck
+        //set player to ready
+        //if all players ready broadcast lobby
         logger.info("The 'ready' method was called by user: {}", username);
-        System.out.println(username);
-        //messagingTemplate.convertAndSend("/topic/test", username);
+
     }
   
     // Perform night action
     @MessageMapping("/nightaction")
-    public void performNightAction(@Payload SelectionRequest request) {
+    public void performNightAction(final SelectionRequest request) {
         // Implement night action logic
+        //set player to ready
+        //if all ready broadcast lobby
     }
    
     // Vote during voting phase
     @MessageMapping("/voting")
-    public void vote(@Payload SelectionRequest request) {
+    public void vote(final SelectionRequest request) {
+        logger.info("The 'voting' method was called by user: {}", request.getUsername());
         // Implement voting logic
+        //set player ready
+        //if all ready (voted) broadcast lobby
     }
    
     // Broadcasting lobby information/changes
-    @MessageMapping("/lobby/{lobbyId}")
-    public Lobby broadcastLobbyInfo(@DestinationVariable Long lobbyId, @Payload Lobby lobbyInfo) {
-       return lobbyInfo;
+    //replace TestMessage with Lobby
+    @SendTo("/topic/lobby/{lobbyId}")
+    public TestMessage sendLobbyInfo(@DestinationVariable String lobbyId, TestMessage lobby) {
+       return lobby;
     }
     
-    /*
-    @MessageMapping("/*")
-    public void handleUnrecognizedDestination(SimpMessageHeaderAccessor headerAccessor) {
-    String destination = headerAccessor.getDestination();
-    throw new IllegalArgumentException("Unrecognized destination: " + destination);
-    }
-    */
 }
