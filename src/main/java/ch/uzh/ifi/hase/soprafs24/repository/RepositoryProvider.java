@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 public class RepositoryProvider {
 
     private PlayerRepository playerRepository;
+
     private LobbyRepository lobbyRepository;
 
     @Autowired
