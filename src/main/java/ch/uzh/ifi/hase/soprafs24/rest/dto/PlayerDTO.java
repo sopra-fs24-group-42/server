@@ -8,16 +8,19 @@ public class PlayerDTO {
 
     private String username;
 
-    private Boolean alive;
+    private Boolean isAlive;
+
     private Boolean isProtected;
 
-    private Boolean killed;
+    private Boolean isKilled;
 
-    private Boolean ready;
+    private Boolean isReady;
 
     private String token;
 
     private Role role;
+
+    private String lobbyCode;
 
     public Long getPlayerId() {
         return playerId;
@@ -35,12 +38,12 @@ public class PlayerDTO {
         this.username = username;
     }
 
-    public Boolean getAlive() {
-        return alive;
+    public Boolean getIsAlive() {
+        return isAlive;
     }
 
-    public void setAlive(Boolean alive) {
-        this.alive = alive;
+    public void setIsAlive(Boolean isAlive) {
+        this.isAlive = isAlive;
     }
 
     public Boolean getIsProtected() {
@@ -51,20 +54,20 @@ public class PlayerDTO {
         this.isProtected = isProtected;
     }
 
-    public Boolean getKilled() {
-        return killed;
+    public Boolean getIsKilled() {
+        return isKilled;
     }
 
-    public void setKilled(Boolean killed) {
-        this.killed = killed;
+    public void setIsKilled(Boolean isKilled) {
+        this.isKilled = isKilled;
     }
 
-    public Boolean getReady() {
-        return ready;
+    public Boolean getIsReady() {
+        return isReady;
     }
 
-    public void setReady(Boolean ready) {
-        this.ready = ready;
+    public void setIsReady(Boolean isReady) {
+        this.isReady = isReady;
     }
 
     public String getToken() {
@@ -82,5 +85,11 @@ public class PlayerDTO {
     public void setRole(Role role) {
         this.role = role;
     }
+    public String getLobbyCode() {
+        return lobbyCode;
+    }
 
+    public void setLobbyCode(String lobbyCode) {
+        this.lobbyCode = lobbyCode;
+    }
 }

@@ -4,50 +4,46 @@ import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 
-/**
- * Internal Player Representation
- * This class composes the internal representation of the user and defines how
- * the user is stored in the database.
- * Every variable will be mapped into a database field with the @Column
- * annotation
- * - nullable = false -> this cannot be left empty
- * - unique = true -> this value must be unqiue across the database -> composes
- * the primary key
- */
 @Entity
 @Table(name = "PLAYER")
 public class Player implements Serializable {
-  @Serial
-  private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 1L;
 
-  @Id
-  @GeneratedValue
-  private Long playerId;
+    @Id
+    @GeneratedValue
+    private Long playerId;
 
-  @Column(nullable = false, unique = true)
-  private String username;
+    @Column(nullable = false, unique = true)
+    private String username;
 
-  @Column(nullable = false)
-  private Boolean alive;
+    @Column(nullable = false)
+    private Boolean isAlive;
 
-  @Column(nullable = false)
-  private Boolean isProtected;
+    @Column(nullable = false)
+    private Boolean isProtected;
 
-  @Column(nullable = false)
-  private Boolean killed;
+    @Column(nullable = false)
+    private Boolean isKilled;
 
-  @Column(nullable = false)
-  private Boolean ready;
+    @Column(nullable = false)
+    private Boolean isReady;
 
-  @Column(nullable = false, unique = true)
-  private String token;
+    @Column(nullable = false, unique = true)
+    private String token;
 
-  @Column(name = "role_name")
-  private String roleName;
+    @Column(nullable = false)
+    private String lobbyCode;
 
-  @Transient   // field is non - persistent
-  private Role role;
+    @Transient   // field is non - persistent
+    private Role role;
 
+    public Player() {}
+
+    public Player(String username, String lobbyCode) {
+        this.username = username;
+        this.lobbyCode = lobbyCode;
+    }
 
     public Long getPlayerId() {
         return playerId;
@@ -57,29 +53,29 @@ public class Player implements Serializable {
         this.playerId = playerId;
     }
 
-  public String getUsername() {
-    return username;
-  }
-
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
-  public String getToken() {
-    return token;
-  }
-
-  public void setToken(String token) {
-    this.token = token;
-  }
-
-
-    public Boolean getAlive() {
-        return alive;
+    public String getUsername() {
+        return username;
     }
 
-    public void setAlive(Boolean alive) {
-        this.alive = alive;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+
+    public Boolean getIsAlive() {
+        return isAlive;
+    }
+
+    public void setIsAlive(Boolean isAlive) {
+        this.isAlive = isAlive;
     }
 
     public Boolean getIsProtected() {
@@ -90,35 +86,34 @@ public class Player implements Serializable {
         this.isProtected = isProtected;
     }
 
-    public Boolean getKilled() {
-        return killed;
+    public Boolean getIsKilled() {
+        return isKilled;
     }
 
-    public void setKilled(Boolean killed) {
-        this.killed = killed;
+    public void setIsKilled(Boolean isKilled) {
+        this.isKilled = isKilled;
     }
 
-    public Boolean getReady() {
-        return ready;
+    public Boolean getIsReady() {
+        return isReady;
     }
 
-    public void setReady(Boolean ready) {
-        this.ready = ready;
+    public void setIsReady(Boolean isReady) {
+        this.isReady = isReady;
     }
-  public Role getRole() {
+    public Role getRole() {
         return role;
     }
 
-  public void setRole(Role role) {
+    public void setRole(Role role) {
         this.role = role;
-        this.roleName = role != null ? role.getRoleName() : null ;// save the role to the pplayer DB
     }
 
-    public String getRoleName() {
-        return roleName;
+    public String getLobbyCode() {
+        return lobbyCode;
     }
 
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
+    public void setLobbyCode(String lobbyCode) {
+        this.lobbyCode = lobbyCode;
     }
 }
