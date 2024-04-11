@@ -1,6 +1,11 @@
 package ch.uzh.ifi.hase.soprafs24.rest.dto;
 
+import ch.uzh.ifi.hase.soprafs24.entity.Player;
 import ch.uzh.ifi.hase.soprafs24.utils.GameSettings;
+import ch.uzh.ifi.hase.soprafs24.constant.GameState;
+
+import java.util.List;
+import java.util.UUID;
 
 public class LobbyDTO {
 
@@ -10,11 +15,13 @@ public class LobbyDTO {
 
     private String lobbyCode;
 
-   // private GameState gameState;
+    private GameState gameState;
 
     private int numberOfPlayers;
 
     private GameSettings gameSettings;
+
+    private List<Player> players;
 
     public Long getLobbyId() {
         return lobbyId;
@@ -40,13 +47,13 @@ public class LobbyDTO {
         this.lobbyCode = lobbyCode;
     }
 
-//    public GameState getGameState() {
-//        return gameState;
-//    }
-//
-//    public void setGameState(GameState gameState) {
-//        this.gameState = gameState;
-//    }
+    public GameState getGameState() {
+        return gameState;
+    }
+
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
+    }
 
     public int getNumberOfPlayers() {
         return numberOfPlayers;
@@ -62,5 +69,13 @@ public class LobbyDTO {
 
     public void setGameSettings(GameSettings gameSettings) {
         this.gameSettings = gameSettings;
+    }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<Player> players) {
+        this.players = players;
     }
 }
