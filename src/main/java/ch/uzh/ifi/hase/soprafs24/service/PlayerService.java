@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs24.service;
 
 import ch.uzh.ifi.hase.soprafs24.entity.Player;
+import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs24.repository.RepositoryProvider;
 import ch.uzh.ifi.hase.soprafs24.events.CreateHostPlayerEvent;
 import org.slf4j.Logger;
@@ -44,6 +45,7 @@ public class PlayerService {
         newPlayer.setIsKilled(Boolean.FALSE);
         newPlayer.setIsReady(Boolean.FALSE);
 
+        CheckIfLobbyExists(newPlayer);
         newPlayer = repositoryProvider.getPlayerRepository().save(newPlayer);
         repositoryProvider.getPlayerRepository().flush();
 
@@ -51,11 +53,19 @@ public class PlayerService {
         return newPlayer;
     }
 
-    private void checkIfUserExists(Player userToBeCreated) {
-        Player userByUsername = repositoryProvider.getPlayerRepository().findByUsername(userToBeCreated.getUsername());
+    private void checkIfUserExists(Player playerToBeCreated) {
+        Player userByUsername = repositoryProvider.getPlayerRepository().findByUsername(playerToBeCreated.getUsername());
 
         if (userByUsername != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The username provided is not unique. Therefore, the user could not be created!");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The username provided is not unique. Therefore, the player could not be created!");
+        }
+    }
+
+    private void CheckIfLobbyExists(Player playerToJoinLobby){
+        Lobby lobbyByCode = repositoryProvider.getLobbyRepository().findByLobbyCode(playerToJoinLobby.getLobbyCode());
+
+        if (lobbyByCode == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The lobby code provided does not exist. Therefore, the player could not be added!");
         }
     }
 }
