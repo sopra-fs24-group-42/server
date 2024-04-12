@@ -18,7 +18,7 @@ public class StompController {
     private static final Logger logger = LoggerFactory.getLogger(StompController.class);
 
     @Autowired
-    private WebsocketService service;
+    private WebsocketService wsService;
 
     //for testing only
     @MessageMapping("/test")
@@ -26,7 +26,7 @@ public class StompController {
     public SelectionRequest getInfo(final SelectionRequest selectionRequest) {
         logger.info("user: {}, selected: {}", selectionRequest.getUsername(), selectionRequest.getSelection());
 
-        service.broadcastLobby("It works, this should be a lobby", 1L);
+        wsService.broadcastLobby(1L);
         
         return selectionRequest;
     }
@@ -75,7 +75,7 @@ public class StompController {
     // Broadcasting lobby information/changes
     //replace TestMessage with Lobby
     @SendTo("/topic/lobby/{lobbyId}")
-    public TestMessage sendLobbyInfo(@DestinationVariable String lobbyId, TestMessage lobby) {
+    public Lobby sendLobbyInfo(@DestinationVariable String lobbyId, Lobby lobby) {
        return lobby;
     }
     
