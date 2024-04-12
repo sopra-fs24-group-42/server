@@ -18,7 +18,6 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @Transactional
@@ -44,7 +43,7 @@ public class LobbyService {
         newLobby.setGameSettings(new GameSettings());
 
         // Create Host Player
-        Player hostPlayer = new Player(newLobby.getHostName(), newLobby.getHostName());
+        Player hostPlayer = new Player(newLobby.getHostName(), newLobby.getLobbyCode());
         eventPublisher.publishEvent(new CreateHostPlayerEvent(this, hostPlayer));
         newLobby.setPlayers(getListOfLobbyPlayers(lobbyCode));
 
@@ -56,8 +55,7 @@ public class LobbyService {
     }
 
     private List<Player> getListOfLobbyPlayers(String lobbyCode) {
-        List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyCode(lobbyCode);
-        return players;
+        return repositoryProvider.getPlayerRepository().findByLobbyCode(lobbyCode);
     }
 
 }
