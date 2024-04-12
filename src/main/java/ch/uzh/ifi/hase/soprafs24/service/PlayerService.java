@@ -44,9 +44,10 @@ public class PlayerService {
         newPlayer.setIsProtected(Boolean.FALSE);
         newPlayer.setIsKilled(Boolean.FALSE);
         newPlayer.setIsReady(Boolean.FALSE);
-        newPlayer.setLobbyId(repositoryProvider.getLobbyRepository().findByLobbyCode(newPlayer.getLobbyCode()).getLobbyId());
 
         CheckIfLobbyExists(newPlayer);
+        newPlayer.setLobbyId(repositoryProvider.getLobbyRepository().findByLobbyCode(newPlayer.getLobbyCode()).getLobbyId());
+
         newPlayer = repositoryProvider.getPlayerRepository().save(newPlayer);
         repositoryProvider.getPlayerRepository().flush();
 
@@ -58,7 +59,7 @@ public class PlayerService {
         Player userByUsername = repositoryProvider.getPlayerRepository().findByUsername(playerToBeCreated.getUsername());
 
         if (userByUsername != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The username provided is not unique. Therefore, the player could not be created!");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "The username provided is not unique. Therefore, the player could not be created!");
         }
     }
 
@@ -66,7 +67,7 @@ public class PlayerService {
         Lobby lobbyByCode = repositoryProvider.getLobbyRepository().findByLobbyCode(playerToJoinLobby.getLobbyCode());
 
         if (lobbyByCode == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The lobby code provided does not exist. Therefore, the player could not be added!");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The lobby code provided does not exist. Therefore, the player could not be added!");
         }
     }
 }
