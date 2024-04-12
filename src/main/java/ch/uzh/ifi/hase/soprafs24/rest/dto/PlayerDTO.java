@@ -22,6 +22,8 @@ public class PlayerDTO {
 
     private String lobbyCode;
 
+    private Long lobbyId;
+
     public Long getPlayerId() {
         return playerId;
     }
@@ -91,5 +93,13 @@ public class PlayerDTO {
 
     public void setLobbyCode(String lobbyCode) {
         this.lobbyCode = lobbyCode;
+    }
+
+    public Long getLobbyId() {
+        return lobbyId;
+    }
+
+    public void setLobbyId(Long lobbyId) {
+        this.lobbyId = lobbyId;
     }
 }

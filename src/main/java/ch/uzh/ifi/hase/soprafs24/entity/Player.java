@@ -35,6 +35,9 @@ public class Player implements Serializable {
     @Column(nullable = false)
     private String lobbyCode;
 
+    @Column(nullable = false)
+    private Long lobbyId;
+
     @Transient   // field is non - persistent
     private Role role;
 
@@ -115,5 +118,13 @@ public class Player implements Serializable {
 
     public void setLobbyCode(String lobbyCode) {
         this.lobbyCode = lobbyCode;
+    }
+
+    public Long getLobbyId() {
+        return lobbyId;
+    }
+
+    public void setLobbyId(Long lobbyId) {
+        this.lobbyId = lobbyId;
     }
 }

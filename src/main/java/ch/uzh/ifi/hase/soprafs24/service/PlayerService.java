@@ -43,6 +43,7 @@ public class PlayerService {
         newPlayer.setIsProtected(Boolean.FALSE);
         newPlayer.setIsKilled(Boolean.FALSE);
         newPlayer.setIsReady(Boolean.FALSE);
+        newPlayer.setLobbyId(repositoryProvider.getLobbyRepository().findByLobbyCode(newPlayer.getLobbyCode()).getLobbyId());
 
         newPlayer = repositoryProvider.getPlayerRepository().save(newPlayer);
         repositoryProvider.getPlayerRepository().flush();

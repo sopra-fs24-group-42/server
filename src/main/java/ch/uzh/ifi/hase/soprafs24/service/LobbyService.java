@@ -42,13 +42,13 @@ public class LobbyService {
         newLobby.setGameState(GameState.NIGHT);
         newLobby.setGameSettings(new GameSettings());
 
-        // Create Host Player
+        newLobby = repositoryProvider.getLobbyRepository().save(newLobby);
+        repositoryProvider.getLobbyRepository().flush();
+
+        // Trigger the Creation of Host Player
         Player hostPlayer = new Player(newLobby.getHostName(), newLobby.getLobbyCode());
         eventPublisher.publishEvent(new CreateHostPlayerEvent(this, hostPlayer));
         newLobby.setPlayers(getListOfLobbyPlayers(lobbyCode));
-
-        newLobby = repositoryProvider.getLobbyRepository().save(newLobby);
-        repositoryProvider.getLobbyRepository().flush();
 
         log.debug("Created Information for Lobby: {}", newLobby);
         return newLobby;
