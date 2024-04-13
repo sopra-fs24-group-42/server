@@ -12,7 +12,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-       registry.addEndpoint("/game").withSockJS();
+       registry.addEndpoint("/game")
+               .setAllowedOriginPatterns("*")
+               .withSockJS()
+               .setHeartbeatTime(10000);
     }
 
     @Override
@@ -20,5 +23,4 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.enableSimpleBroker("/topic");
         registry.setApplicationDestinationPrefixes("/app");
     }
-
 }
