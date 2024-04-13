@@ -20,10 +20,9 @@ public class WebsocketService {
         this.repositoryProvider = repositoryProvider;
     }
 
-    //change message and TestMessage to Lobby
     public void broadcastLobby(final Long lobbyId) {
         Lobby lobbyToBroadcast = repositoryProvider.getLobbyRepository().findByLobbyId(lobbyId);
-        lobbyToBroadcast.setPlayers(repositoryProvider.getPlayerRepository().findByLobbyCode(lobbyToBroadcast.getLobbyCode()));     
+        lobbyToBroadcast.setPlayers(repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId));     
         String destination = "/topic/lobby/" + Long.toString(lobbyId);
         messagingTemplate.convertAndSend(destination, lobbyToBroadcast);
     }
