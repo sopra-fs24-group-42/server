@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
+import ch.uzh.ifi.hase.soprafs24.entity.Player;
+import ch.uzh.ifi.hase.soprafs24.repository.RepositoryProvider;
 import ch.uzh.ifi.hase.soprafs24.service.WebsocketService;
 import ch.uzh.ifi.hase.soprafs24.websocket.dto.SelectionRequest;
 import ch.uzh.ifi.hase.soprafs24.websocket.dto.TestMessage;
@@ -19,6 +21,12 @@ public class StompController {
 
     @Autowired
     private WebsocketService wsService;
+    private final RepositoryProvider repositoryProvider;
+
+    @Autowired
+    public StompController(RepositoryProvider repositoryProvider) {
+        this.repositoryProvider = repositoryProvider;
+    }
 
     //for testing only
     @MessageMapping("/test")
@@ -26,8 +34,13 @@ public class StompController {
     public SelectionRequest getInfo(final SelectionRequest selectionRequest) {
         logger.info("user: {}, selected: {}", selectionRequest.getUsername(), selectionRequest.getSelection());
 
-        wsService.broadcastLobby(1L);
+        //get player specified in selectioRequest
+        Player player = repositoryProvider.getPlayerRepository().findByUsername(selectionRequest.getUsername());
+
+        //broadcast Lobby to /topic/lobby/{lobbyId}
+        wsService.broadcastLobby(player.getLobbyId());
         
+        //broadcast selectionRequest to /topic/test
         return selectionRequest;
     }
 
@@ -73,7 +86,6 @@ public class StompController {
     }
    
     // Broadcasting lobby information/changes
-    //replace TestMessage with Lobby
     @SendTo("/topic/lobby/{lobbyId}")
     public Lobby sendLobbyInfo(@DestinationVariable String lobbyId, Lobby lobby) {
        return lobby;
