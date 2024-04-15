@@ -19,25 +19,70 @@ public class PlayerRepositoryIntegrationTest {
   private PlayerRepository playerRepository;
 
   @Test
-  public void findByName_success() {
+  public void findByUsername_success() {
     // given
-    Player user = new Player();
-    user.setName("Firstname Lastname");
-    user.setUsername("firstname@lastname");
-    user.setStatus(UserStatus.OFFLINE);
-    user.setToken("1");
+    Player player = new Player();
+    player.setPlayerId(1L);
+    player.setUsername("testPlayer");
+    player.setLobbyId(1L);
+    player.setLobbyCode("AG8HH");
+    player.setIsAlive(Boolean.TRUE);
+    player.setIsKilled(Boolean.FALSE);
+    player.setIsProtected(Boolean.FALSE);
+    player.setIsReady(Boolean.FALSE);
+    // what to do with the token
+    //player.setToken();
 
-    entityManager.persist(user);
+    entityManager.persist(player);
     entityManager.flush();
 
     // when
-    Player found = userRepository.findByName(user.getName());
+    Player found = playerRepository.findByUsername(player.getUsername());
 
     // then
-    assertNotNull(found.getId());
-    assertEquals(found.getName(), user.getName());
-    assertEquals(found.getUsername(), user.getUsername());
-    assertEquals(found.getToken(), user.getToken());
-    assertEquals(found.getStatus(), user.getStatus());
+    assertNotNull(found.getPlayerId());
+    assertEquals(found.getUsername(), player.getUsername());
+    assertEquals(found.getLobbyId(), player.getLobbyId());
+    assertEquals(found.getLobbyCode(), player.getLobbyCode());
+    assertEquals(found.getToken(), player.getToken());
+    assertEquals(found.getIsAlive(), player.getIsAlive());
+    assertEquals(found.getIsProtected(), player.getIsProtected());
+    assertEquals(found.getIsKilled(), player.getIsKilled());
+    assertEquals(found.getIsReady(), player.getIsReady());
   }
+
+
+    // redo
+    @Test
+    public void findByLobbyCode_throws_error() {
+        // given
+        Player player = new Player();
+        player.setPlayerId(1L);
+        player.setUsername("testPlayer");
+        player.setLobbyId(1L);
+        player.setLobbyCode("AG8HH");
+        player.setIsAlive(Boolean.TRUE);
+        player.setIsKilled(Boolean.FALSE);
+        player.setIsProtected(Boolean.FALSE);
+        player.setIsReady(Boolean.FALSE);
+        // what to do with the token
+        //player.setToken();
+
+        entityManager.persist(player);
+        entityManager.flush();
+
+        // when
+        Player found = playerRepository.findByUsername(player.getUsername());
+
+        // then
+        assertNotNull(found.getPlayerId());
+        assertEquals(found.getUsername(), player.getUsername());
+        assertEquals(found.getLobbyId(), player.getLobbyId());
+        assertEquals(found.getLobbyCode(), player.getLobbyCode());
+        assertEquals(found.getToken(), player.getToken());
+        assertEquals(found.getIsAlive(), player.getIsAlive());
+        assertEquals(found.getIsProtected(), player.getIsProtected());
+        assertEquals(found.getIsKilled(), player.getIsKilled());
+        assertEquals(found.getIsReady(), player.getIsReady());
+    }
 }
