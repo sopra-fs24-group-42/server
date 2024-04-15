@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs24.entity.Player;
-import ch.uzh.ifi.hase.soprafs24.repository.RepositoryProvider;
+import ch.uzh.ifi.hase.soprafs24.service.PlayerService;
 import ch.uzh.ifi.hase.soprafs24.service.WebsocketService;
 import ch.uzh.ifi.hase.soprafs24.websocket.dto.SelectionRequest;
 import ch.uzh.ifi.hase.soprafs24.websocket.dto.TestMessage;
@@ -18,14 +18,14 @@ import ch.uzh.ifi.hase.soprafs24.websocket.dto.TestMessage;
 public class StompController {
 
     private static final Logger logger = LoggerFactory.getLogger(StompController.class);
+    private final PlayerService playerService;
 
     @Autowired
     private WebsocketService wsService;
-    private final RepositoryProvider repositoryProvider;
 
     @Autowired
-    public StompController(RepositoryProvider repositoryProvider) {
-        this.repositoryProvider = repositoryProvider;
+    public StompController(PlayerService playerService) {
+        this.playerService = playerService;
     }
 
     //for testing only
@@ -34,11 +34,10 @@ public class StompController {
     public SelectionRequest getInfo(final SelectionRequest selectionRequest) {
         logger.info("user: {}, selected: {}", selectionRequest.getUsername(), selectionRequest.getSelection());
 
-        //get player specified in selectioRequest
-        Player player = repositoryProvider.getPlayerRepository().findByUsername(selectionRequest.getUsername());
+        Long lobbyId = playerService.getLobbyIdFromPlayerByUsername(selectionRequest.getUsername());
 
         //broadcast Lobby to /topic/lobby/{lobbyId}
-        wsService.broadcastLobby(player.getLobbyId());
+        wsService.broadcastLobby(lobbyId);
         
         //broadcast selectionRequest to /topic/test
         return selectionRequest;
