@@ -1,7 +1,6 @@
 package ch.uzh.ifi.hase.soprafs24.service;
 
 import ch.uzh.ifi.hase.soprafs24.constant.GameState;
-import ch.uzh.ifi.hase.soprafs24.events.CreateHostPlayerEvent;
 import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs24.entity.Player;
 import ch.uzh.ifi.hase.soprafs24.utils.LobbyCodeGenerator;
@@ -10,7 +9,7 @@ import ch.uzh.ifi.hase.soprafs24.utils.GameSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,36 +25,30 @@ public class LobbyService {
 
     private final RepositoryProvider repositoryProvider;
 
-    private final ApplicationEventPublisher eventPublisher;
 
     @Autowired
-    public LobbyService(RepositoryProvider repositoryProvider,
-                        ApplicationEventPublisher eventPublisher) {
+    public LobbyService(RepositoryProvider repositoryProvider) {
         this.repositoryProvider = repositoryProvider;
-        this.eventPublisher = eventPublisher;
     }
 
-    public Lobby createLobby(Lobby newLobby) {
-        String lobbyCode = LobbyCodeGenerator.generateLobbyCode();
-        newLobby.setLobbyCode(lobbyCode);
-
-        newLobby.setGameState(GameState.NIGHT);
-        newLobby.setGameSettings(new GameSettings());
-
-        newLobby = repositoryProvider.getLobbyRepository().save(newLobby);
-        repositoryProvider.getLobbyRepository().flush();
-
-        // Trigger the Creation of Host Player
-        Player hostPlayer = new Player(newLobby.getHostName(), newLobby.getLobbyCode());
-        eventPublisher.publishEvent(new CreateHostPlayerEvent(this, hostPlayer));
-        newLobby.setPlayers(getListOfLobbyPlayers(lobbyCode));
-
-        log.debug("Created Information for Lobby: {}", newLobby);
-        return newLobby;
-    }
-
-    private List<Player> getListOfLobbyPlayers(String lobbyCode) {
+    public List<Player> getListOfLobbyPlayers(String lobbyCode) {
         return repositoryProvider.getPlayerRepository().findByLobbyCode(lobbyCode);
     }
 
+    public void CheckIfLobbyFull(String lobbyCode){
+        Lobby lobby = repositoryProvider.getLobbyRepository().findByLobbyCode(lobbyCode);
+
+        List<Player> players = getListOfLobbyPlayers(lobbyCode);
+        if (players.size() >= lobby.getNumberOfPlayers()) {
+            throw new ResponseStatusException(HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE, "The lobby is full. Therefore, the player could not be added!");
+        }
+    }
+
+    public void CheckIfLobbyExists(Player playerToJoinLobby){
+        Lobby lobbyByCode = repositoryProvider.getLobbyRepository().findByLobbyCode(playerToJoinLobby.getLobbyCode());
+
+        if (lobbyByCode == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The lobby code provided does not exist. Therefore, the player could not be added!");
+        }
+    }
 }

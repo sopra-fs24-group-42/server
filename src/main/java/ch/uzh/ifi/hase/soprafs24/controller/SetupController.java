@@ -6,6 +6,7 @@ import ch.uzh.ifi.hase.soprafs24.rest.dto.LobbyDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.PlayerDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.PlayerPostDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.LobbyPostDTO;
+import ch.uzh.ifi.hase.soprafs24.service.GameService;
 import ch.uzh.ifi.hase.soprafs24.service.LobbyService;
 import ch.uzh.ifi.hase.soprafs24.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs24.service.PlayerService;
@@ -15,12 +16,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class SetupController {
 
-    private final PlayerService playerService;
-    private final LobbyService lobbyService;
+    private final GameService gameService;
 
-    SetupController(PlayerService playerService, LobbyService lobbyService) {
-        this.playerService = playerService;
-        this.lobbyService = lobbyService;
+    SetupController(GameService gameService) {
+        this.gameService = gameService;
     }
 
     @PostMapping("/players")
@@ -31,7 +30,7 @@ public class SetupController {
         Player playerInput = DTOMapper.INSTANCE.convertPlayerPostDTOtoEntity(playerPostDTO);
 
         // create user
-        Player createdPlayer = playerService.createPlayer(playerInput);
+        Player createdPlayer = gameService.createPlayer(playerInput);
 
         // convert internal representation of user back to API
         return DTOMapper.INSTANCE.convertEntityToPlayerDTO(createdPlayer);
@@ -45,7 +44,7 @@ public class SetupController {
         Lobby lobbyInput = DTOMapper.INSTANCE.convertLobbyPostDTOtoEntity(lobbyPostDTO);
 
         // create lobby
-        Lobby createdLobby = lobbyService.createLobby(lobbyInput);
+        Lobby createdLobby = gameService.createLobby(lobbyInput);
 
         // convert internal representation of user back to API
         return DTOMapper.INSTANCE.convertEntityToLobbyDTO(createdLobby);

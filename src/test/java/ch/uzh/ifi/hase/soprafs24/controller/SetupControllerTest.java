@@ -4,6 +4,7 @@ import ch.uzh.ifi.hase.soprafs24.entity.Player;
 import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.PlayerPostDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.LobbyPostDTO;
+import ch.uzh.ifi.hase.soprafs24.service.GameService;
 import ch.uzh.ifi.hase.soprafs24.service.PlayerService;
 import ch.uzh.ifi.hase.soprafs24.service.LobbyService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -37,10 +38,7 @@ public class SetupControllerTest {
   private MockMvc mockMvc;
 
   @MockBean
-  private PlayerService playerService;
-
-  @MockBean
-  private LobbyService lobbyService;
+  private GameService gameService;
 
   @Test
   public void createUser_validInput_userCreated() throws Exception {
@@ -54,7 +52,7 @@ public class SetupControllerTest {
     userPostDTO.setUsername("Test User");
     userPostDTO.setLobbyCode("EXXW8");
 
-    given(playerService.createPlayer(Mockito.any())).willReturn(player);
+    given(gameService.createPlayer(Mockito.any())).willReturn(player);
 
     MockHttpServletRequestBuilder postRequest = post("/players")
         .contentType(MediaType.APPLICATION_JSON)
