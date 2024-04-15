@@ -40,6 +40,7 @@ public class Player implements Serializable {
 
     @Transient   // field is non - persistent
     private Role role;
+    
     @Column(nullable = true)
     private String roleName;
 

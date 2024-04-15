@@ -9,7 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs24.entity.Player;
-import ch.uzh.ifi.hase.soprafs24.service.PlayerService;
+import ch.uzh.ifi.hase.soprafs24.service.GameService;
+import ch.uzh.ifi.hase.soprafs24.service.ServiceProvider;
 import ch.uzh.ifi.hase.soprafs24.service.WebsocketService;
 import ch.uzh.ifi.hase.soprafs24.websocket.dto.SelectionRequest;
 import ch.uzh.ifi.hase.soprafs24.websocket.dto.TestMessage;
@@ -18,14 +19,16 @@ import ch.uzh.ifi.hase.soprafs24.websocket.dto.TestMessage;
 public class StompController {
 
     private static final Logger logger = LoggerFactory.getLogger(StompController.class);
-    private final PlayerService playerService;
+    private final ServiceProvider serviceProvider;
+    private final GameService gameService;
 
     @Autowired
     private WebsocketService wsService;
 
     @Autowired
-    public StompController(PlayerService playerService) {
-        this.playerService = playerService;
+    public StompController(ServiceProvider serviceProvider, GameService gameService) {
+        this.serviceProvider = serviceProvider;
+        this.gameService = gameService;
     }
 
     //for testing only
@@ -34,7 +37,9 @@ public class StompController {
     public SelectionRequest getInfo(final SelectionRequest selectionRequest) {
         logger.info("user: {}, selected: {}", selectionRequest.getUsername(), selectionRequest.getSelection());
 
-        Long lobbyId = playerService.getLobbyIdFromPlayerByUsername(selectionRequest.getUsername());
+        Long lobbyId = serviceProvider.getPlayerService().getLobbyIdFromPlayerByUsername(selectionRequest.getUsername());
+
+        //Long lobbyId = playerService.getLobbyIdFromPlayerByUsername(selectionRequest.getUsername());
 
         //broadcast Lobby to /topic/lobby/{lobbyId}
         wsService.broadcastLobby(lobbyId);
@@ -53,8 +58,12 @@ public class StompController {
     // Start game and distribute roles
     @MessageMapping("/startgame")
     public void startGame(final Long lobbyId) {
+        //maybe todo check if lobby is full
+        
         // asign roles
+        gameService.assignRolesByLobbyId(lobbyId);
         //broadcast lobby
+        wsService.broadcastLobby(lobbyId);
     }
    
     // Advance to next phase

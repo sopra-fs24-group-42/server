@@ -42,4 +42,5 @@ public class PlayerService {
         Player player = repositoryProvider.getPlayerRepository().findByUsername(username);
         return player.getLobbyId();
     }
+
 }

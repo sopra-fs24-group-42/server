@@ -74,6 +74,14 @@ public class GameService {
         return newLobby;
     }
 
-
+    public void assignRolesByLobbyId(Long lobbyId) {
+        //assign roles
+        List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
+        /*
+        for (Player player : players) {
+            player.setRole(new Role());
+        }
+        */
+    }
 
 }
