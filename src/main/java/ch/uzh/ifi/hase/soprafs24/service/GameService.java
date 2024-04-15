@@ -56,7 +56,9 @@ public class GameService {
         newLobby.setLobbyCode(lobbyCode);
 
         newLobby.setGameState(GameState.NIGHT);
-        newLobby.setGameSettings(new GameSettings());
+        //newLobby.setGameSettings(new GameSettings());
+
+        newLobby.setGameSettings(serviceProvider.getLobbyService().setDefaultSettings(newLobby.getNumberOfPlayers()));
 
         newLobby = repositoryProvider.getLobbyRepository().save(newLobby);
         repositoryProvider.getLobbyRepository().flush();

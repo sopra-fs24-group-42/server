@@ -51,4 +51,15 @@ public class LobbyService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The lobby code provided does not exist. Therefore, the player could not be added!");
         }
     }
+
+    public GameSettings setDefaultSettings(int numberOfPlayers) {
+        if(numberOfPlayers < 3) {
+            throw new NullPointerException("Lobby needs more Players");
+        }
+        GameSettings gameSettings = new GameSettings();
+        int numberOfWerewolves = (int)(numberOfPlayers/3); 
+        gameSettings.setNumberOfWerewolves(numberOfWerewolves);
+        gameSettings.setNumberOfVillagers(numberOfPlayers - numberOfWerewolves - 1);
+        return gameSettings;
+    }
 }
