@@ -70,4 +70,9 @@ public class PlayerService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The lobby code provided does not exist. Therefore, the player could not be added!");
         }
     }
+
+    public Long getLobbyIdFromPlayerByUsername(String username) {
+        Player player = repositoryProvider.getPlayerRepository().findByUsername(username);
+        return player.getLobbyId();
+    }
 }
