@@ -34,26 +34,26 @@ public class SetupControllerTest {
   private GameService gameService;
 
   @Test
-  public void createUser_validInput_userCreated() throws Exception {
+  public void createPlayer_validInput_playerCreated() throws Exception {
     Player player = new Player();
     player.setPlayerId(1L);
     player.setUsername("testUsername");
     player.setToken("1");
     player.setLobbyCode("AH1PL");
 
-    PlayerPostDTO userPostDTO = new PlayerPostDTO();
-    userPostDTO.setUsername("Test User");
-    userPostDTO.setLobbyCode("EXXW8");
+    PlayerPostDTO playerPostDTO = new PlayerPostDTO();
+    playerPostDTO.setUsername("Test Player");
+    playerPostDTO.setLobbyCode("EXXW8");
 
     given(gameService.createPlayer(Mockito.any())).willReturn(player);
 
     MockHttpServletRequestBuilder postRequest = post("/players")
         .contentType(MediaType.APPLICATION_JSON)
-        .content(asJsonString(userPostDTO));
+        .content(asJsonString(playerPostDTO));
 
     mockMvc.perform(postRequest)
         .andExpect(status().isCreated())
-        .andExpect(jsonPath("$.id", is(player.getPlayerId().intValue())))
+        .andExpect(jsonPath("$.playerId", is(player.getPlayerId().intValue())))
         .andExpect(jsonPath("$.username", is(player.getUsername())))
         .andExpect(jsonPath("$.lobbyCode", is(player.getLobbyCode())));
   }

@@ -1,6 +1,8 @@
 package ch.uzh.ifi.hase.soprafs24.repository;
 
+import ch.uzh.ifi.hase.soprafs24.constant.GameState;
 import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
+import ch.uzh.ifi.hase.soprafs24.utils.GameSettings;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -25,6 +27,8 @@ public class LobbyRepositoryIntegrationTest {
     lobby.setHostName("testHost");
     lobby.setLobbyCode("G4Hf6");
     lobby.setNumberOfPlayers(7);
+    lobby.setGameSettings(new GameSettings());
+    lobby.setGameState(GameState.NIGHT);
 
     entityManager.persist(lobby);
     entityManager.flush();
@@ -37,6 +41,9 @@ public class LobbyRepositoryIntegrationTest {
     assertEquals(found.getHostName(), lobby.getHostName());
     assertEquals(found.getLobbyCode(), lobby.getLobbyCode());
     assertEquals(found.getNumberOfPlayers(), lobby.getNumberOfPlayers());
+    assertEquals(found.getGameSettings(), lobby.getGameSettings());
+    assertEquals(found.getGameState(), lobby.getGameState());
+
   }
 
     @Test
@@ -46,6 +53,8 @@ public class LobbyRepositoryIntegrationTest {
       lobby.setHostName("testHost");
       lobby.setLobbyCode("G4Hf6");
       lobby.setNumberOfPlayers(7);
+      lobby.setGameSettings(new GameSettings());
+      lobby.setGameState(GameState.NIGHT);
 
       entityManager.persist(lobby);
       entityManager.flush();
@@ -58,5 +67,9 @@ public class LobbyRepositoryIntegrationTest {
       assertEquals(found.getHostName(), lobby.getHostName());
       assertEquals(found.getLobbyCode(), lobby.getLobbyCode());
       assertEquals(found.getNumberOfPlayers(), lobby.getNumberOfPlayers());
-    }
+      assertEquals(found.getGameSettings(), lobby.getGameSettings());
+      assertEquals(found.getGameState(), lobby.getGameState());
+
+  }
+
 }
