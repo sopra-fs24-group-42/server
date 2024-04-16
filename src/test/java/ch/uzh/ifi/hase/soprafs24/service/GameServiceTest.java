@@ -3,8 +3,7 @@ package ch.uzh.ifi.hase.soprafs24.service;
 import ch.uzh.ifi.hase.soprafs24.constant.GameState;
 import ch.uzh.ifi.hase.soprafs24.entity.Player;
 import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
-import ch.uzh.ifi.hase.soprafs24.repository.PlayerRepository;
-import ch.uzh.ifi.hase.soprafs24.repository.LobbyRepository;
+import ch.uzh.ifi.hase.soprafs24.repository.RepositoryProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -18,9 +17,9 @@ import static org.junit.jupiter.api.Assertions.*;
 public class GameServiceTest {
 
   @Mock
-  private PlayerRepository playerRepository;
+  private RepositoryProvider repositoryProvider;
   @Mock
-  private LobbyRepository lobbyRepository;
+  private ServiceProvider serviceProvider;
   @InjectMocks
   private GameService gameService;
   private Player testPlayer;
@@ -40,12 +39,11 @@ public class GameServiceTest {
     testPlayer.setIsKilled(Boolean.FALSE);
     testPlayer.setIsProtected(Boolean.FALSE);
     testPlayer.setIsReady(Boolean.FALSE);
-    // what to do with the token
-    // testPlayer.setToken();
+    testPlayer.setToken("1");
 
     // when -> any object is being save in the userRepository -> return the dummy
     // testUser
-    Mockito.when(playerRepository.save(Mockito.any())).thenReturn(testPlayer);
+    Mockito.when(repositoryProvider.getPlayerRepository().save(Mockito.any())).thenReturn(testPlayer);
   }
 
    // assertEquals(UserStatus.ONLINE, createdUser.getStatus());
@@ -53,6 +51,7 @@ public class GameServiceTest {
   @BeforeEach
   public void setupLobby() {
     MockitoAnnotations.openMocks(this);
+
     this.testLobby = new Lobby();
     testLobby.setLobbyId(1L);
     testLobby.setHostName("testPlayer");
@@ -60,7 +59,7 @@ public class GameServiceTest {
     testLobby.setGameState(GameState.NIGHT);
     testLobby.setNumberOfPlayers(7);
 
-    Mockito.when(lobbyRepository.save(Mockito.any())).thenReturn(testLobby);
+    Mockito.when(repositoryProvider.getLobbyRepository().save(Mockito.any())).thenReturn(testLobby);
 
   }
 
@@ -70,7 +69,7 @@ public class GameServiceTest {
     Player createdPlayer = gameService.createPlayer(testPlayer);
 
     // then
-    Mockito.verify(playerRepository, Mockito.times(1)).save(Mockito.any());
+    Mockito.verify(repositoryProvider.getPlayerRepository(), Mockito.times(1)).save(Mockito.any());
 
     // maybe add other fields
     assertEquals(testPlayer.getPlayerId(), createdPlayer.getPlayerId());
@@ -91,8 +90,8 @@ public class GameServiceTest {
     gameService.createPlayer(testPlayer);
 
     // when -> setup additional mocks for UserRepository
-    Mockito.when(playerRepository.findByUsername(Mockito.any())).thenReturn(testPlayer);
-    Mockito.when(playerRepository.findByUsername(Mockito.any())).thenReturn(null);
+    Mockito.when(repositoryProvider.getPlayerRepository().findByUsername(Mockito.any())).thenReturn(testPlayer);
+    Mockito.when(repositoryProvider.getPlayerRepository().findByUsername(Mockito.any())).thenReturn(null);
 
     // then -> attempt to create second user with same user -> check that an error
     // is thrown
@@ -105,8 +104,8 @@ public class GameServiceTest {
     gameService.createPlayer(testPlayer);
 
     // when -> setup additional mocks for UserRepository
-    Mockito.when(playerRepository.findByUsername(Mockito.any())).thenReturn(testPlayer);
-    Mockito.when(playerRepository.findByUsername(Mockito.any())).thenReturn(testPlayer);
+    Mockito.when(repositoryProvider.getPlayerRepository().findByUsername(Mockito.any())).thenReturn(testPlayer);
+    Mockito.when(repositoryProvider.getPlayerRepository().findByUsername(Mockito.any())).thenReturn(testPlayer);
 
     // then -> attempt to create second user with same user -> check that an error
     // is thrown
@@ -119,7 +118,7 @@ public class GameServiceTest {
       Lobby createdLobby = gameService.createLobby(testLobby);
 
       // then
-      Mockito.verify(lobbyRepository, Mockito.times(1)).save(Mockito.any());
+      Mockito.verify(repositoryProvider.getLobbyRepository(), Mockito.times(1)).save(Mockito.any());
 
       // maybe add other fields
       assertEquals(testLobby.getLobbyId(), createdLobby.getLobbyId());
