@@ -2,6 +2,7 @@ package ch.uzh.ifi.hase.soprafs24.entity;
 import ch.uzh.ifi.hase.soprafs24.utils.GameSettings;
 
 import ch.uzh.ifi.hase.soprafs24.constant.GameState;
+import ch.uzh.ifi.hase.soprafs24.utils.Role;
 
 import javax.persistence.*;
 import java.io.Serial;
@@ -37,6 +38,9 @@ public class Lobby implements Serializable {
     private GameSettings gameSettings;
 
     public Lobby(){ }
+
+    @Transient
+    private List<Role> lobbyRoles;
 
     public Long getLobbyId() {
         return lobbyId;

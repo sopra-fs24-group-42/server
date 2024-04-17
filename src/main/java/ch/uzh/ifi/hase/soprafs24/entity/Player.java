@@ -1,4 +1,5 @@
 package ch.uzh.ifi.hase.soprafs24.entity;
+import ch.uzh.ifi.hase.soprafs24.utils.Role;
 
 import javax.persistence.*;
 import java.io.Serial;
@@ -40,8 +41,8 @@ public class Player implements Serializable {
 
     @Transient   // field is non - persistent
     private Role role;
-    //@Column(nullable = true)
-   // private String roleName;
+    @Column(nullable = true)
+    private String roleName;
 
     public Player() {}
 
@@ -111,7 +112,7 @@ public class Player implements Serializable {
 
     public void setRole(Role role) {
         this.role = role;
-      //  this.roleName = role.getRoleName();
+        this.roleName = role.getRoleName();
     }
 
     public String getLobbyCode() {
