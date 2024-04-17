@@ -12,7 +12,7 @@
 
 | Date | Name | Links to Github Issues | Comments |
 |---|---|---|---|
-|08.04.2024|Lukas|   |working on websockets: `ce4038eb33774f8d4dafe42a7e27e833d8e877e3`|
+|08.04.2024|Lukas|   |working on websockets: [ce4038eb33774f8d4dafe42a7e27e833d8e877e3]|
 |   |   |   |   |
 |   |   |   |   |
 
@@ -20,8 +20,8 @@
 
 | Date | Name | Links to Github Issues | Comments |
 |---|---|---|---|
-|13.04.2024|Lukas|#32, #39, #47, #72|working on websockets|
-|16.04.2024|Lukas|#30, #91|working on startgame implementation|
+|13.04.2024|Lukas|[#32], [#39], [#47], [#72]|working on websockets|
+|16.04.2024|Lukas|[#30], [#91]|working on startgame implementation|
 |   |   |   |   |
 
 ## <font style="color: #00d7ff">Week 3 *(18.04 – 24.04)*</font>
