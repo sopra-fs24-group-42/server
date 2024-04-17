@@ -14,7 +14,7 @@
 |---|---|---|---|
 |08.04.2024|Lukas|   |working on websockets|
 |09.04.2024|Polina|[#25](https://github.com/orgs/sopra-fs24-group-42/projects/1/views/1?pane=issue&itemId=57283946)|Created classes|
-|   |   |   |   |
+|09.04.2024|Polina|[#28](https://github.com/orgs/sopra-fs24-group-42/projects/1/views/1?pane=issue&itemId=57283946), [#27](https://github.com/sopra-fs24-group-42/server/issues/27)|Implemented http post methods to support lobby and player creation|
 
 ## <font style="color: #00d7ff">Week 2 *(11.04 – 17.04)*</font>
 
