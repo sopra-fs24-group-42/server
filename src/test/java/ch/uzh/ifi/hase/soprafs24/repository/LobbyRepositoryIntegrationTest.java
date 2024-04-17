@@ -1,6 +1,10 @@
 package ch.uzh.ifi.hase.soprafs24.repository;
 
-import ch.uzh.ifi.hase.soprafs24.entity.Player;
+import ch.uzh.ifi.hase.soprafs24.constant.GameState;
+import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
+import ch.uzh.ifi.hase.soprafs24.utils.GameSettings;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -16,28 +20,58 @@ public class LobbyRepositoryIntegrationTest {
   private TestEntityManager entityManager;
 
   @Autowired
-  private PlayerRepository playerRepository;
+  private LobbyRepository lobbyRepository;
 
   @Test
-  public void findByName_success() {
+  public void findByLobbyCode_success() {
     // given
-    Player user = new Player();
-    user.setName("Firstname Lastname");
-    user.setUsername("firstname@lastname");
-    user.setStatus(UserStatus.OFFLINE);
-    user.setToken("1");
+    Lobby lobby = new Lobby();
+    lobby.setHostName("testHost");
+    lobby.setLobbyCode("G4Hf6");
+    lobby.setNumberOfPlayers(7);
+    lobby.setGameSettings(new GameSettings());
+    lobby.setGameState(GameState.NIGHT);
 
-    entityManager.persist(user);
+    entityManager.persist(lobby);
     entityManager.flush();
 
     // when
-    Player found = userRepository.findByName(user.getName());
+    Lobby found = lobbyRepository.findByLobbyCode(lobby.getLobbyCode());
 
     // then
-    assertNotNull(found.getId());
-    assertEquals(found.getName(), user.getName());
-    assertEquals(found.getUsername(), user.getUsername());
-    assertEquals(found.getToken(), user.getToken());
-    assertEquals(found.getStatus(), user.getStatus());
+    assertNotNull(found.getLobbyId());
+    assertEquals(found.getHostName(), lobby.getHostName());
+    assertEquals(found.getLobbyCode(), lobby.getLobbyCode());
+    assertEquals(found.getNumberOfPlayers(), lobby.getNumberOfPlayers());
+    assertEquals(found.getGameSettings(), lobby.getGameSettings());
+    assertEquals(found.getGameState(), lobby.getGameState());
+
   }
+
+    @Test
+    public void findByLobbyId_success() {
+      // given
+      Lobby lobby = new Lobby();
+      lobby.setHostName("testHost");
+      lobby.setLobbyCode("G4Hf6");
+      lobby.setNumberOfPlayers(7);
+      lobby.setGameSettings(new GameSettings());
+      lobby.setGameState(GameState.NIGHT);
+
+      entityManager.persist(lobby);
+      entityManager.flush();
+
+      // when
+      Lobby found = lobbyRepository.findByLobbyId(lobby.getLobbyId());
+
+      // then
+      assertNotNull(found.getLobbyId());
+      assertEquals(found.getHostName(), lobby.getHostName());
+      assertEquals(found.getLobbyCode(), lobby.getLobbyCode());
+      assertEquals(found.getNumberOfPlayers(), lobby.getNumberOfPlayers());
+      assertEquals(found.getGameSettings(), lobby.getGameSettings());
+      assertEquals(found.getGameState(), lobby.getGameState());
+
+  }
+
 }

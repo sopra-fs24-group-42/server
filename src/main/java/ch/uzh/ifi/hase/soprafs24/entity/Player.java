@@ -1,4 +1,5 @@
 package ch.uzh.ifi.hase.soprafs24.entity;
+import ch.uzh.ifi.hase.soprafs24.utils.Role;
 
 import javax.persistence.*;
 import java.io.Serial;

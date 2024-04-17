@@ -1,46 +1,47 @@
 package ch.uzh.ifi.hase.soprafs24.rest.mapper;
 
+import ch.uzh.ifi.hase.soprafs24.entity.Player;
+import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
+import ch.uzh.ifi.hase.soprafs24.rest.dto.LobbyPostDTO;
+import ch.uzh.ifi.hase.soprafs24.rest.dto.PlayerPostDTO;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+
+import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * DTOMapperTest
- * Tests if the mapping between the internal and the external/API representation
- * works.
- */
+
 public class DTOMapperTest {
-  /*
   @Test
-  public void testCreateUser_fromUserPostDTO_toUser_success() {
+  public void testCreatePlayer_fromPlayerPostDTO_toPlayer_success() {
     // create UserPostDTO
-    PlayerPostDTO userPostDTO = new PlayerPostDTO();
-    userPostDTO.setName("name");
-    userPostDTO.setUsername("username");
+    PlayerPostDTO playerPostDTO = new PlayerPostDTO();
+    playerPostDTO.setUsername("username");
+    playerPostDTO.setLobbyCode("HG5fV");
 
     // MAP -> Create user
-    Player user = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
+    Player player = DTOMapper.INSTANCE.convertPlayerPostDTOtoEntity(playerPostDTO);
 
     // check content
-    assertEquals(userPostDTO.getName(), user.getName());
-    assertEquals(userPostDTO.getUsername(), user.getUsername());
+    assertEquals(playerPostDTO.getUsername(), player.getUsername());
+    assertEquals(playerPostDTO.getLobbyCode(), player.getLobbyCode());
+
   }
 
   @Test
-  public void testGetUser_fromUser_toUserGetDTO_success() {
-    // create User
-    Player user = new Player();
-    user.setName("Firstname Lastname");
-    user.setUsername("firstname@lastname");
-    user.setStatus(UserStatus.OFFLINE);
-    user.setToken("1");
+  public void testCreateLobby_fromLobbyPostDTO_toLobby_success() {
+    // create LobbyPostDTO
+    LobbyPostDTO lobbyPostDTO = new LobbyPostDTO();
+    lobbyPostDTO.setHostName("testPlayer");
+    lobbyPostDTO.setNumberOfPlayers(7);
 
-    // MAP -> Create UserGetDTO
-    UserGetDTO userGetDTO = DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
+    // MAP -> Create user
+    Lobby lobby = DTOMapper.INSTANCE.convertLobbyPostDTOtoEntity(lobbyPostDTO);
 
     // check content
-    assertEquals(user.getId(), userGetDTO.getId());
-    assertEquals(user.getName(), userGetDTO.getName());
-    assertEquals(user.getUsername(), userGetDTO.getUsername());
-    assertEquals(user.getStatus(), userGetDTO.getStatus());
+    assertEquals(lobbyPostDTO.getHostName(), lobby.getHostName());
+    assertEquals(lobbyPostDTO.getNumberOfPlayers(), lobby.getNumberOfPlayers());
   }
-  */
+
 }
