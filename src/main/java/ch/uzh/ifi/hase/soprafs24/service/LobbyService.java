@@ -1,20 +1,17 @@
 package ch.uzh.ifi.hase.soprafs24.service;
 
-import ch.uzh.ifi.hase.soprafs24.constant.GameState;
 import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
-import ch.uzh.ifi.hase.soprafs24.entity.Player;
-import ch.uzh.ifi.hase.soprafs24.utils.LobbyCodeGenerator;
-import ch.uzh.ifi.hase.soprafs24.repository.RepositoryProvider;
 import ch.uzh.ifi.hase.soprafs24.utils.GameSettings;
+import ch.uzh.ifi.hase.soprafs24.utils.Role;
+import ch.uzh.ifi.hase.soprafs24.entity.Player;
+import ch.uzh.ifi.hase.soprafs24.repository.RepositoryProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
 
@@ -62,4 +59,15 @@ public class LobbyService {
         gameSettings.setNumberOfVillagers(numberOfPlayers - numberOfWerewolves - 1);
         return gameSettings;
     }
+    /*public List<Role> SetLobbyRoles(Long lobbyId){
+        // having the setting we are to create a list of roles that placed in the list randomly
+        // then we assign the roles to the players by the position in the list
+        Lobby lobby = repositoryProvider.getLobbyRepository().findByLobbyId(lobbyId);
+        List<Role> roles = new List<Role>();
+
+        for (int i = 0; i < lobby.getNumberOfPlayers(); i++){
+            roles.add()
+        }
+        return roles;
+    }*/
 }

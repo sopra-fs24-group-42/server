@@ -119,3 +119,33 @@ public class GameSettings {
     }
 
 }
+
+// add here the method to convert the game setting to the dictionary
+
+/*import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import org.reflections.Reflections;
+
+public class RoleManager {
+    public static void main(String[] args) {
+        Reflections reflections = new Reflections("your.package.name"); // specify your package name
+        Set<Class<? extends Role>> roleClasses = reflections.getSubTypesOf(Role.class);
+
+        List<Role> roles = new ArrayList<>();
+        for (Class<? extends Role> roleClass : roleClasses) {
+            try {
+                roles.add(roleClass.getDeclaredConstructor().newInstance());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Displaying descriptions and actions for each role
+        for (Role role : roles) {
+            System.out.println(role.getDescription());
+            role.performAction();
+        }
+    }
+}
+*/

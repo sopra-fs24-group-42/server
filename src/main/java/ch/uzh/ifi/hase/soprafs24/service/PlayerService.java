@@ -43,4 +43,9 @@ public class PlayerService {
         return player.getLobbyId();
     }
 
+    
+    public void assignRoles(String lobbyCode) {
+        List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyCode(lobbyCode);
+
+    }
 }

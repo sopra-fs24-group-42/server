@@ -8,14 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class ServiceProvider {
 
     private final LobbyService lobbyService;
-
     private final PlayerService playerService;
-    private final WebsocketService wsService;
 
     public ServiceProvider(LobbyService lobbyService, PlayerService playerService, WebsocketService wsService) {
         this.lobbyService = lobbyService;
         this.playerService = playerService;
-        this.wsService = wsService;
     }
     public LobbyService getLobbyService() {
         return lobbyService;
@@ -25,7 +22,4 @@ public class ServiceProvider {
         return playerService;
     }
 
-    public WebsocketService getWsService() {
-        return wsService;
-    }
 }

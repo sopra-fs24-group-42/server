@@ -53,19 +53,19 @@ public class GameService {
 
     public Lobby createLobby(Lobby newLobby) {
         String lobbyCode = LobbyCodeGenerator.generateLobbyCode();
-        newLobby.setLobbyCode(lobbyCode);
 
+        newLobby.setLobbyCode(lobbyCode);
         newLobby.setGameState(GameState.NIGHT);
         //newLobby.setGameSettings(new GameSettings());
 
         newLobby.setGameSettings(serviceProvider.getLobbyService().setDefaultSettings(newLobby.getNumberOfPlayers()));
 
-        newLobby = repositoryProvider.getLobbyRepository().save(newLobby);
-        repositoryProvider.getLobbyRepository().flush();
-
         // Trigger the Creation of Host Player
         Player hostPlayer = new Player(newLobby.getHostName(), newLobby.getLobbyCode());
         Player createdPlayer = createPlayer(hostPlayer);
+
+        newLobby = repositoryProvider.getLobbyRepository().save(newLobby);
+        repositoryProvider.getLobbyRepository().flush();
 
         List<Player> players = serviceProvider.getLobbyService().getListOfLobbyPlayers(lobbyCode);
         newLobby.setPlayers(players);
@@ -73,7 +73,8 @@ public class GameService {
         log.debug("Created Information for Lobby: {}", newLobby);
         return newLobby;
     }
-
+    
+    //probably needs to be removed and do it in PlayerService
     public void assignRolesByLobbyId(Long lobbyId) {
         //assign roles
         List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
@@ -83,5 +84,5 @@ public class GameService {
         }
         */
     }
-
+    
 }
