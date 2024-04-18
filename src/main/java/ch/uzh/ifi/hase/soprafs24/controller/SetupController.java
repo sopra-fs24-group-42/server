@@ -10,10 +10,13 @@ import ch.uzh.ifi.hase.soprafs24.service.GameService;
 import ch.uzh.ifi.hase.soprafs24.rest.mapper.DTOMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 public class SetupController {
 
+    private static final Logger logger = LoggerFactory.getLogger(SetupController.class);
     private final GameService gameService;
 
     SetupController(GameService gameService) {
@@ -43,6 +46,8 @@ public class SetupController {
 
         // create lobby
         Lobby createdLobby = gameService.createLobby(lobbyInput);
+
+        logger.info("created Lobby with lobbyId: {}", createdLobby.getLobbyId());
 
         // convert internal representation of user back to API
         return DTOMapper.INSTANCE.convertEntityToLobbyDTO(createdLobby);
