@@ -21,10 +21,13 @@ public class WebsocketService {
     }
 
     public void broadcastLobby(final Long lobbyId) {
+        try {
         Lobby lobbyToBroadcast = repositoryProvider.getLobbyRepository().findByLobbyId(lobbyId);
         lobbyToBroadcast.setPlayers(repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId));     
         String destination = "/topic/lobby/" + Long.toString(lobbyId);
         messagingTemplate.convertAndSend(destination, lobbyToBroadcast);
+        }
+        catch(Exception e){}
     }
 
 }
