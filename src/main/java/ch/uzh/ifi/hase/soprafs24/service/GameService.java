@@ -34,6 +34,7 @@ public class GameService {
     public Player createPlayer(Player newPlayer) {
         newPlayer.setToken(UUID.randomUUID().toString());
         serviceProvider.getPlayerService().checkIfUserExists(newPlayer);
+        serviceProvider.getLobbyService().CheckIfLobbyFull(newPlayer.getLobbyCode());
 
         newPlayer.setIsAlive(Boolean.TRUE);
         newPlayer.setIsProtected(Boolean.FALSE);
@@ -70,7 +71,7 @@ public class GameService {
         log.debug("Created Information for Lobby: {}", newLobby);
         return newLobby;
     }
-    
+
     //probably needs to be removed and do it in PlayerService
     public void assignRolesByLobbyId(Long lobbyId) {
         //assign roles
@@ -81,5 +82,4 @@ public class GameService {
         }
         */
     }
-    
 }

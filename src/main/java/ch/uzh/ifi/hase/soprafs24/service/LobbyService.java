@@ -59,15 +59,6 @@ public class LobbyService {
         gameSettings.setNumberOfVillagers(numberOfPlayers - numberOfWerewolves - 1);
         return gameSettings;
     }
-    /*public List<Role> SetLobbyRoles(Long lobbyId){
-        // having the setting we are to create a list of roles that placed in the list randomly
-        // then we assign the roles to the players by the position in the list
-        Lobby lobby = repositoryProvider.getLobbyRepository().findByLobbyId(lobbyId);
-        List<Role> roles = new List<Role>();
 
-        for (int i = 0; i < lobby.getNumberOfPlayers(); i++){
-            roles.add()
-        }
-        return roles;
-    }*/
+
 }
