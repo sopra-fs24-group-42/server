@@ -34,7 +34,6 @@ public class GameService {
     public Player createPlayer(Player newPlayer) {
         newPlayer.setToken(UUID.randomUUID().toString());
         serviceProvider.getPlayerService().checkIfUserExists(newPlayer);
-        serviceProvider.getLobbyService().CheckIfLobbyFull(newPlayer.getLobbyCode());
 
         newPlayer.setIsAlive(Boolean.TRUE);
         newPlayer.setIsProtected(Boolean.FALSE);
@@ -56,16 +55,14 @@ public class GameService {
 
         newLobby.setLobbyCode(lobbyCode);
         newLobby.setGameState(GameState.NIGHT);
-        //newLobby.setGameSettings(new GameSettings());
-
         newLobby.setGameSettings(serviceProvider.getLobbyService().setDefaultSettings(newLobby.getNumberOfPlayers()));
+
+        newLobby = repositoryProvider.getLobbyRepository().save(newLobby);
+        repositoryProvider.getLobbyRepository().flush();
 
         // Trigger the Creation of Host Player
         Player hostPlayer = new Player(newLobby.getHostName(), newLobby.getLobbyCode());
         Player createdPlayer = createPlayer(hostPlayer);
-
-        newLobby = repositoryProvider.getLobbyRepository().save(newLobby);
-        repositoryProvider.getLobbyRepository().flush();
 
         List<Player> players = serviceProvider.getLobbyService().getListOfLobbyPlayers(lobbyCode);
         newLobby.setPlayers(players);
