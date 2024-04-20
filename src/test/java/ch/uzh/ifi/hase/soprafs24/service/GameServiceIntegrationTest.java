@@ -125,13 +125,6 @@ public class GameServiceIntegrationTest {
   public void createPlayer_InvalidLobbyCode_throwsException() {
     assertNull(playerRepository.findByUsername("testPlayer"));
 
-    /*
-    Lobby testLobby = new Lobby();
-    testLobby.setHostName("testHost");
-    testLobby.setNumberOfPlayers(7);
-    Lobby createdLobby = gameService.createLobby(testLobby);
-    */
-
     Player testPlayer = new Player();
     testPlayer.setUsername("testPlayer");
     testPlayer.setLobbyCode("testCode");

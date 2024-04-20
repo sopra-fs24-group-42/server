@@ -33,15 +33,20 @@ public class GameService {
 
     public Player createPlayer(Player newPlayer) {
         newPlayer.setToken(UUID.randomUUID().toString());
-        serviceProvider.getPlayerService().checkIfUserExists(newPlayer);
+        serviceProvider.getPlayerService().checkIfUserExists(newPlayer); // check if the same username is entered
+        serviceProvider.getLobbyService().CheckIfLobbyExists(newPlayer); // check if the lobby code is correct
+
+        // lobby exists and username is not taken
+        // check if the lobby is full
         serviceProvider.getLobbyService().CheckIfLobbyFull(newPlayer.getLobbyCode());
 
+        // set the fields for a new player
         newPlayer.setIsAlive(Boolean.TRUE);
         newPlayer.setIsProtected(Boolean.FALSE);
         newPlayer.setIsKilled(Boolean.FALSE);
         newPlayer.setIsReady(Boolean.FALSE);
 
-        serviceProvider.getLobbyService().CheckIfLobbyExists(newPlayer);
+        // get the lobby id by the lobby code
         newPlayer.setLobbyId(repositoryProvider.getLobbyRepository().findByLobbyCode(newPlayer.getLobbyCode()).getLobbyId());
 
         newPlayer = repositoryProvider.getPlayerRepository().save(newPlayer);
