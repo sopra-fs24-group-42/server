@@ -37,8 +37,8 @@ public class PlayerRepositoryIntegrationTest {
     player.setIsProtected(Boolean.FALSE);
     player.setIsReady(Boolean.FALSE);
     player.setToken("1");
-    player.setRole(new Role());
-    //player.setRoleName("1");
+    //player.setRole(new Role());
+    player.setRoleName("1");
 
     entityManager.persist(player);
     entityManager.flush();
@@ -57,7 +57,7 @@ public class PlayerRepositoryIntegrationTest {
     assertEquals(found.getIsKilled(), player.getIsKilled());
     assertEquals(found.getIsReady(), player.getIsReady());
     assertEquals(found.getToken(), player.getToken());
-    assertEquals(found.getRole(), player.getRole());
+    //assertEquals(found.getRole(), player.getRole());
   }
 
 

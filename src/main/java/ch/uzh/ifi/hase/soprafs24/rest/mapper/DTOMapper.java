@@ -28,7 +28,7 @@ public interface DTOMapper {
     @Mapping(source = "isProtected", target = "isProtected")
     @Mapping(source = "isKilled", target = "isKilled")
     @Mapping(source = "isReady", target = "isReady")
-    @Mapping(source = "role", target = "role")
+    @Mapping(source = "roleName", target = "roleName")
     @Mapping(source = "lobbyCode", target = "lobbyCode")
     @Mapping(source = "lobbyId", target = "lobbyId")
     PlayerDTO convertEntityToPlayerDTO(Player player);

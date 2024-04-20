@@ -39,8 +39,8 @@ public class Player implements Serializable {
     @Column(nullable = false)
     private Long lobbyId;
 
-    @Transient   // field is non - persistent
-    private Role role;
+    //@Transient   // field is non - persistent
+    //private Role role;
     
     @Column(nullable = true)
     private String roleName;
@@ -107,6 +107,7 @@ public class Player implements Serializable {
     public void setIsReady(Boolean isReady) {
         this.isReady = isReady;
     }
+    /*
     public Role getRole() {
         return role;
     }
@@ -115,7 +116,7 @@ public class Player implements Serializable {
         this.role = role;
         this.roleName = role.getRoleName();
     }
-
+    */
     public String getLobbyCode() {
         return lobbyCode;
     }
@@ -130,5 +131,13 @@ public class Player implements Serializable {
 
     public void setLobbyId(Long lobbyId) {
         this.lobbyId = lobbyId;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 }

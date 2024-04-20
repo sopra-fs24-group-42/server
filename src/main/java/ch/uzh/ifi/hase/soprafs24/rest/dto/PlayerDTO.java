@@ -18,7 +18,7 @@ public class PlayerDTO {
 
     private String token;
 
-    private Role role;
+    private String roleName;
 
     private String lobbyCode;
 
@@ -80,12 +80,12 @@ public class PlayerDTO {
         this.token = token;
     }
 
-    public Role getRole() {
-        return role;
+    public String getRoleName() {
+        return roleName;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
     public String getLobbyCode() {
         return lobbyCode;
