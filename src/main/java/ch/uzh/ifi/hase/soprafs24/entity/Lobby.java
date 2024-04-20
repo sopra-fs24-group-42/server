@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = "LOBBY")
@@ -27,6 +28,9 @@ public class Lobby implements Serializable {
 
     @Transient
     private List<Player> players;
+
+    @Transient  // This map is not persisted in the database
+    private Map<String, Player> playerMap;
 
     @Column(nullable = false)
     private GameState gameState;
@@ -96,5 +100,13 @@ public class Lobby implements Serializable {
 
     public void setNumberOfPlayers(int numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
+    }
+
+    public Map<String, Player> getPlayerMap() {
+        return playerMap;
+    }
+
+    public void setPlayerMap(Map<String, Player> playerMap) {
+        this.playerMap = playerMap;
     }
 }
