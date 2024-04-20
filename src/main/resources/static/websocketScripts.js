@@ -11,6 +11,10 @@ $(document).ready(function() {
     $("#send").click(function() {
         sendMessage();
     });
+
+    $("#startGame").click(function() {
+        startGame();
+    });
     /*
     $("#send-private").click(function() {
         sendPrivateMessage();
@@ -55,6 +59,12 @@ function showMessage(message) {
 function sendMessage() {
     console.log("sending message");
     stompClient.send("/app/test", {}, JSON.stringify({'username': $("#username").val(), 'selection': $("#selection").val()}));
+}
+
+function startGame() {
+    lobbyId = parseInt($("#lobbyId").val(), 10);
+    console.log("start game: ", lobbyId);
+    stompClient.send("/app/startgame", {}, JSON.stringify({'lobbyId': lobbyId}));
 }
 
 /*
