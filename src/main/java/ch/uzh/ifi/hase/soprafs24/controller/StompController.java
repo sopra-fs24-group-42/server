@@ -13,6 +13,7 @@ import ch.uzh.ifi.hase.soprafs24.service.GameService;
 import ch.uzh.ifi.hase.soprafs24.service.ServiceProvider;
 import ch.uzh.ifi.hase.soprafs24.service.WebsocketService;
 import ch.uzh.ifi.hase.soprafs24.websocket.dto.SelectionRequest;
+import ch.uzh.ifi.hase.soprafs24.websocket.dto.StartGameRequest;
 import ch.uzh.ifi.hase.soprafs24.websocket.dto.TestMessage;
 
 @Controller
@@ -57,11 +58,13 @@ public class StompController {
    
     // Start game and distribute roles
     @MessageMapping("/startgame")
-    public void startGame(final Long lobbyId) {
+    public void startGame(final StartGameRequest startGameRequest) {
+        Long lobbyId = Long.valueOf(startGameRequest.getLobbyId());
         //maybe todo check if lobby is full
-        
+
+        logger.info("lobby {} wants to start the game", lobbyId);
         // asign roles
-        gameService.assignRolesByLobbyId(lobbyId);
+        serviceProvider.getPlayerService().assignRoles(lobbyId);
         //broadcast lobby
         wsService.broadcastLobby(lobbyId);
     }

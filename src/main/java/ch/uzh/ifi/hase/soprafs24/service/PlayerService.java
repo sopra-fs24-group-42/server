@@ -15,6 +15,8 @@ import org.springframework.context.event.EventListener;
 
 import java.util.UUID;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
 
 
 @Service
@@ -43,9 +45,29 @@ public class PlayerService {
         return player.getLobbyId();
     }
 
+    public void assignRoles(Long lobbyId) {
+        try {
+            // Fetch players and roles
+            List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
+            ArrayList<String> roles = repositoryProvider.getLobbyRepository().findByLobbyId(lobbyId).getGameSettings().RoleList();
     
-    public void assignRoles(String lobbyCode) {
-        List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyCode(lobbyCode);
+            // Check if there are enough roles and players
+            if (players == null || roles == null || players.size() < roles.size()) {
+                throw new IllegalArgumentException("Not enough players or roles available for assignment.");
+            }
+    
+            // Shuffle roles
+            Collections.shuffle(roles);
+    
+            // Assign roles to players
+            for (int i = 0; i < roles.size(); i++) {
+                players.get(i).setRoleName(roles.get(i));
+            }
+        } catch (Exception e) {
+            // Log the exception and possibly throw it to be handled by a higher-level function
+            System.err.println("An error occurred during role assignment: " + e.getMessage());
+            throw e;
+        }
 
     }
 }

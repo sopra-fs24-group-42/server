@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs24.utils;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 
 @Embeddable
 public class GameSettings {
@@ -116,6 +117,46 @@ public class GameSettings {
 
     public void setNumberOfSwappers(int numberOfSwappers) {
         this.numberOfSwappers = numberOfSwappers;
+    }
+
+    public ArrayList<String> RoleList() {
+        ArrayList<String> roles = new ArrayList<>();
+
+        for (int i = 0; i < numberOfWerewolves; i++) {
+            roles.add("Werewolf");
+        }
+        for (int i = 0; i < numberOfVillagers; i++) {
+            roles.add("Villager");
+        }
+        for (int i = 0; i < numberOfProtectors; i++) {
+            roles.add("Protector");
+        }
+        for (int i = 0; i < numberOfSeers; i++) {
+            roles.add("Seer");
+        }
+        for (int i = 0; i < numberOfSheriffs; i++) {
+            roles.add("Sheriff");
+        }
+        for (int i = 0; i < numberOfMayors; i++) {
+            roles.add("Mayor");
+        }
+        for (int i = 0; i < numberOfJesters; i++) {
+            roles.add("Jester");
+        }
+        for (int i = 0; i < numberOfSacrifices; i++) {
+            roles.add("Sacrifice");
+        }
+        for (int i = 0; i < numberOfAmours; i++) {
+            roles.add("Amour");
+        }
+        for (int i = 0; i < numberOfHunters; i++) {
+            roles.add("Hunter");
+        }
+        for (int i = 0; i < numberOfSwappers; i++) {
+            roles.add("Swapper");
+        }
+
+        return roles;
     }
 
 }
