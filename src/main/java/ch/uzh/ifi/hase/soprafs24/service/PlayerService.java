@@ -1,8 +1,10 @@
 package ch.uzh.ifi.hase.soprafs24.service;
 
 import ch.uzh.ifi.hase.soprafs24.entity.Player;
+import ch.uzh.ifi.hase.soprafs24.constant.GameState;
 import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs24.repository.RepositoryProvider;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +70,41 @@ public class PlayerService {
             System.err.println("An error occurred during role assignment: " + e.getMessage());
             throw e;
         }
+    }
 
+    public void setPlayerReady(String username, GameState clientGameState) {
+        Player readyPlayer = repositoryProvider.getPlayerRepository().findByUsername(username);
+        Lobby lobbyOfReadyPlayer = repositoryProvider.getLobbyRepository().findByLobbyCode(readyPlayer.getLobbyCode());
+
+        //check if client and server are in same gameState
+        if (lobbyOfReadyPlayer.getGameState() != clientGameState) {
+            throw new IllegalArgumentException("Player is not in the same gameState as the lobby");
+        }
+
+        readyPlayer.setIsReady(true);
+
+        log.info("User {} is set ready in lobby {}", readyPlayer.getUsername(), lobbyOfReadyPlayer.getLobbyId());
+    }
+
+    public boolean areAllPlayersReady(Long lobbyId) {
+        //if too slow it could be implemented with SQL
+        int countNotReady = 0;
+        List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
+
+        for (int i = 0; i < players.size(); i++) {
+            if (!players.get(i).getIsReady()) {countNotReady++;}
+        }
+
+        log.info("{} Players are not ready yet", countNotReady);
+
+        return countNotReady == 0;
+    }
+
+    public void setPlayersNotReady (Long lobbyId){
+        List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
+
+        for (int i = 0; i < players.size(); i++) {
+            players.get(i).setIsReady(false);
+        }
     }
 }

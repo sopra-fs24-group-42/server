@@ -72,4 +72,38 @@ public class GameService {
         return newLobby;
     }
 
+    public void goToNextPhase (Long lobbyId) {
+        if(!serviceProvider.getPlayerService().areAllPlayersReady(lobbyId)) {
+            log.info("Not all Players are ready yet to go to next Phase");
+        } else {
+            Lobby lobby = repositoryProvider.getLobbyRepository().findByLobbyId(lobbyId);
+            switch (lobby.getGameState()) {
+                case WAITINGROOM:
+                    lobby.setGameState(GameState.NIGHT);
+                    break;
+                case NIGHT:
+                    lobby.setGameState(GameState.REVEALNIGHT);
+                    break;
+                case REVEALNIGHT:
+                    lobby.setGameState(GameState.DISCUSSION);
+                    break;
+                case DISCUSSION:
+                    lobby.setGameState(GameState.VOTING);
+                    break;
+                case VOTING:
+                    lobby.setGameState(GameState.REVEALVOTING);
+                    break;
+                case REVEALVOTING:
+                    lobby.setGameState(GameState.NIGHT);
+                    break;
+                default:
+                    break;
+            }
+            log.info("lobby {} is now in phase {}", lobby.getLobbyId(), lobby.getGameState());
+
+            //reset all players to isReady = false
+            serviceProvider.getPlayerService().setPlayersNotReady(lobbyId);
+        }
+    }
+
 }
