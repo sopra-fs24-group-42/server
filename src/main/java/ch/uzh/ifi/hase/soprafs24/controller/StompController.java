@@ -12,7 +12,9 @@ import ch.uzh.ifi.hase.soprafs24.entity.Player;
 import ch.uzh.ifi.hase.soprafs24.service.GameService;
 import ch.uzh.ifi.hase.soprafs24.service.ServiceProvider;
 import ch.uzh.ifi.hase.soprafs24.service.WebsocketService;
+import ch.uzh.ifi.hase.soprafs24.websocket.dto.ReadyRequest;
 import ch.uzh.ifi.hase.soprafs24.websocket.dto.SelectionRequest;
+import ch.uzh.ifi.hase.soprafs24.websocket.dto.StartGameRequest;
 import ch.uzh.ifi.hase.soprafs24.websocket.dto.TestMessage;
 
 @Controller
@@ -57,23 +59,31 @@ public class StompController {
    
     // Start game and distribute roles
     @MessageMapping("/startgame")
-    public void startGame(final Long lobbyId) {
-        //maybe todo check if lobby is full
-        
+    public void startGame(final StartGameRequest startGameRequest) {
+        Long lobbyId = Long.valueOf(startGameRequest.getLobbyId());
+
+        logger.info("lobby {} wants to start the game", lobbyId);
         // asign roles
-        gameService.assignRolesByLobbyId(lobbyId);
+        serviceProvider.getPlayerService().assignRoles(lobbyId);
         //broadcast lobby
         wsService.broadcastLobby(lobbyId);
     }
    
     // Advance to next phase
     @MessageMapping("/ready")
-    public void ready(final String username) {
+    public void ready(final ReadyRequest readyRequest) {
         //implement readycheck
+        logger.info("User {} is in {} phase and ready!", readyRequest.getUsername(), readyRequest.getGameState());
+        
         //set player to ready
-        //if all players ready broadcast lobby
-        logger.info("The 'ready' method was called by user: {}", username);
+        serviceProvider.getPlayerService().setPlayerReady(readyRequest.getUsername(), readyRequest.getGameState());
 
+        //go to next phase
+        Long lobbyId = serviceProvider.getPlayerService().getLobbyIdFromPlayerByUsername(readyRequest.getUsername());
+        gameService.goToNextPhase(lobbyId);
+
+        //just give updates to everyone
+        wsService.broadcastLobby(lobbyId);
     }
   
     // Perform night action

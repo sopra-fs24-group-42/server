@@ -56,9 +56,9 @@ public class LobbyService {
         GameSettings gameSettings = new GameSettings();
         int numberOfWerewolves = (int)(numberOfPlayers/3); 
         gameSettings.setNumberOfWerewolves(numberOfWerewolves);
+        //-1 for Seer. Potential Bug if initializasion of GameSettings changes 
         gameSettings.setNumberOfVillagers(numberOfPlayers - numberOfWerewolves - 1);
         return gameSettings;
     }
-
 
 }

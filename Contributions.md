@@ -33,7 +33,7 @@
 
 | Date | Name | Links to Github Issues | Comments |
 |---|---|---|---|
-|   |   |   |   |
+|20.04.2024|Lukas|[#46](https://github.com/sopra-fs24-group-42/server/issues/46), [#100](https://github.com/sopra-fs24-group-42/server/issues/100)| implement start game logic|
 |   |   |   |   |
 |   |   |   |   |
 

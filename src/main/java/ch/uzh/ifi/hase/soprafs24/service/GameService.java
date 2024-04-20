@@ -60,7 +60,7 @@ public class GameService {
         String lobbyCode = LobbyCodeGenerator.generateLobbyCode();
 
         newLobby.setLobbyCode(lobbyCode);
-        newLobby.setGameState(GameState.NIGHT);
+        newLobby.setGameState(GameState.WAITINGROOM);
         newLobby.setGameSettings(serviceProvider.getLobbyService().setDefaultSettings(newLobby.getNumberOfPlayers()));
 
         newLobby = repositoryProvider.getLobbyRepository().save(newLobby);
@@ -77,14 +77,38 @@ public class GameService {
         return newLobby;
     }
 
-    //probably needs to be removed and do it in PlayerService
-    public void assignRolesByLobbyId(Long lobbyId) {
-        //assign roles
-        List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
-        /*
-        for (Player player : players) {
-            player.setRole(new Role());
+    public void goToNextPhase (Long lobbyId) {
+        if(!serviceProvider.getPlayerService().areAllPlayersReady(lobbyId)) {
+            log.info("Not all Players are ready yet to go to next Phase");
+        } else {
+            Lobby lobby = repositoryProvider.getLobbyRepository().findByLobbyId(lobbyId);
+            switch (lobby.getGameState()) {
+                case WAITINGROOM:
+                    lobby.setGameState(GameState.NIGHT);
+                    break;
+                case NIGHT:
+                    lobby.setGameState(GameState.REVEALNIGHT);
+                    break;
+                case REVEALNIGHT:
+                    lobby.setGameState(GameState.DISCUSSION);
+                    break;
+                case DISCUSSION:
+                    lobby.setGameState(GameState.VOTING);
+                    break;
+                case VOTING:
+                    lobby.setGameState(GameState.REVEALVOTING);
+                    break;
+                case REVEALVOTING:
+                    lobby.setGameState(GameState.NIGHT);
+                    break;
+                default:
+                    break;
+            }
+            log.info("lobby {} is now in phase {}", lobby.getLobbyId(), lobby.getGameState());
+
+            //reset all players to isReady = false
+            serviceProvider.getPlayerService().setPlayersNotReady(lobbyId);
         }
-        */
     }
+
 }
