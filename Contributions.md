@@ -33,7 +33,7 @@
 
 | Date | Name | Links to Github Issues | Comments |
 |---|---|---|---|
-|20.04.2024|Lukas|issue #46|implement startgame logic|
+|20.04.2024|Lukas|[#46]|implement startgame logic|
 |   |   |   |   |
 |   |   |   |   |
 
