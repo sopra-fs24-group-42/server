@@ -15,6 +15,10 @@ $(document).ready(function() {
     $("#startGame").click(function() {
         startGame();
     });
+
+    $("#ready").click(function() {
+        readycheck();
+    });
     /*
     $("#send-private").click(function() {
         sendPrivateMessage();
@@ -65,6 +69,11 @@ function startGame() {
     lobbyId = parseInt($("#lobbyId").val(), 10);
     console.log("start game: ", lobbyId);
     stompClient.send("/app/startgame", {}, JSON.stringify({'lobbyId': lobbyId}));
+}
+
+function readycheck() {
+    console.log("sending readycheck");
+    stompClient.send("/app/ready", {}, JSON.stringify({'username': $("#username").val(), 'gameState': $("#gameState").val()}));
 }
 
 /*
