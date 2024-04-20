@@ -37,10 +37,9 @@ public class PlayerRepositoryIntegrationTest {
     player.setIsProtected(Boolean.FALSE);
     player.setIsReady(Boolean.FALSE);
     player.setToken("1");
-    //player.setRole(new Role());
-    player.setRoleName("1");
+    player.setRoleName("Seer");
 
-    entityManager.persist(player);
+    entityManager.merge(player);
     entityManager.flush();
 
     // when
@@ -57,13 +56,11 @@ public class PlayerRepositoryIntegrationTest {
     assertEquals(found.getIsKilled(), player.getIsKilled());
     assertEquals(found.getIsReady(), player.getIsReady());
     assertEquals(found.getToken(), player.getToken());
-    //assertEquals(found.getRole(), player.getRole());
+    assertEquals(found.getRoleName(), player.getRoleName());
   }
 
-
-    // redo
     @Test
-    public void findByLobbyCode_throws_error() {
+    public void findByLobbyCode_success() {
      // given
      Player player = new Player();
      player.setPlayerId(1L);
@@ -75,25 +72,26 @@ public class PlayerRepositoryIntegrationTest {
      player.setIsProtected(Boolean.FALSE);
      player.setIsReady(Boolean.FALSE);
      player.setToken("1");
+     player.setRoleName("Seer");
 
-     entityManager.persist(player);
+     entityManager.merge(player);
      entityManager.flush();
 
      // return the list of players
-     // for loop ?
      List<Player> founds = playerRepository.findByLobbyCode(player.getLobbyCode());
 
      // then
-     assertNotNull(founds.get(1).getPlayerId());
-     assertEquals(founds.get(1).getUsername(), player.getUsername());
-     assertEquals(founds.get(1).getLobbyId(), player.getLobbyId());
-     assertEquals(founds.get(1).getLobbyCode(), player.getLobbyCode());
-     assertEquals(founds.get(1).getToken(), player.getToken());
-     assertEquals(founds.get(1).getIsAlive(), player.getIsAlive());
-     assertEquals(founds.get(1).getIsProtected(), player.getIsProtected());
-     assertEquals(founds.get(1).getIsKilled(), player.getIsKilled());
-     assertEquals(founds.get(1).getIsReady(), player.getIsReady());
-     assertEquals(founds.get(1).getToken(), player.getToken());
+     assertNotNull(founds.get(0).getPlayerId());
+     assertEquals(founds.get(0).getUsername(), player.getUsername());
+     assertEquals(founds.get(0).getLobbyId(), player.getLobbyId());
+     assertEquals(founds.get(0).getLobbyCode(), player.getLobbyCode());
+     assertEquals(founds.get(0).getToken(), player.getToken());
+     assertEquals(founds.get(0).getIsAlive(), player.getIsAlive());
+     assertEquals(founds.get(0).getIsProtected(), player.getIsProtected());
+     assertEquals(founds.get(0).getIsKilled(), player.getIsKilled());
+     assertEquals(founds.get(0).getIsReady(), player.getIsReady());
+     assertEquals(founds.get(0).getToken(), player.getToken());
+     assertEquals(founds.get(0).getRoleName(), player.getRoleName());
 
     }
 }
