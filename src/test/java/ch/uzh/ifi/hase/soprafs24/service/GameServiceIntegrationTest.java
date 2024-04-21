@@ -47,8 +47,14 @@ public class GameServiceIntegrationTest {
     // given
     assertNull(playerRepository.findByUsername("testPlayer"));
 
+    Lobby testLobby = new Lobby();
+    testLobby.setHostName("testHost");
+    testLobby.setNumberOfPlayers(7);
+    Lobby createdLobby = gameService.createLobby(testLobby);
+
     Player testPlayer = new Player();
     testPlayer.setUsername("testPlayer");
+    testPlayer.setLobbyCode(createdLobby.getLobbyCode());
 
     // when
     Player createdPlayer = gameService.createPlayer(testPlayer);
@@ -93,30 +99,37 @@ public class GameServiceIntegrationTest {
   @Test
   public void createPlayer_duplicateUsername_throwsException() {
     assertNull(playerRepository.findByUsername("testPlayer"));
+    assertNull(playerRepository.findByUsername("testHost"));
+
+    Lobby testLobby = new Lobby();
+    testLobby.setHostName("testHost");
+    testLobby.setNumberOfPlayers(7);
+    Lobby createdLobby = gameService.createLobby(testLobby);
 
     Player testPlayer = new Player();
     testPlayer.setUsername("testPlayer");
+    testPlayer.setLobbyCode(createdLobby.getLobbyCode());
     Player createdPlayer = gameService.createPlayer(testPlayer);
 
     // attempt to create second user with same username
     Player testPlayer2 = new Player();
     testPlayer2.setUsername("testPlayer");
+    testPlayer2.setLobbyCode(createdLobby.getLobbyCode());
 
     // check that an error is thrown
     assertThrows(ResponseStatusException.class, () -> gameService.createPlayer(testPlayer2));
+
   }
 
   @Test
   public void createPlayer_InvalidLobbyCode_throwsException() {
     assertNull(playerRepository.findByUsername("testPlayer"));
-    assertNull(lobbyRepository.findByLobbyCode("testCode"));
 
     Player testPlayer = new Player();
     testPlayer.setUsername("testPlayer");
     testPlayer.setLobbyCode("testCode");
 
     assertThrows(ResponseStatusException.class, () -> gameService.createPlayer(testPlayer));
-
   }
 
 }
