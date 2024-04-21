@@ -87,11 +87,22 @@ public class StompController {
     }
   
     // Perform night action
-    @MessageMapping("/nightaction")
-    public void performNightAction(final SelectionRequest request) {
-        // Implement night action logic
-        //set player to ready
-        //if all ready broadcast lobby
+    @MessageMapping("/Werewolf/nightaction")
+    public void performWerewolfNightAction(final SelectionRequest request) {
+        // Implement night action logic for werewol
+        logger.info("Werewolf {} selected {} during NIGHT", request.getUsername(), request.getSelection());
+    }
+
+    @MessageMapping("/Villager/nightaction")
+    public void performVillagerNightAction(final SelectionRequest request) {
+        //No logic needed for now
+        logger.info("Villager {} selected {} during NIGHT", request.getUsername(), request.getSelection());
+    }
+
+    @MessageMapping("/Seer/nightaction")
+    public void performSeerNightAction(final SelectionRequest request) {
+        //No logic needed for now
+        logger.info("Seer {} selected {} during NIGHT", request.getUsername(), request.getSelection());
     }
    
     // Vote during voting phase
