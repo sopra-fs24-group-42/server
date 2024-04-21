@@ -58,8 +58,9 @@ public class GameService {
         }
         catch (Exception ex){
             System.err.println("Player was not created, try again!");
+            throw ex;
         }
-        return new Player();
+        // return new Player();
     }
 
     public Lobby createLobby(Lobby newLobby) {
@@ -85,8 +86,8 @@ public class GameService {
         }
         catch(Exception ex){
             System.err.println("Player was not created, try again!");
+            throw ex;
         }
-        return new Lobby();
 
     }
 

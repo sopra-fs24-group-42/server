@@ -48,7 +48,7 @@ public class GameServiceTest {
   private Lobby testLobby;
 
   @BeforeEach
-  public void setupPlayer() {
+  public void setup() {
     MockitoAnnotations.openMocks(this);
     Mockito.when(repositoryProvider.getLobbyRepository()).thenReturn(lobbyRepository);
     Mockito.when(repositoryProvider.getPlayerRepository()).thenReturn(playerRepository);
