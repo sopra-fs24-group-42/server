@@ -34,7 +34,7 @@
 | Date | Name | Links to Github Issues | Comments |
 |---|---|---|---|
 |20.04.2024|Lukas|[#46](https://github.com/sopra-fs24-group-42/server/issues/46), [#100](https://github.com/sopra-fs24-group-42/server/issues/100), [#108](https://github.com/sopra-fs24-group-42/server/issues/108)| implement start game logic|
-|   | [#116](https://github.com/sopra-fs24-group-42/server/issues/116)  |   |   |
+|20.04.2024|Polina|[#116](https://github.com/sopra-fs24-group-42/server/issues/116), [#115](https://github.com/sopra-fs24-group-42/server/issues/115)|integration and test service tests|
 |   |   |   |   |
 
 ## <font style="color: #00d7ff">Week 4 *(25.04 – 26.04)*</font>
