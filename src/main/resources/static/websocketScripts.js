@@ -19,6 +19,11 @@ $(document).ready(function() {
     $("#ready").click(function() {
         readycheck();
     });
+
+    $("#nightaction").click(function() {
+        nightaction();
+    });
+
     /*
     $("#send-private").click(function() {
         sendPrivateMessage();
@@ -74,6 +79,12 @@ function startGame() {
 function readycheck() {
     console.log("sending readycheck");
     stompClient.send("/app/ready", {}, JSON.stringify({'username': $("#username").val(), 'gameState': $("#gameState").val()}));
+}
+
+function nightaction () {
+    var path = "/app/" + $("#roleName").val() + "/nightaction"
+    console.log("path: ", path);
+    stompClient.send(path, {}, JSON.stringify({'username': $("#username").val(), 'selection': $("#selection").val()}));
 }
 
 /*
