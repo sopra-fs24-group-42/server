@@ -104,7 +104,10 @@ public class PlayerService {
         List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
 
         for (int i = 0; i < players.size(); i++) {
-            players.get(i).setIsReady(false);
+            //only set alive players to not ready (non alive players are always ready)
+            if (players.get(i).getIsAlive()) {
+                players.get(i).setIsReady(false);
+            }
         }
     }
 
@@ -122,5 +125,15 @@ public class PlayerService {
     public String getRoleByUsername (String username) {
         Player player = repositoryProvider.getPlayerRepository().findByUsername(username);
         return player.getRoleName();
+    }
+
+    public int numberOfPlayersAlive (Long lobbyId) {
+        int count = 0;
+        List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
+        for (int i = 0; i < players.size(); i++) {
+            if (players.get(i).getIsAlive()) {count++;}
+        }
+        //log.info("In lobby {} are {} players alive", lobbyId, count);     
+        return count;
     }
 }
