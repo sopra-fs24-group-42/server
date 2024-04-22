@@ -24,6 +24,10 @@ $(document).ready(function() {
         nightaction();
     });
 
+    $("#voting").click(function() {
+        voting();
+    });
+
     /*
     $("#send-private").click(function() {
         sendPrivateMessage();
@@ -85,6 +89,10 @@ function nightaction () {
     var path = "/app/" + $("#roleName").val() + "/nightaction"
     console.log("path: ", path);
     stompClient.send(path, {}, JSON.stringify({'username': $("#username").val(), 'selection': $("#selection").val()}));
+}
+
+function voting () {
+    stompClient.send("/app/voting", {}, JSON.stringify({'username': $("#username").val(), 'selection': $("#selection").val()}));
 }
 
 /*
