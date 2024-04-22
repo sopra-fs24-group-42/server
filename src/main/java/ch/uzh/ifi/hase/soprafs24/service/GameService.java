@@ -51,6 +51,7 @@ public class GameService {
             newPlayer.setIsProtected(Boolean.FALSE);
             newPlayer.setIsKilled(Boolean.FALSE);
             newPlayer.setIsReady(Boolean.FALSE);
+            newPlayer.setNumberOfVotes(0);
 
             // get the lobby id by the lobby code
             newPlayer.setLobbyId(repositoryProvider.getLobbyRepository().findByLobbyCode(newPlayer.getLobbyCode()).getLobbyId());
@@ -111,15 +112,19 @@ public class GameService {
                     break;
                 case REVEALNIGHT:
                     lobby.setGameState(GameState.DISCUSSION);
+                    serviceProvider.getPlayerService().resetIsKilled(lobbyId);
                     break;
                 case DISCUSSION:
                     lobby.setGameState(GameState.VOTING);
                     break;
                 case VOTING:
+                    processVoting(lobbyId);
                     lobby.setGameState(GameState.REVEALVOTING);
                     break;
                 case REVEALVOTING:
                     lobby.setGameState(GameState.NIGHT);
+                    serviceProvider.getPlayerService().resetVotes(lobbyId);
+                    serviceProvider.getPlayerService().resetIsKilled(lobbyId);
                     break;
                 default:
                     break;
@@ -168,6 +173,32 @@ public class GameService {
     public void werewolfNightAction(String selection) {
         werewolf.setSelection(selection);
         werewolf.doNightAction();
+    }
+
+    private void processVoting (Long lobbyId) {
+        List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
+
+        Player playerWithMostVotes = null;
+        int maxVotes = -1;
+        int numOfMaxVotes = 0;
+
+        for (Player player : players) {
+            if (player.getNumberOfVotes() >= maxVotes) {
+                //check if other player also has maxVotes
+                if(player.getNumberOfVotes() == maxVotes) {
+                    numOfMaxVotes++;
+                } else {
+                    maxVotes = player.getNumberOfVotes();
+                    numOfMaxVotes = 1;
+                    playerWithMostVotes = player;
+                }
+            }
+        }
+
+        if (playerWithMostVotes != null && maxVotes > 0 && numOfMaxVotes == 1) {
+            playerWithMostVotes.setIsKilled(true);
+            playerWithMostVotes.setIsAlive(false);
+        }
     }
 
 }
