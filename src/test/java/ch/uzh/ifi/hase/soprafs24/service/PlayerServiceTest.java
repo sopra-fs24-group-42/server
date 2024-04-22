@@ -70,6 +70,11 @@ public class PlayerServiceTest {
     }
 
     @Test
+    public void assignRoles_success() {
+
+    }
+
+    @Test
     public void assignRoles_throw_error_invalid_number_of_players() {
 
     }
