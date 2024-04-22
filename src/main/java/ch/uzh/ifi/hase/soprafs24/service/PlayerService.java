@@ -108,6 +108,27 @@ public class PlayerService {
         }
     }
 
+    public void resetIsKilled (Long lobbyId) {
+        List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
+
+        for (int i = 0; i < players.size(); i++) {
+            players.get(i).setIsKilled(false);
+        }
+    }
+
+    public void resetVotes(Long lobbyId) {
+        List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
+
+        for (int i = 0; i < players.size(); i++) {
+            players.get(i).setNumberOfVotes(0);
+        }
+    }
+
+    public void voteForPlayer(String selectedPlayerName) {
+        Player votedPlayer = repositoryProvider.getPlayerRepository().findByUsername(selectedPlayerName);
+        votedPlayer.setNumberOfVotes(votedPlayer.getNumberOfVotes() + 1);
+    }
+
     public void killPlayer (String unsername) {
         Player playerToKill = repositoryProvider.getPlayerRepository().findByUsername(unsername);
         

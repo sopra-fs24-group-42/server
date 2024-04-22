@@ -45,6 +45,9 @@ public class Player implements Serializable {
     @Column(nullable = true)
     private String roleName;
 
+    @Column(nullable = false)
+    private int numberOfVotes;
+
     public Player() {}
 
     public Player(String username, String lobbyCode) {
@@ -139,5 +142,13 @@ public class Player implements Serializable {
 
     public void setRoleName(String roleName) {
         this.roleName = roleName;
+    }
+
+    public int getNumberOfVotes() {
+        return numberOfVotes;
+    }
+
+    public void setNumberOfVotes(int numberOfVotes) {
+        this.numberOfVotes = numberOfVotes;
     }
 }
