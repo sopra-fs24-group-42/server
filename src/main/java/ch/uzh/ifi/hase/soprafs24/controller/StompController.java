@@ -129,10 +129,13 @@ public class StompController {
     // Vote during voting phase
     @MessageMapping("/voting")
     public void vote(final SelectionRequest request) {
-        logger.info("The 'voting' method was called by user: {}", request.getUsername());
-        // Implement voting logic
-        //set player ready
-        //if all ready (voted) broadcast lobby
+        logger.info("user {} wants to vote for {}", request.getUsername(), request.getSelection());
+        //maybe check if both players are in the same lobby
+        
+        //vote for selected player
+        if(request.getSelection() != "" && request.getSelection() != null) {
+            serviceProvider.getPlayerService().voteForPlayer(request.getSelection());
+        }
     }
    
     // Broadcasting lobby information/changes
