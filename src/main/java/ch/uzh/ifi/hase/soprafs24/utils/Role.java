@@ -1,21 +1,18 @@
 package ch.uzh.ifi.hase.soprafs24.utils;
 
 public class Role {
-    private String roleName;
+    
+    private String selection;
 
     public Role() {
     }
 
-    public Role(String roleName) {
-        this.roleName = roleName;
+    public String getSelection() {
+        return selection;
     }
 
-    public String getRoleName() {
-        return roleName;
-    }
-
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
+    public void setSelection(String selection) {
+        this.selection = selection;
     }
 
     public void doNightAction(){}

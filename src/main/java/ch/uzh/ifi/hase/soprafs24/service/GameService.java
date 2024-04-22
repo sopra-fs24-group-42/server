@@ -6,6 +6,8 @@ import ch.uzh.ifi.hase.soprafs24.entity.Player;
 import ch.uzh.ifi.hase.soprafs24.repository.RepositoryProvider;
 import ch.uzh.ifi.hase.soprafs24.utils.GameSettings;
 import ch.uzh.ifi.hase.soprafs24.utils.LobbyCodeGenerator;
+import ch.uzh.ifi.hase.soprafs24.utils.roles.Werewolf;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +26,13 @@ public class GameService {
 
     private final RepositoryProvider repositoryProvider;
     private final ServiceProvider serviceProvider;
+    private final Werewolf werewolf;
 
     @Autowired
-    public GameService(RepositoryProvider repositoryProvider, ServiceProvider serviceProvider) {
+    public GameService(RepositoryProvider repositoryProvider, ServiceProvider serviceProvider, Werewolf werewolf) {
         this.repositoryProvider = repositoryProvider;
         this.serviceProvider = serviceProvider;
+        this.werewolf = werewolf;
     }
 
     public Player createPlayer(Player newPlayer) {
@@ -109,6 +113,11 @@ public class GameService {
             //reset all players to isReady = false
             serviceProvider.getPlayerService().setPlayersNotReady(lobbyId);
         }
+    }
+
+    public void werewolfNightAction(String selection) {
+        werewolf.setSelection(selection);
+        werewolf.doNightAction();
     }
 
 }

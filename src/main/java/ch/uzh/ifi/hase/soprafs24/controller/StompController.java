@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
-import ch.uzh.ifi.hase.soprafs24.entity.Player;
 import ch.uzh.ifi.hase.soprafs24.service.GameService;
 import ch.uzh.ifi.hase.soprafs24.service.ServiceProvider;
 import ch.uzh.ifi.hase.soprafs24.service.WebsocketService;
@@ -89,8 +88,17 @@ public class StompController {
     // Perform night action
     @MessageMapping("/Werewolf/nightaction")
     public void performWerewolfNightAction(final SelectionRequest request) {
-        // Implement night action logic for werewol
+
         logger.info("Werewolf {} selected {} during NIGHT", request.getUsername(), request.getSelection());
+
+        //maybe add check if player is werewolf
+
+        //check that both players are in same lobby
+        if (serviceProvider.getPlayerService().playersLobbyEqual(request.getUsername(), request.getSelection())) {
+            gameService.werewolfNightAction(request.getSelection());
+        } else {
+            logger.info("user {} with role {} is not in the same lobby as {}!", request.getSelection());
+        }
     }
 
     @MessageMapping("/Villager/nightaction")

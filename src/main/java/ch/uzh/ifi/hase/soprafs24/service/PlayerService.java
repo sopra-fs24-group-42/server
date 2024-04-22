@@ -100,11 +100,27 @@ public class PlayerService {
         return countNotReady == 0;
     }
 
-    public void setPlayersNotReady (Long lobbyId){
+    public void setPlayersNotReady (Long lobbyId) {
         List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
 
         for (int i = 0; i < players.size(); i++) {
             players.get(i).setIsReady(false);
         }
+    }
+
+    public void killPlayer (String unsername) {
+        Player playerToKill = repositoryProvider.getPlayerRepository().findByUsername(unsername);
+        
+        playerToKill.setIsKilled(true);
+    }
+
+    public boolean playersLobbyEqual (String usernameOne, String usernameTwo) {
+
+        return getLobbyIdFromPlayerByUsername(usernameOne) == getLobbyIdFromPlayerByUsername(usernameTwo);
+    }
+
+    public String getRoleByUsername (String username) {
+        Player player = repositoryProvider.getPlayerRepository().findByUsername(username);
+        return player.getRoleName();
     }
 }
