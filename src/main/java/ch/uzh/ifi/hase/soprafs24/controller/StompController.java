@@ -99,18 +99,31 @@ public class StompController {
         } else {
             logger.info("user {} with role {} is not in the same lobby as {}!", request.getSelection());
         }
+
+        //let lobby know that someone performed nightaction
+        Long lobbyIdOfUsername = serviceProvider.getPlayerService().getLobbyIdFromPlayerByUsername(request.getUsername());
+        serviceProvider.getLobbyService().incrementCountNightaction(lobbyIdOfUsername);
+        gameService.processNightphase(lobbyIdOfUsername);
     }
 
     @MessageMapping("/Villager/nightaction")
     public void performVillagerNightAction(final SelectionRequest request) {
         //No logic needed for now
         logger.info("Villager {} selected {} during NIGHT", request.getUsername(), request.getSelection());
+        //let lobby know that someone performed nightaction
+        Long lobbyIdOfUsername = serviceProvider.getPlayerService().getLobbyIdFromPlayerByUsername(request.getUsername());
+        serviceProvider.getLobbyService().incrementCountNightaction(lobbyIdOfUsername);
+        gameService.processNightphase(lobbyIdOfUsername);
     }
 
     @MessageMapping("/Seer/nightaction")
     public void performSeerNightAction(final SelectionRequest request) {
         //No logic needed for now
         logger.info("Seer {} selected {} during NIGHT", request.getUsername(), request.getSelection());
+        //let lobby know that someone performed nightaction
+        Long lobbyIdOfUsername = serviceProvider.getPlayerService().getLobbyIdFromPlayerByUsername(request.getUsername());
+        serviceProvider.getLobbyService().incrementCountNightaction(lobbyIdOfUsername);
+        gameService.processNightphase(lobbyIdOfUsername);
     }
    
     // Vote during voting phase

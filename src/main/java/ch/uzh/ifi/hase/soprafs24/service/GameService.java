@@ -16,7 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 import java.util.List;
-
+import java.util.stream.Collectors;
+import java.util.Random;
 
 @Service
 @Transactional
@@ -65,6 +66,7 @@ public class GameService {
 
         newLobby.setLobbyCode(lobbyCode);
         newLobby.setGameState(GameState.WAITINGROOM);
+        newLobby.setCountNightaction(0);
         newLobby.setGameSettings(serviceProvider.getLobbyService().setDefaultSettings(newLobby.getNumberOfPlayers()));
 
         newLobby = repositoryProvider.getLobbyRepository().save(newLobby);
@@ -110,9 +112,43 @@ public class GameService {
             }
             log.info("lobby {} is now in phase {}", lobby.getLobbyId(), lobby.getGameState());
 
-            //reset all players to isReady = false
+            //reset all alive players to isReady = false
             serviceProvider.getPlayerService().setPlayersNotReady(lobbyId);
         }
+    }
+
+    public void processNightphase(Long lobbyId) {
+        Lobby lobbyToProcess = repositoryProvider.getLobbyRepository().findByLobbyId(lobbyId);
+
+        if(serviceProvider.getPlayerService().numberOfPlayersAlive(lobbyId) == lobbyToProcess.getCountNightaction()) {
+            //process nightaction
+            List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
+
+            //if player isProtected change isKilled to false here!!!!
+
+            List<Player> killedPlayers = players.stream()
+                                            .filter(Player::getIsKilled)
+                                            .collect(Collectors.toList());
+
+            if (!killedPlayers.isEmpty()) {
+                    Random rand = new Random();
+                    // Randomly select one player to keep as killed
+                    Player playerToKeepKilled = killedPlayers.get(rand.nextInt(killedPlayers.size()));
+                    //permanent eliminated from game
+                    playerToKeepKilled.setIsAlive(false);                
+                    // Set all killed players' isKilled to false, except the randomly selected one
+                    for (Player player : players) {
+                        if (player.getIsKilled() && !player.equals(playerToKeepKilled)) {
+                            player.setIsKilled(false);
+                        }
+                    }
+            }
+            //reset CountNightaction
+            serviceProvider.getLobbyService().resetNightactionCount(lobbyId);
+        } else {
+            log.info("Waiting for Players to perform their Nightaction");
+        }
+
     }
 
     public void werewolfNightAction(String selection) {

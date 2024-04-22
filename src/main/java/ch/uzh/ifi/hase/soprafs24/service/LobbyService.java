@@ -61,4 +61,14 @@ public class LobbyService {
         return gameSettings;
     }
 
+    public void resetNightactionCount(Long lobbyId) {
+        Lobby lobbyToReset = repositoryProvider.getLobbyRepository().findByLobbyId(lobbyId);
+        lobbyToReset.setCountNightaction(0);
+    }
+
+    public void incrementCountNightaction(Long lobbyId) {
+        Lobby lobby = repositoryProvider.getLobbyRepository().findByLobbyId(lobbyId);
+        lobby.setCountNightaction(lobby.getCountNightaction() + 1);
+    }
+
 }

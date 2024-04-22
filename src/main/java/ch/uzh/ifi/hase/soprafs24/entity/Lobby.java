@@ -38,6 +38,9 @@ public class Lobby implements Serializable {
     @Column(nullable = false)
     private int numberOfPlayers;
 
+    @Column(nullable = false)
+    private int countNightaction;
+
     @Embedded
     private GameSettings gameSettings;
 
@@ -108,5 +111,13 @@ public class Lobby implements Serializable {
 
     public void setPlayerMap(Map<String, Player> playerMap) {
         this.playerMap = playerMap;
+    }
+
+    public int getCountNightaction() {
+        return countNightaction;
+    }
+
+    public void setCountNightaction(int countNightaction) {
+        this.countNightaction = countNightaction;
     }
 }
