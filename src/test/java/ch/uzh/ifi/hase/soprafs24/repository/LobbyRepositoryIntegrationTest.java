@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs24.repository;
 
 import ch.uzh.ifi.hase.soprafs24.constant.GameState;
+import ch.uzh.ifi.hase.soprafs24.constant.WinnerSide;
 import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs24.utils.GameSettings;
 import org.junit.jupiter.api.AfterAll;
@@ -29,6 +30,9 @@ public class LobbyRepositoryIntegrationTest {
     lobby.setHostName("testHost");
     lobby.setLobbyCode("G4Hf6");
     lobby.setNumberOfPlayers(7);
+    lobby.setCountNightaction(0);
+    lobby.setGameState(GameState.WAITINGROOM);
+    lobby.setWinnerSide(WinnerSide.NOWINNER);
     lobby.setGameSettings(new GameSettings());
     lobby.setGameState(GameState.NIGHT);
 
@@ -57,6 +61,8 @@ public class LobbyRepositoryIntegrationTest {
       lobby.setNumberOfPlayers(7);
       lobby.setGameSettings(new GameSettings());
       lobby.setGameState(GameState.NIGHT);
+      lobby.setCountNightaction(0);
+      lobby.setWinnerSide(WinnerSide.NOWINNER);
 
       entityManager.persist(lobby);
       entityManager.flush();
