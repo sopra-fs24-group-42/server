@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs24.service;
 
 import ch.uzh.ifi.hase.soprafs24.constant.GameState;
+import ch.uzh.ifi.hase.soprafs24.constant.WinnerSide;
 import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs24.entity.Player;
 import ch.uzh.ifi.hase.soprafs24.repository.RepositoryProvider;
@@ -76,6 +77,7 @@ public class GameService {
             newLobby.setLobbyCode(lobbyCode);
             newLobby.setGameState(GameState.WAITINGROOM);
             newLobby.setCountNightaction(0);
+            newLobby.setWinnerSide(WinnerSide.NOWINNER);
             newLobby.setGameSettings(serviceProvider.getLobbyService().setDefaultSettings(newLobby.getNumberOfPlayers()));
 
             newLobby = repositoryProvider.getLobbyRepository().save(newLobby);
@@ -113,6 +115,7 @@ public class GameService {
                 case REVEALNIGHT:
                     lobby.setGameState(GameState.DISCUSSION);
                     serviceProvider.getPlayerService().resetIsKilled(lobbyId);
+                    checkIfgameEnded(lobbyId);
                     break;
                 case DISCUSSION:
                     lobby.setGameState(GameState.VOTING);
@@ -125,6 +128,7 @@ public class GameService {
                     lobby.setGameState(GameState.NIGHT);
                     serviceProvider.getPlayerService().resetVotes(lobbyId);
                     serviceProvider.getPlayerService().resetIsKilled(lobbyId);
+                    checkIfgameEnded(lobbyId);
                     break;
                 default:
                     break;
@@ -198,6 +202,36 @@ public class GameService {
         if (playerWithMostVotes != null && maxVotes > 0 && numOfMaxVotes == 1) {
             playerWithMostVotes.setIsKilled(true);
             playerWithMostVotes.setIsAlive(false);
+        }
+    }
+
+    private void checkIfgameEnded (Long lobbyId) {
+        List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
+
+        //only check alive players
+        List<Player> alivePlayers = players.stream()
+                                            .filter(Player::getIsAlive)
+                                            .collect(Collectors.toList());
+
+        int countWerewolf = 0;
+        int countVillager = 0;
+
+        for (Player player : alivePlayers) {
+            if (player.getRoleName() == "Werewolf") {
+                countWerewolf++;
+            } else {
+                countVillager++;
+            }
+        }
+
+        Lobby lobby = repositoryProvider.getLobbyRepository().findByLobbyId(lobbyId);
+
+        if (countWerewolf == 0) {
+            lobby.setWinnerSide(WinnerSide.VILLAGERS);
+            lobby.setGameState(GameState.WAITINGROOM);
+        } else if (countWerewolf >= countVillager) {
+            lobby.setWinnerSide(WinnerSide.WEREWOLFS);
+            lobby.setGameState(GameState.WAITINGROOM);
         }
     }
 

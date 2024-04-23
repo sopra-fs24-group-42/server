@@ -2,6 +2,7 @@ package ch.uzh.ifi.hase.soprafs24.entity;
 import ch.uzh.ifi.hase.soprafs24.utils.GameSettings;
 
 import ch.uzh.ifi.hase.soprafs24.constant.GameState;
+import ch.uzh.ifi.hase.soprafs24.constant.WinnerSide;
 import ch.uzh.ifi.hase.soprafs24.utils.Role;
 
 import javax.persistence.*;
@@ -34,6 +35,9 @@ public class Lobby implements Serializable {
 
     @Column(nullable = false)
     private GameState gameState;
+
+    @Column(nullable = false)
+    private WinnerSide winnerSide;
 
     @Column(nullable = false)
     private int numberOfPlayers;
@@ -87,6 +91,14 @@ public class Lobby implements Serializable {
 
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
+    }
+
+    public WinnerSide getWinnerSide() {
+        return winnerSide;
+    }
+
+    public void setWinnerSide(WinnerSide winnerSide) {
+        this.winnerSide = winnerSide;
     }
 
     public GameSettings getGameSettings() {
