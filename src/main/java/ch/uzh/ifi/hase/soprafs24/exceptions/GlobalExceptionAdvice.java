@@ -35,11 +35,18 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
 
   // Keep this one disable for all testing purposes -> it shows more detail with
   // this one disabled
-  /*
+  
   @ExceptionHandler(HttpServerErrorException.InternalServerError.class)
   public ResponseStatusException handleException(Exception ex) {
     log.error("Default Exception Handler -> caught:", ex);
     return new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), ex);
   }
-  */
+
+  // Handler for NullPointerException comment out for testing!!!
+  @ExceptionHandler(NullPointerException.class)
+  public ResponseEntity<Object> handleNullPointerException(Exception ex, WebRequest request) {
+    log.error("NullPointerException caught: {}", ex.getMessage());
+    String bodyOfResponse = "Null values found where not expected.";
+    return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    } 
 }
