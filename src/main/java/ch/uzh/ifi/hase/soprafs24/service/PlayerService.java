@@ -75,7 +75,8 @@ public class PlayerService {
 
         //check if client and server are in same gameState
         if (lobbyOfReadyPlayer.getGameState() != clientGameState) {
-            throw new IllegalArgumentException("Player is not in the same gameState as the lobby");
+            return;
+            //throw new IllegalArgumentException("Player is not in the same gameState as the lobby");
         }
 
         readyPlayer.setIsReady(true);
