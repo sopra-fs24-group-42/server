@@ -40,6 +40,7 @@
 |23.04.2024|Lukas|[#123](https://github.com/sopra-fs24-group-42/server/issues/123),[#124](https://github.com/sopra-fs24-group-42/server/issues/124),[#125](https://github.com/sopra-fs24-group-42/server/issues/125)|implemented endgame logic|
 |23.04.2024|Polina|[#24](https://github.com/sopra-fs24-group-42/client/issues/24), [#72](https://github.com/sopra-fs24-group-42/client/issues/72)|added timer to the night action view and voting view|
 |22.04.2024|Polina|[#17](https://github.com/sopra-fs24-group-42/client/issues/17),[#19](https://github.com/sopra-fs24-group-42/client/issues/19), [#18](https://github.com/sopra-fs24-group-42/client/issues/18)|implemented discussion view|
+|23.04.2024|Polina|[#126](https://github.com/sopra-fs24-group-42/server/issues/126)|added more tests to check the system|
 
 ## <font style="color: #00d7ff">Week 4 *(25.04 – 26.04)*</font>
 
