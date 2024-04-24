@@ -16,6 +16,4 @@ public class Role {
     }
 
     public void doNightAction(){}
-    public void doDayAction(){}
-    public void doVotingAction(){}
 }
