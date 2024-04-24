@@ -41,6 +41,10 @@
 |23.04.2024|Polina|[#24](https://github.com/sopra-fs24-group-42/client/issues/24), [#72](https://github.com/sopra-fs24-group-42/client/issues/72)|added timer to the night action view and voting view|
 |22.04.2024|Polina|[#17](https://github.com/sopra-fs24-group-42/client/issues/17),[#19](https://github.com/sopra-fs24-group-42/client/issues/19), [#18](https://github.com/sopra-fs24-group-42/client/issues/18)|implemented discussion view|
 |23.04.2024|Polina|[#126](https://github.com/sopra-fs24-group-42/server/issues/126)|added more tests to check the system|
+|18.04.2024|Charlotte|[#11](https://github.com/sopra-fs24-group-42/client/issues/11), [#12](https://github.com/sopra-fs24-group-42/client/issues/12)|finished UI implementation of waitingRoom: waitingRoom updates automatically for everyone when a new player joins, start game button only visible to host & only pressable once everyone is in the lobby|
+|20.04.2024|Charlotte|[#14](https://github.com/sopra-fs24-group-42/client/issues/14), [#13](https://github.com/sopra-fs24-group-42/client/issues/13)|started on roleReveal view|
+|21.04.2024|Charlotte|[#73](https://github.com/sopra-fs24-group-42/client/issues/73), [#68](https://github.com/sopra-fs24-group-42/client/issues/68), [#69](https://github.com/sopra-fs24-group-42/client/issues/69), [#70](https://github.com/sopra-fs24-group-42/client/issues/70), [#71](https://github.com/sopra-fs24-group-42/client/issues/71)|finished roleReveal implementation, started on nightAction view for villagers, werewolves and seers|
+|22.04.2024|Charlotte|[#76](https://github.com/sopra-fs24-group-42/client/issues/76), [#78](https://github.com/sopra-fs24-group-42/client/issues/78), [#69](https://github.com/sopra-fs24-group-42/client/issues/69), [#79](https://github.com/sopra-fs24-group-42/client/issues/79), [#80](https://github.com/sopra-fs24-group-42/client/issues/80), [#21](https://github.com/sopra-fs24-group-42/client/issues/21)|finished nightAction views for all roles, implemented nightReveal view and started on voting view|
 
 ## <font style="color: #00d7ff">Week 4 *(25.04 – 26.04)*</font>
 

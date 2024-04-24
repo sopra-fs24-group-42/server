@@ -20,13 +20,4 @@ public class Werewolf extends Role{
         serviceProvider.getPlayerService().killPlayer(this.getSelection());
     }
 
-    @Override
-    public void doVotingAction(){
-
-    }
-
-    @Override
-    public void doDayAction(){
-
-    }
 }
