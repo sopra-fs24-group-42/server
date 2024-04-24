@@ -100,6 +100,7 @@ public class GameService {
 
     }
 
+    @Transactional
     public void goToNextPhase (Long lobbyId) {
         if(!serviceProvider.getPlayerService().areAllPlayersReady(lobbyId)) {
             log.info("Not all Players are ready yet to go to next Phase");
