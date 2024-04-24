@@ -35,7 +35,7 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
 
   // Keep this one disable for all testing purposes -> it shows more detail with
   // this one disabled
-  
+  /*
   @ExceptionHandler(HttpServerErrorException.InternalServerError.class)
   public ResponseStatusException handleException(Exception ex) {
     log.error("Default Exception Handler -> caught:", ex);
@@ -49,4 +49,5 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
     String bodyOfResponse = "Null values found where not expected.";
     return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     } 
+    */
 }
