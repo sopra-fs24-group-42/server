@@ -130,6 +130,9 @@ public class GameService {
                     serviceProvider.getPlayerService().resetIsKilled(lobbyId);
                     checkIfgameEnded(lobbyId);
                     break;
+                case ENDGAME:
+                    //resetLobby() needs to be implemented
+                    lobby.setGameState(GameState.WAITINGROOM);
                 default:
                     break;
             }
@@ -228,10 +231,10 @@ public class GameService {
 
         if (countWerewolf == 0) {
             lobby.setWinnerSide(WinnerSide.VILLAGERS);
-            lobby.setGameState(GameState.WAITINGROOM);
+            lobby.setGameState(GameState.ENDGAME);
         } else if (countWerewolf >= countVillager) {
             lobby.setWinnerSide(WinnerSide.WEREWOLFS);
-            lobby.setGameState(GameState.WAITINGROOM);
+            lobby.setGameState(GameState.ENDGAME);
         }
     }
 
