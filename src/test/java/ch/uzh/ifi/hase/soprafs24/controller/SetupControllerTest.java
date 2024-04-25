@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(SetupController.class)
-public class SetupControllerTest {
+class SetupControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
@@ -48,7 +48,7 @@ public class SetupControllerTest {
   private GameService gameService;
 
   @Test
-  public void createPlayer_validInput_playerCreated() throws Exception {
+  void createPlayer_validInput_playerCreated() throws Exception {
     Player player = new Player();
     player.setPlayerId(1L);
     player.setUsername("testUsername");
@@ -73,7 +73,7 @@ public class SetupControllerTest {
   }
 
     @Test
-    public void createLobby_validInput_lobbyCreated() throws Exception {
+    void createLobby_validInput_lobbyCreated() throws Exception {
       Lobby lobby = new Lobby();
       lobby.setLobbyId(2L);
       lobby.setHostName("testHost");

@@ -2,9 +2,10 @@ package ch.uzh.ifi.hase.soprafs24.utils;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.io.Serializable;
 
 @Embeddable
-public class GameSettings {
+public class GameSettings implements Serializable {
     private int numberOfWerewolves;
     private int numberOfVillagers;
     private int numberOfProtectors;

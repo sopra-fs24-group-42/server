@@ -11,12 +11,11 @@ import org.springframework.stereotype.Service;
 import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs24.entity.Player;
 import ch.uzh.ifi.hase.soprafs24.repository.RepositoryProvider;
-import ch.uzh.ifi.hase.soprafs24.websocket.dto.TestMessage;
 
 @Service
 public class WebsocketService {
 
-    final private SimpMessagingTemplate messagingTemplate;
+    private final SimpMessagingTemplate messagingTemplate;
     private final RepositoryProvider repositoryProvider;
     
     @Autowired

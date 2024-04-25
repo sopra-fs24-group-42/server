@@ -5,7 +5,6 @@ import ch.uzh.ifi.hase.soprafs24.utils.GameSettings;
 import ch.uzh.ifi.hase.soprafs24.constant.GameState;
 
 import java.util.List;
-import java.util.UUID;
 
 public class LobbyDTO {
 

@@ -74,7 +74,7 @@ public class PlayerServiceTest {
     }
 
     @Test
-    public void getLobbyIdFromPlayerByUsername_throw_error_invalid_username() {
+    void getLobbyIdFromPlayerByUsername_throw_error_invalid_username() {
         // mock the method findByUsername of the player repo to return null if player is not found
         Mockito.when(playerRepository.findByUsername(Mockito.any())).thenReturn(null);
 
@@ -84,7 +84,7 @@ public class PlayerServiceTest {
     }
 
     @Test
-    public void getLobbyIdFromPlayerByUsername_success() {
+    void getLobbyIdFromPlayerByUsername_success() {
         Mockito.when(playerRepository.findByUsername(Mockito.any())).thenReturn(testPlayer);
         Long lobbyId = playerService.getLobbyIdFromPlayerByUsername("testPlayer");
 
@@ -93,7 +93,7 @@ public class PlayerServiceTest {
     }
 
     @Test
-    public void assignRoles_success() {
+    void assignRoles_success() {
         Long lobbyId = 2L;
         Player player1 = new Player("testPlayer1", "testLobbyCode");
         Player player2 = new Player("testPlayer2", "testLobbyCode");
@@ -123,7 +123,7 @@ public class PlayerServiceTest {
 
 
     @Test
-    public void assignRoles_notEnoughRoles_throwsError() {
+    void assignRoles_notEnoughRoles_throwsError() {
         Long lobbyId = 2L;
         Player player1 = new Player("testPlayer1", "testLobbyCode");
         Player player2 = new Player("testPlayer2", "testLobbyCode");
@@ -150,7 +150,7 @@ public class PlayerServiceTest {
     }
 
 //    @Test
-//    public void setPlayerReady_success() {
+//    void setPlayerReady_success() {
 //        Lobby lobby = new Lobby();
 //        lobby.setLobbyId(2L);
 //        lobby.setHostName("testHost");
@@ -256,7 +256,7 @@ public class PlayerServiceTest {
     }
 
     @Test
-    public void voteForPlayer_success() {
+    void voteForPlayer_success() {
         Mockito.when(repositoryProvider.getPlayerRepository().findByUsername(Mockito.any())).thenReturn(testPlayer);
         Mockito.when(testPlayer.getNumberOfVotes()).thenReturn(0, 1);
 
@@ -269,7 +269,7 @@ public class PlayerServiceTest {
     }
 
     @Test
-    public void killPlayer_success() {
+    void killPlayer_success() {
         Mockito.when(repositoryProvider.getPlayerRepository().findByUsername(testPlayer.getUsername())).thenReturn(testPlayer);
         playerService.killPlayer(testPlayer.getUsername());
 

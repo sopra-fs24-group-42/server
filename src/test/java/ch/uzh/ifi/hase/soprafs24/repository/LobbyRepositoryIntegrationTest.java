@@ -24,7 +24,7 @@ public class LobbyRepositoryIntegrationTest {
   private LobbyRepository lobbyRepository;
 
   @Test
-  public void findByLobbyCode_success() {
+  void findByLobbyCode_success() {
     // given
     Lobby lobby = new Lobby();
     lobby.setHostName("testHost");
@@ -53,7 +53,7 @@ public class LobbyRepositoryIntegrationTest {
   }
 
     @Test
-    public void findByLobbyId_success() {
+    void findByLobbyId_success() {
       // given
       Lobby lobby = new Lobby();
       lobby.setHostName("testHost");

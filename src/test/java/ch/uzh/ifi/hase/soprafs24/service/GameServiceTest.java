@@ -79,7 +79,7 @@ public class GameServiceTest {
   }
 
   @Test
-  public void createPlayer_validInputs_success() {
+  void createPlayer_validInputs_success() {
     // when -> any object is being save in the userRepository -> return the dummy
     Player createdPlayer = gameService.createPlayer(testPlayer);
 
@@ -99,7 +99,7 @@ public class GameServiceTest {
   }
 
   @Test
-  public void createPlayer_duplicateUsername_throwsException() {
+  void createPlayer_duplicateUsername_throwsException() {
     // Mockito.when(playerRepository.findByUsername("testPlayer")).thenReturn(testPlayer);
 
     doThrow(new ResponseStatusException(HttpStatus.CONFLICT, "The username provided is not unique. Therefore, the player could not be created!"))
@@ -113,24 +113,24 @@ public class GameServiceTest {
   }
 
   @Test
-  public void createPlayer_InvalidLobbyCode_throwsException() {
+  void createPlayer_InvalidLobbyCode_throwsException() {
     Player newPlayer = new Player("testPlayer2", "GFDST");
 
       // when -> setup additional mocks for UserRepository
     Mockito.when(lobbyRepository.findByLobbyCode(Mockito.any())).thenReturn(null);
 
     doThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "The lobby code provided does not exist. Therefore, the player could not be added!"))
-            .when(lobbyService).CheckIfLobbyExists(any(Player.class));
+            .when(lobbyService).checkIfLobbyExists(any(Player.class));
 
     // then -> attempt to create second user with same user -> check that an error
     // is thrown
     assertThrows(ResponseStatusException.class, () -> gameService.createPlayer(newPlayer));
-    verify(lobbyService).CheckIfLobbyExists(newPlayer);
+    verify(lobbyService).checkIfLobbyExists(newPlayer);
 
   }
 
   @Test
-  public void createLobby_validInputs_success() {
+  void createLobby_validInputs_success() {
       // when -> any object is being save in the userRepository -> return the dummy
       Lobby createdLobby = gameService.createLobby(this.testLobby);
 

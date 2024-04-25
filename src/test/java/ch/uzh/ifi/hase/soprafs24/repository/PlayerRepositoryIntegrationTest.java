@@ -25,7 +25,7 @@ public class PlayerRepositoryIntegrationTest {
   private PlayerRepository playerRepository;
 
   @Test
-  public void findByUsername_success() {
+  void findByUsername_success() {
     // given
     Player player = new Player();
     player.setPlayerId(1L);
@@ -60,7 +60,7 @@ public class PlayerRepositoryIntegrationTest {
   }
 
     @Test
-    public void findByLobbyCode_success() {
+    void findByLobbyCode_success() {
      // given
      Player player = new Player();
      player.setPlayerId(1L);

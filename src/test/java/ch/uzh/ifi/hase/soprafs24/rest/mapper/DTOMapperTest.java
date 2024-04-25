@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DTOMapperTest {
   @Test
-  public void testCreatePlayer_fromPlayerPostDTO_toPlayer_success() {
+  void testCreatePlayer_fromPlayerPostDTO_toPlayer_success() {
     // create UserPostDTO
     PlayerPostDTO playerPostDTO = new PlayerPostDTO();
     playerPostDTO.setUsername("username");
@@ -30,7 +30,7 @@ public class DTOMapperTest {
   }
 
   @Test
-  public void testCreateLobby_fromLobbyPostDTO_toLobby_success() {
+  void testCreateLobby_fromLobbyPostDTO_toLobby_success() {
     // create LobbyPostDTO
     LobbyPostDTO lobbyPostDTO = new LobbyPostDTO();
     lobbyPostDTO.setHostName("testPlayer");

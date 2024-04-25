@@ -48,8 +48,6 @@ public class Lobby implements Serializable {
     @Embedded
     private GameSettings gameSettings;
 
-    public Lobby(){ }
-
     @Transient
     private List<Role> lobbyRoles;
 

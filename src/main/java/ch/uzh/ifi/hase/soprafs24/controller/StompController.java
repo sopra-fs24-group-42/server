@@ -14,7 +14,6 @@ import ch.uzh.ifi.hase.soprafs24.service.WebsocketService;
 import ch.uzh.ifi.hase.soprafs24.websocket.dto.ReadyRequest;
 import ch.uzh.ifi.hase.soprafs24.websocket.dto.SelectionRequest;
 import ch.uzh.ifi.hase.soprafs24.websocket.dto.StartGameRequest;
-import ch.uzh.ifi.hase.soprafs24.websocket.dto.TestMessage;
 
 @Controller
 public class StompController {
@@ -23,7 +22,6 @@ public class StompController {
     private final ServiceProvider serviceProvider;
     private final GameService gameService;
 
-    @Autowired
     private WebsocketService wsService;
 
     @Autowired
@@ -59,7 +57,7 @@ public class StompController {
     // Start game and distribute roles
     @MessageMapping("/startgame")
     public void startGame(final StartGameRequest startGameRequest) {
-        Long lobbyId = Long.valueOf(startGameRequest.getLobbyId());
+        Long lobbyId = startGameRequest.getLobbyId();
 
         logger.info("lobby {} wants to start the game", lobbyId);
         // asign roles
@@ -133,7 +131,7 @@ public class StompController {
         //maybe check if both players are in the same lobby
         
         //vote for selected player
-        if(request.getSelection() != "" && request.getSelection() != null) {
+        if(request.getSelection() != null && !request.getSelection().isEmpty()) {
             serviceProvider.getPlayerService().voteForPlayer(request.getSelection());
         }
     }

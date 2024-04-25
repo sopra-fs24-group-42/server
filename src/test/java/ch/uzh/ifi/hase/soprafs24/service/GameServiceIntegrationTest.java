@@ -43,7 +43,7 @@ public class GameServiceIntegrationTest {
   }
 
   @Test
-  public void createPlayer_validInputs_success() {
+  void createPlayer_validInputs_success() {
     // given
     assertNull(playerRepository.findByUsername("testPlayer"));
 
@@ -73,7 +73,7 @@ public class GameServiceIntegrationTest {
   }
 
   @Test
-  public void createLobby_validInputs_success() {
+  void createLobby_validInputs_success() {
     // given
     assertNull(playerRepository.findByUsername("testUsername"));
 
@@ -97,7 +97,7 @@ public class GameServiceIntegrationTest {
   }
 
   @Test
-  public void createPlayer_duplicateUsername_throwsException() {
+  void createPlayer_duplicateUsername_throwsException() {
     assertNull(playerRepository.findByUsername("testPlayer"));
     assertNull(playerRepository.findByUsername("testHost"));
 
@@ -122,7 +122,7 @@ public class GameServiceIntegrationTest {
   }
 
   @Test
-  public void createPlayer_InvalidLobbyCode_throwsException() {
+  void createPlayer_InvalidLobbyCode_throwsException() {
     assertNull(playerRepository.findByUsername("testPlayer"));
 
     Player testPlayer = new Player();

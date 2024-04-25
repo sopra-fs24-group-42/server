@@ -1,7 +1,5 @@
 package ch.uzh.ifi.hase.soprafs24.rest.dto;
 
-import ch.uzh.ifi.hase.soprafs24.utils.Role;
-
 public class PlayerDTO {
 
     private Long playerId;

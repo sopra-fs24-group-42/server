@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.io.*;
 
 import java.util.UUID;
 import java.util.List;
@@ -41,11 +40,11 @@ public class GameService {
         try {
             newPlayer.setToken(UUID.randomUUID().toString());
             serviceProvider.getPlayerService().checkIfUserExists(newPlayer); // check if the same username is entered
-            serviceProvider.getLobbyService().CheckIfLobbyExists(newPlayer); // check if the lobby code is correct
+            serviceProvider.getLobbyService().checkIfLobbyExists(newPlayer); // check if the lobby code is correct
 
             // lobby exists and username is not taken
             // check if the lobby is full
-            serviceProvider.getLobbyService().CheckIfLobbyFull(newPlayer.getLobbyCode());
+            serviceProvider.getLobbyService().checkIfLobbyFull(newPlayer.getLobbyCode());
 
             // set the fields for a new player
             newPlayer.setIsAlive(Boolean.TRUE);
@@ -67,7 +66,6 @@ public class GameService {
             System.err.println("Player was not created, try again!");
             throw ex;
         }
-        // return new Player();
     }
 
     public Lobby createLobby(Lobby newLobby) {
@@ -97,7 +95,6 @@ public class GameService {
             System.err.println("Player was not created, try again!");
             throw ex;
         }
-
     }
 
     @Transactional
@@ -221,7 +218,7 @@ public class GameService {
         int countVillager = 0;
 
         for (Player player : alivePlayers) {
-            if (player.getRoleName() == "Werewolf") {
+            if (player.getRoleName().equals("Werewolf")) {
                 countWerewolf++;
             } else {
                 countVillager++;

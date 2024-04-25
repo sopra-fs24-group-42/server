@@ -2,7 +2,6 @@ package ch.uzh.ifi.hase.soprafs24.service;
 
 import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs24.utils.GameSettings;
-import ch.uzh.ifi.hase.soprafs24.utils.Role;
 import ch.uzh.ifi.hase.soprafs24.entity.Player;
 import ch.uzh.ifi.hase.soprafs24.repository.RepositoryProvider;
 import org.slf4j.Logger;
@@ -18,8 +17,6 @@ import java.util.List;
 @Service
 @Transactional
 public class LobbyService {
-    private final Logger log = LoggerFactory.getLogger(LobbyService.class);
-
     private final RepositoryProvider repositoryProvider;
 
 
@@ -32,7 +29,7 @@ public class LobbyService {
         return repositoryProvider.getPlayerRepository().findByLobbyCode(lobbyCode);
     }
 
-    public void CheckIfLobbyFull(String lobbyCode){
+    public void checkIfLobbyFull(String lobbyCode){
         Lobby lobby = repositoryProvider.getLobbyRepository().findByLobbyCode(lobbyCode);
 
         List<Player> players = getListOfLobbyPlayers(lobbyCode);
@@ -41,7 +38,7 @@ public class LobbyService {
         }
     }
 
-    public void CheckIfLobbyExists(Player playerToJoinLobby){
+    public void checkIfLobbyExists(Player playerToJoinLobby){
         Lobby lobbyByCode = repositoryProvider.getLobbyRepository().findByLobbyCode(playerToJoinLobby.getLobbyCode());
 
         if (lobbyByCode == null) {
