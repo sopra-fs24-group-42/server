@@ -151,21 +151,109 @@ public class PlayerServiceTest {
 
 //    @Test
 //    public void setPlayerReady_success() {
+//        Lobby lobby = new Lobby();
+//        lobby.setLobbyId(2L);
+//        lobby.setHostName("testHost");
+//        lobby.setNumberOfPlayers(7);
+//        lobby.setGameState(GameState.NIGHT);
+//
+//        Mockito.when(testPlayer.getUsername()).thenReturn("testPlayer");
+//        Mockito.when(testPlayer.getIsReady()).thenReturn(false).thenReturn(true);
+//
 //        Mockito.when(playerRepository.findByUsername(Mockito.any())).thenReturn(testPlayer);
-//        Mockito.when(lobbyRepository.findByLobbyCode(Mockito.any())).thenReturn(testLobby);
-//        Mockito.when(testLobby.getGameState()).thenReturn(GameState.NIGHT);
+//        Mockito.when(lobbyRepository.findByLobbyCode(Mockito.any())).thenReturn(lobby);
 //
-//        ArrayList<String> roleList = new ArrayList<>(Arrays.asList("Werewolf", "Seer", "Villager"));
-//        when(gameSettings.RoleList()).thenReturn(roleList);
-//        testLobby.setGameSettings(gameSettings);
-//
-//        Mockito.when(testPlayer.getIsReady()).thenReturn(false, true);
-//
-//        playerService.setPlayerReady(testPlayer.getUsername(), GameState.NIGHT);
+//        playerService.setPlayerReady(testPlayer.getUsername(), lobby.getGameState());
 //
 //        Mockito.verify(testPlayer).setIsReady(true);
 //        assertTrue(testPlayer.getIsReady());
 //    }
+
+    @Test
+    void allPlayersReady_returnsTrue() {
+        Player player1 = new Player("testPlayer1", "testLobbyCode");
+        player1.setIsAlive(true);
+        player1.setIsReady(true);
+
+        Player player2 = new Player("testPlayer2", "testLobbyCode");
+        player2.setIsAlive(true);
+        player2.setIsReady(true);
+        List<Player> players = Arrays.asList(player1, player2);
+
+        when(playerRepository.findByLobbyId(1L)).thenReturn(players);
+
+        boolean result = playerService.areAllPlayersReady(1L);
+
+        assertTrue(result, "All players are ready, should return true");
+    }
+
+    @Test
+    void allPlayersReady_returnsFalse() {
+        Player player1 = new Player("testPlayer1", "testLobbyCode");
+        player1.setIsAlive(true);
+        player1.setIsReady(true);
+
+        Player player2 = new Player("testPlayer2", "testLobbyCode");
+        player2.setIsAlive(true);
+        player2.setIsReady(false);
+        List<Player> players = Arrays.asList(player1, player2);
+
+        when(playerRepository.findByLobbyId(1L)).thenReturn(players);
+
+        boolean result = playerService.areAllPlayersReady(1L);
+
+        assertFalse(result, "Not all players are ready, should return false");
+    }
+
+//    @Test
+//    void setPlayersNotReady_success() {
+//        Player player1 = mock(Player.class);
+//        Player player2 = mock(Player.class);
+//
+//        when(player1.getIsAlive()).thenReturn(true);
+//        when(player2.getIsAlive()).thenReturn(true);
+//
+//        when(player1.getIsReady()).thenReturn(false);
+//        when(player2.getIsReady()).thenReturn(true);
+//
+//        List<Player> players = new ArrayList<>();
+//        players.add(player1);
+//        players.add(player2);
+//
+//        when(playerRepository.findByLobbyId(1L)).thenReturn(players);
+//        playerService.setPlayersNotReady(1L);
+//
+//        verify(player1).setIsReady(false);
+//        verify(player2, never()).setIsReady(false);
+//    }
+
+    @Test
+    void resetIsKilled_success() {
+        Player player1 = mock(Player.class);
+        Player player2 = mock(Player.class);
+        List<Player> players = Arrays.asList(player1, player2);
+
+        when(playerRepository.findByLobbyId(1L)).thenReturn(players);
+
+        playerService.resetIsKilled(1L);
+
+        verify(player1).setIsKilled(false);
+        verify(player2).setIsKilled(false);
+    }
+
+    @Test
+    void resetVotes_success() {
+        Player player1 = mock(Player.class);
+        Player player2 = mock(Player.class);
+        List<Player> players = Arrays.asList(player1, player2);
+
+        when(playerRepository.findByLobbyId(1L)).thenReturn(players);
+
+        playerService.resetVotes(1L);
+
+        verify(player1).setNumberOfVotes(0);
+        verify(player2).setNumberOfVotes(0);
+    }
 
     @Test
     public void voteForPlayer_success() {
