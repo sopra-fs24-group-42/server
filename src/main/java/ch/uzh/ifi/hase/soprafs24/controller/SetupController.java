@@ -25,7 +25,6 @@ public class SetupController {
 
     @PostMapping("/players")
     @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
     public PlayerDTO createPlayer(@RequestBody PlayerPostDTO playerPostDTO) {
         // convert API user to internal representation
         Player playerInput = DTOMapper.INSTANCE.convertPlayerPostDTOtoEntity(playerPostDTO);
@@ -39,7 +38,6 @@ public class SetupController {
 
     @PostMapping("/lobbies")
     @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
     public LobbyDTO createLobby(@RequestBody LobbyPostDTO lobbyPostDTO) {
         // convert API lobby to internal representation
         Lobby lobbyInput = DTOMapper.INSTANCE.convertLobbyPostDTOtoEntity(lobbyPostDTO);

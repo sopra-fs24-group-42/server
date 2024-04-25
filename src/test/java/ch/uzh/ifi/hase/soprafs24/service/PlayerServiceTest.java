@@ -2,6 +2,7 @@ package ch.uzh.ifi.hase.soprafs24.service;
 
 import ch.uzh.ifi.hase.soprafs24.entity.Player;
 import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
+import  ch.uzh.ifi.hase.soprafs24.constant.GameState;
 import ch.uzh.ifi.hase.soprafs24.utils.GameSettings;
 import ch.uzh.ifi.hase.soprafs24.repository.RepositoryProvider;
 import ch.uzh.ifi.hase.soprafs24.repository.PlayerRepository;
@@ -52,7 +53,7 @@ public class PlayerServiceTest {
         Mockito.when(repositoryProvider.getPlayerRepository()).thenReturn(playerRepository);
         Mockito.when(repositoryProvider.getLobbyRepository()).thenReturn(lobbyRepository);
 
-        this.testPlayer = new Player();
+        this.testPlayer = Mockito.mock(Player.class);
         testPlayer.setPlayerId(1L);
         testPlayer.setUsername("testPlayer");
         testPlayer.setLobbyId(2L);
@@ -64,13 +65,12 @@ public class PlayerServiceTest {
         testPlayer.setToken("1");
         Mockito.when(playerRepository.save(Mockito.any())).thenReturn(testPlayer);
 
-        this.testLobby = mock(Lobby.class);
-        Long lobbyId  = 2L;
-        this.gameSettings = mock(GameSettings.class);
-        this.testLobby.setGameSettings(gameSettings);
+        this.testLobby = Mockito.mock(Lobby.class);
+        this.gameSettings = Mockito.mock(GameSettings.class);
+        testLobby.setLobbyCode("ABCDE");
+        testLobby.setLobbyId(2L);
+        Mockito.when(lobbyRepository.save(Mockito.any())).thenReturn(testLobby);
 
-        when(gameSettings.RoleList()).thenReturn(new ArrayList<>(Arrays.asList("Werewolf", "Seer", "Villager")));
-        when(lobbyRepository.findByLobbyId(lobbyId)).thenReturn(testLobby);
     }
 
     @Test
@@ -148,6 +148,47 @@ public class PlayerServiceTest {
 
         // Verify the message of the exception
         assertEquals("Not enough players or roles available for assignment.", exception.getMessage());
+    }
+
+//    @Test
+//    public void setPlayerReady_success() {
+//        Mockito.when(playerRepository.findByUsername(Mockito.any())).thenReturn(testPlayer);
+//        Mockito.when(lobbyRepository.findByLobbyCode(Mockito.any())).thenReturn(testLobby);
+//        Mockito.when(testLobby.getGameState()).thenReturn(GameState.NIGHT);
+//
+//        ArrayList<String> roleList = new ArrayList<>(Arrays.asList("Werewolf", "Seer", "Villager"));
+//        when(gameSettings.RoleList()).thenReturn(roleList);
+//        testLobby.setGameSettings(gameSettings);
+//
+//        Mockito.when(testPlayer.getIsReady()).thenReturn(false, true);
+//
+//        playerService.setPlayerReady(testPlayer.getUsername(), GameState.NIGHT);
+//
+//        Mockito.verify(testPlayer).setIsReady(true);
+//        assertTrue(testPlayer.getIsReady());
+//    }
+
+    @Test
+    public void voteForPlayer_success() {
+        Mockito.when(repositoryProvider.getPlayerRepository().findByUsername(Mockito.any())).thenReturn(testPlayer);
+        Mockito.when(testPlayer.getNumberOfVotes()).thenReturn(0, 1);
+
+        playerService.voteForPlayer(testPlayer.getUsername());
+
+        Mockito.verify(repositoryProvider.getPlayerRepository()).findByUsername(testPlayer.getUsername());
+
+        Mockito.verify(testPlayer).getNumberOfVotes();
+        Mockito.verify(testPlayer).setNumberOfVotes(1);
+    }
+
+    @Test
+    public void killPlayer_success() {
+        Mockito.when(repositoryProvider.getPlayerRepository().findByUsername(testPlayer.getUsername())).thenReturn(testPlayer);
+        playerService.killPlayer(testPlayer.getUsername());
+
+        Mockito.verify(repositoryProvider.getPlayerRepository()).findByUsername(testPlayer.getUsername());
+
+        Mockito.verify(testPlayer).setIsKilled(true);
     }
 
 }

@@ -1,8 +1,18 @@
 package ch.uzh.ifi.hase.soprafs24.controller;
 
 import ch.uzh.ifi.hase.soprafs24.entity.Player;
+import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
+import ch.uzh.ifi.hase.soprafs24.constant.WinnerSide;
+import ch.uzh.ifi.hase.soprafs24.constant.GameState;
+import ch.uzh.ifi.hase.soprafs24.utils.GameSettings;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.PlayerPostDTO;
+import ch.uzh.ifi.hase.soprafs24.rest.dto.LobbyPostDTO;
+import ch.uzh.ifi.hase.soprafs24.service.ServiceProvider;
+import ch.uzh.ifi.hase.soprafs24.service.LobbyService;
 import ch.uzh.ifi.hase.soprafs24.service.GameService;
+import ch.uzh.ifi.hase.soprafs24.repository.RepositoryProvider;
+import ch.uzh.ifi.hase.soprafs24.repository.LobbyRepository;
+import ch.uzh.ifi.hase.soprafs24.utils.LobbyCodeGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -10,6 +20,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.Mock;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -31,6 +42,9 @@ public class SetupControllerTest {
   private MockMvc mockMvc;
 
   @MockBean
+  private ServiceProvider serviceProvider;
+
+  @MockBean
   private GameService gameService;
 
   @Test
@@ -42,8 +56,8 @@ public class SetupControllerTest {
     player.setLobbyCode("AH1PL");
 
     PlayerPostDTO playerPostDTO = new PlayerPostDTO();
-    playerPostDTO.setUsername("Test Player");
-    playerPostDTO.setLobbyCode("EXXW8");
+    playerPostDTO.setUsername("testUsername");
+    playerPostDTO.setLobbyCode("AH1PL");
 
     given(gameService.createPlayer(Mockito.any())).willReturn(player);
 
@@ -58,7 +72,35 @@ public class SetupControllerTest {
         .andExpect(jsonPath("$.lobbyCode", is(player.getLobbyCode())));
   }
 
-  private String asJsonString(final Object object) {
+    @Test
+    public void createLobby_validInput_lobbyCreated() throws Exception {
+      Lobby lobby = new Lobby();
+      lobby.setLobbyId(2L);
+      lobby.setHostName("testHost");
+      lobby.setNumberOfPlayers(7);
+      lobby.setGameSettings(new GameSettings());
+      lobby.setGameState(GameState.NIGHT);
+      lobby.setCountNightaction(0);
+      lobby.setWinnerSide(WinnerSide.NOWINNER);
+
+      LobbyPostDTO lobbyPostDTO = new LobbyPostDTO();
+      lobbyPostDTO.setHostName("testHost");
+      lobbyPostDTO.setNumberOfPlayers(7);
+
+      given(gameService.createLobby(Mockito.any())).willReturn(lobby);
+
+      MockHttpServletRequestBuilder postRequest = post("/lobbies")
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(asJsonString(lobbyPostDTO));
+
+      mockMvc.perform(postRequest)
+              .andExpect(status().isCreated())
+              .andExpect(jsonPath("$.lobbyId", is(lobby.getLobbyId().intValue())))
+              .andExpect(jsonPath("$.hostName", is(lobby.getHostName())))
+              .andExpect(jsonPath("$.numberOfPlayers", is(lobby.getNumberOfPlayers())));
+    }
+
+    private String asJsonString(final Object object) {
     try {
       return new ObjectMapper().writeValueAsString(object);
     } catch (JsonProcessingException e) {
