@@ -146,7 +146,6 @@ public class PlayerServiceTest {
             playerService.assignRoles(lobbyId);
         });
 
-        // Verify the message of the exception
         assertEquals("Not enough players or roles available for assignment.", exception.getMessage());
     }
 
