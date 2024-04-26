@@ -25,6 +25,8 @@ public class GameService {
 
     private final Logger log = LoggerFactory.getLogger(GameService.class);
 
+    private Random rand = new Random();
+
     private final RepositoryProvider repositoryProvider;
     private final ServiceProvider serviceProvider;
     private final Werewolf werewolf;
@@ -63,7 +65,7 @@ public class GameService {
             return newPlayer;
         }
         catch (Exception ex){
-            System.err.println("Player was not created, try again!");
+            log.info("Player was not created, try again!");
             throw ex;
         }
     }
@@ -92,7 +94,7 @@ public class GameService {
             return newLobby;
         }
         catch(Exception ex){
-            System.err.println("Player was not created, try again!");
+            log.info("Player was not created, try again!");
             throw ex;
         }
     }
@@ -131,6 +133,7 @@ public class GameService {
                 case ENDGAME:
                     //resetLobby() needs to be implemented
                     lobby.setGameState(GameState.WAITINGROOM);
+                    break;
                 default:
                     break;
             }
@@ -148,21 +151,16 @@ public class GameService {
             //process nightaction
             List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
 
-            //if player isProtected change isKilled to false here!!!!
-
-            List<Player> killedPlayers = players.stream()
-                                            .filter(Player::getIsKilled)
-                                            .collect(Collectors.toList());
+            List<Player> killedPlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsKilled(lobbyId, Boolean.TRUE);
 
             if (!killedPlayers.isEmpty()) {
-                    Random rand = new Random();
                     // Randomly select one player to keep as killed
                     Player playerToKeepKilled = killedPlayers.get(rand.nextInt(killedPlayers.size()));
                     //permanent eliminated from game
                     playerToKeepKilled.setIsAlive(false);                
                     // Set all killed players' isKilled to false, except the randomly selected one
-                    for (Player player : players) {
-                        if (player.getIsKilled() && !player.equals(playerToKeepKilled)) {
+                    for (Player player : players) {         
+                        if (player.getIsKilled().equals(Boolean.TRUE) && !player.equals(playerToKeepKilled)) {
                             player.setIsKilled(false);
                         }
                     }
@@ -207,12 +205,14 @@ public class GameService {
     }
 
     private void checkIfgameEnded (Long lobbyId) {
-        List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
+        // List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
 
-        //only check alive players
-        List<Player> alivePlayers = players.stream()
-                                            .filter(Player::getIsAlive)
-                                            .collect(Collectors.toList());
+        // //only check alive players
+        // List<Player> alivePlayers = players.stream()
+        //                                     .filter(Player::getIsAlive)
+        //                                     .collect(Collectors.toList());
+
+        List<Player> alivePlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsAlive(lobbyId, Boolean.TRUE);
 
         int countWerewolf = 0;
         int countVillager = 0;
