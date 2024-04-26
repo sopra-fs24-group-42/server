@@ -4,9 +4,6 @@ public class Role {
     
     private String selection;
 
-    public Role() {
-    }
-
     public String getSelection() {
         return selection;
     }

@@ -64,7 +64,7 @@ public class PlayerService {
             }
         } catch (Exception e) {
             // Log the exception and possibly throw it to be handled by a higher-level function
-            System.err.println("An error occurred during role assignment: " + e.getMessage());
+            log.info("An error occurred during role assignment: " + e.getMessage());
             throw e;
         }
     }
@@ -75,8 +75,8 @@ public class PlayerService {
 
         //check if client and server are in same gameState
         if (lobbyOfReadyPlayer.getGameState() != clientGameState) {
+            log.info("client of {} is not in the same gameState as the server!", username);
             return;
-            //throw new IllegalArgumentException("Player is not in the same gameState as the lobby");
         }
 
         readyPlayer.setIsReady(true);
@@ -90,7 +90,7 @@ public class PlayerService {
         List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
 
         for (int i = 0; i < players.size(); i++) {
-            if (!players.get(i).getIsReady()) {countNotReady++;}
+            if (players.get(i).getIsReady().equals(Boolean.FALSE)) {countNotReady++;}
         }
 
         log.info("{} Players are not ready yet", countNotReady);
@@ -138,7 +138,7 @@ public class PlayerService {
 
     public boolean playersLobbyEqual (String usernameOne, String usernameTwo) {
 
-        return getLobbyIdFromPlayerByUsername(usernameOne) == getLobbyIdFromPlayerByUsername(usernameTwo);
+        return getLobbyIdFromPlayerByUsername(usernameOne).equals(getLobbyIdFromPlayerByUsername(usernameTwo));
     }
 
     public String getRoleByUsername (String username) {
@@ -150,9 +150,8 @@ public class PlayerService {
         int count = 0;
         List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
         for (int i = 0; i < players.size(); i++) {
-            if (players.get(i).getIsAlive()) {count++;}
-        }
-        //log.info("In lobby {} are {} players alive", lobbyId, count);     
+            if (players.get(i).getIsAlive().equals(Boolean.TRUE)) {count++;}
+        } 
         return count;
     }
 }

@@ -10,7 +10,7 @@ public class ServiceProvider {
     private final LobbyService lobbyService;
     private final PlayerService playerService;
 
-    public ServiceProvider(LobbyService lobbyService, PlayerService playerService, WebsocketService wsService) {
+    public ServiceProvider(LobbyService lobbyService, PlayerService playerService) {
         this.lobbyService = lobbyService;
         this.playerService = playerService;
     }

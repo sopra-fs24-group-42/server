@@ -4,8 +4,6 @@ import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs24.utils.GameSettings;
 import ch.uzh.ifi.hase.soprafs24.entity.Player;
 import ch.uzh.ifi.hase.soprafs24.repository.RepositoryProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -51,7 +49,7 @@ public class LobbyService {
             throw new NullPointerException("Lobby needs more Players");
         }
         GameSettings gameSettings = new GameSettings();
-        int numberOfWerewolves = (int)(numberOfPlayers/3); 
+        int numberOfWerewolves = numberOfPlayers / 3; 
         gameSettings.setNumberOfWerewolves(numberOfWerewolves);
         //-1 for Seer. Potential Bug if initializasion of GameSettings changes 
         gameSettings.setNumberOfVillagers(numberOfPlayers - numberOfWerewolves - 1);
@@ -67,5 +65,4 @@ public class LobbyService {
         Lobby lobby = repositoryProvider.getLobbyRepository().findByLobbyId(lobbyId);
         lobby.setCountNightaction(lobby.getCountNightaction() + 1);
     }
-
 }

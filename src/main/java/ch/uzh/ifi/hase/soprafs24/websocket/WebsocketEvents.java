@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 @Component
 public class WebsocketEvents {
 
-    private static final Logger logger = LoggerFactory.getLogger(StompController.class);
+    private static final Logger logger = LoggerFactory.getLogger(WebsocketEvents.class);
 
     @Autowired
     private WebsocketService wsService;
@@ -23,7 +23,7 @@ public class WebsocketEvents {
     public void handleSessionSubscribeEvent(SessionSubscribeEvent event) {
 
         String destination = event.getMessage().getHeaders().get("simpDestination").toString();
-        logger.info("New subscription to: " + destination);
+        logger.info("New subscription to: {}", destination);
 
         Long lobbyId = getLobbyId(destination);
 
