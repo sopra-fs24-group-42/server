@@ -231,7 +231,7 @@ public class GameService {
             lobby.setWinnerSide(WinnerSide.VILLAGERS);
             lobby.setGameState(GameState.ENDGAME);
         } else if (countWerewolf >= countVillager) {
-            lobby.setWinnerSide(WinnerSide.WEREWOLFES);
+            lobby.setWinnerSide(WinnerSide.WEREWOLVES);
             lobby.setGameState(GameState.ENDGAME);
         }
     }
