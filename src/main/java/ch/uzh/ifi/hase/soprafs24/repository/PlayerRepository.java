@@ -11,4 +11,6 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
     Player findByUsername(String username);
     List<Player> findByLobbyCode(String lobbyCode);
     List<Player> findByLobbyId(Long lobbyId);
+    List<Player> findByLobbyIdAndIsKilled(Long lobbyId, Boolean isKilled);
+    List<Player> findByLobbyIdAndIsAlive(Long lobbyId, Boolean isAlive);
 }
