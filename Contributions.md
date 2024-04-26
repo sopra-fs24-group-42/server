@@ -46,7 +46,7 @@
 |21.04.2024|Charlotte|[#73](https://github.com/sopra-fs24-group-42/client/issues/73), [#68](https://github.com/sopra-fs24-group-42/client/issues/68), [#69](https://github.com/sopra-fs24-group-42/client/issues/69), [#70](https://github.com/sopra-fs24-group-42/client/issues/70), [#71](https://github.com/sopra-fs24-group-42/client/issues/71)|finished roleReveal implementation, started on nightAction view for villagers, werewolves and seers|
 |22.04.2024|Charlotte|[#76](https://github.com/sopra-fs24-group-42/client/issues/76), [#78](https://github.com/sopra-fs24-group-42/client/issues/78), [#69](https://github.com/sopra-fs24-group-42/client/issues/69), [#79](https://github.com/sopra-fs24-group-42/client/issues/79), [#80](https://github.com/sopra-fs24-group-42/client/issues/80), [#21](https://github.com/sopra-fs24-group-42/client/issues/21)|finished nightAction views for all roles, implemented nightReveal view and started on voting view|
 
-## <font style="color: #00d7ff">Week 4 *(25.04 – 26.04)*</font>
+## <font style="color: #00d7ff">Week 3 *(25.04 – 26.04)*</font>
 
 | Date | Name | Links to Github Issues | Comments |
 |---|---|---|---|
@@ -62,7 +62,7 @@
 |   |   |   |   |
 |   |   |   |   |
 
-## <font style="color: #00d7ff">Week 4 *(04.05 – 08.05)*</font>
+## <font style="color: #00d7ff">Week 5 *(04.05 – 08.05)*</font>
 
 | Date | Name | Links to Github Issues | Comments |
 |---|---|---|---|
