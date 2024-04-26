@@ -54,7 +54,7 @@
 
 | Date | Name | Links to Github Issues | Comments |
 |---|---|---|---|
-|26.04.2024|Lukas||cleanup code for M3|
+|26.04.2024|Lukas||cleanup code for M3, work on deployment|
 |   |   |   |   |
 |   |   |   |   |
 
