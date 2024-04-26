@@ -30,23 +30,6 @@ public class StompController {
         this.gameService = gameService;
     }
 
-    //for testing only
-    @MessageMapping("/test")
-    @SendTo("/topic/test")
-    public SelectionRequest getInfo(final SelectionRequest selectionRequest) {
-        logger.info("user: {}, selected: {}", selectionRequest.getUsername(), selectionRequest.getSelection());
-
-        Long lobbyId = serviceProvider.getPlayerService().getLobbyIdFromPlayerByUsername(selectionRequest.getUsername());
-
-        //Long lobbyId = playerService.getLobbyIdFromPlayerByUsername(selectionRequest.getUsername());
-
-        //broadcast Lobby to /topic/lobby/{lobbyId}
-        wsService.broadcastLobby(lobbyId);
-        
-        //broadcast selectionRequest to /topic/test
-        return selectionRequest;
-    }
-
     // Set or change lobby settings
     @MessageMapping("/settings")
     public void updateSettings(final String lobbySettings) {
@@ -89,13 +72,13 @@ public class StompController {
 
         logger.info("Werewolf {} selected {} during NIGHT", request.getUsername(), request.getSelection());
 
-        //maybe add check if player is werewolf
+        //TODO: check if player is werewolf
 
         //check that both players are in same lobby
         if (serviceProvider.getPlayerService().playersLobbyEqual(request.getUsername(), request.getSelection())) {
             gameService.werewolfNightAction(request.getSelection());
         } else {
-            logger.info("user {} with role {} is not in the same lobby as {}!", request.getSelection());
+            logger.info("user {} is not in the same lobby as {}!", request.getUsername(), request.getSelection());
         }
 
         //let lobby know that someone performed nightaction
