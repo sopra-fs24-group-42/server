@@ -50,6 +50,22 @@
 
 | Date | Name | Links to Github Issues | Comments |
 |---|---|---|---|
+|26.04.2024|Lukas||cleanup code for M3|
+|   |   |   |   |
+|   |   |   |   |
+
+## <font style="color: #00d7ff">Week 4 *(27.04 – 03.05)*</font>
+
+| Date | Name | Links to Github Issues | Comments |
+|---|---|---|---|
+|   |   |   |   |
+|   |   |   |   |
+|   |   |   |   |
+
+## <font style="color: #00d7ff">Week 4 *(04.05 – 08.05)*</font>
+
+| Date | Name | Links to Github Issues | Comments |
+|---|---|---|---|
 |   |   |   |   |
 |   |   |   |   |
 |   |   |   |   |
