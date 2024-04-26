@@ -6,6 +6,7 @@
 |---|---|---|---|
 |27.03.2024|Lukas|   |working on websockets|
 |25.03.2024|Charlotte||read documentation about websockets|
+|29.03.2024|Rafael|   |Research regarding different Text to Speech APIs|
 |   |   |   |   |
 
 ## <font style="color: #9d979f">Week 1½ *(04.04 – 10.04)*</font>
@@ -13,6 +14,7 @@
 | Date | Name | Links to Github Issues | Comments |
 |---|---|---|---|
 |08.04.2024|Lukas|   |working on websockets|
+|08.04.2024|Rafael|[#48](https://github.com/sopra-fs24-group-42/client/issues/48), [#54](https://github.com/sopra-fs24-group-42/client/issues/54)   |Working on the Text to Speech API Setting it up On the Google Cloud and Testing it regarding Responsespeed and Settings|
 |09.04.2024|Polina|[#25](https://github.com/orgs/sopra-fs24-group-42/projects/1/views/1?pane=issue&itemId=57283946), [#26](https://github.com/sopra-fs24-group-42/server/issues/26) |Created classes, set up repositories|
 |09.04.2024|Polina|[#28](https://github.com/orgs/sopra-fs24-group-42/projects/1/views/1?pane=issue&itemId=57283946), [#27](https://github.com/sopra-fs24-group-42/server/issues/27)|Implemented http post methods to support lobby and player creation|
 |10.04.2024|Charlotte|[#2](https://github.com/sopra-fs24-group-42/client/issues/2)|initial setup of views and entities, working on websocket implementation|
@@ -28,6 +30,8 @@
 |16.04.2024|Charlotte|[#4](https://github.com/sopra-fs24-group-42/client/issues/4), [#9](https://github.com/sopra-fs24-group-42/client/issues/9)|   |
 |17.04.2024|Charlotte|[#2](https://github.com/sopra-fs24-group-42/client/issues/2), [#8](https://github.com/sopra-fs24-group-42/client/issues/8)|   |
 |12.04.2024|Charlotte|[#1](https://github.com/sopra-fs24-group-42/client/issues/1), [#7](https://github.com/sopra-fs24-group-42/client/issues/7)|   |
+|17.04.2024|Rafael|, [#61](https://github.com/sopra-fs24-group-42/client/issues/61), [#47](https://github.com/sopra-fs24-group-42/client/issues/47), [#42](https://github.com/sopra-fs24-group-42/client/issues/52)| Continued work on getting the TTS API working. |
+|16.04.2024|Rafael|, [#57](https://github.com/sopra-fs24-group-42/client/issues/57)| Implemented a Verion using Web Speech API since the authentification with the Google TTS API still causes Problems.   |
 
 ## <font style="color: #00d7ff">Week 3 *(18.04 – 24.04)*</font>
 
