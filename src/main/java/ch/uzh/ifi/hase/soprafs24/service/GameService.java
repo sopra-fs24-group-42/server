@@ -131,7 +131,7 @@ public class GameService {
                     checkIfgameEnded(lobbyId);
                     break;
                 case ENDGAME:
-                    //resetLobby() needs to be implemented
+                    resetGame(lobbyId);
                     lobby.setGameState(GameState.WAITINGROOM);
                     break;
                 default:
@@ -236,4 +236,8 @@ public class GameService {
         }
     }
 
+    private void resetGame (Long lobbyId) {
+        serviceProvider.getLobbyService().resetLobby(lobbyId);
+        serviceProvider.getPlayerService().resetPlayersByLobbyId(lobbyId);
+    }
 }

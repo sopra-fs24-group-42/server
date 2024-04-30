@@ -154,4 +154,21 @@ public class PlayerService {
         } 
         return count;
     }
+
+    @Transactional
+    public void resetPlayersByLobbyId (Long lobbyId) {
+        List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
+
+        for (Player player : players) {
+            player.setRoleName(null);
+            player.setIsAlive(Boolean.TRUE);
+            player.setIsProtected(Boolean.FALSE);
+            player.setIsKilled(Boolean.FALSE);
+            player.setIsReady(Boolean.FALSE);
+            player.setNumberOfVotes(0);
+        }
+
+        repositoryProvider.getPlayerRepository().saveAll(players);
+        repositoryProvider.getPlayerRepository().flush();
+    }
 }

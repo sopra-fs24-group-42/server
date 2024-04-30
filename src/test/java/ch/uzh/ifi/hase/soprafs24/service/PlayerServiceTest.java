@@ -278,4 +278,29 @@ public class PlayerServiceTest {
         Mockito.verify(testPlayer).setIsKilled(true);
     }
 
+    @Test
+    void resetPlayersByLobbyId_success() {
+        //given
+        Player player1 = mock(Player.class);
+        Player player2 = mock(Player.class);
+        List<Player> players = Arrays.asList(player1, player2);
+
+        when(playerRepository.findByLobbyId(1L)).thenReturn(players);
+
+        //test
+        playerService.resetPlayersByLobbyId(1L);
+
+        //assert
+        for (Player player : players) {
+            verify(player).setRoleName(null);
+            verify(player).setIsAlive(true);
+            verify(player).setIsProtected(false);
+            verify(player).setIsKilled(false);
+            verify(player).setIsReady(false);
+            verify(player).setNumberOfVotes(0);
+        }
+        verify(playerRepository).saveAll(players);
+        verify(playerRepository).flush();
+    }
+
 }

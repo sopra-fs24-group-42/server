@@ -1,5 +1,6 @@
 package ch.uzh.ifi.hase.soprafs24.service;
 
+import ch.uzh.ifi.hase.soprafs24.constant.WinnerSide;
 import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs24.utils.GameSettings;
 import ch.uzh.ifi.hase.soprafs24.entity.Player;
@@ -64,5 +65,16 @@ public class LobbyService {
     public void incrementCountNightaction(Long lobbyId) {
         Lobby lobby = repositoryProvider.getLobbyRepository().findByLobbyId(lobbyId);
         lobby.setCountNightaction(lobby.getCountNightaction() + 1);
+    }
+
+    @Transactional
+    public void resetLobby (Long lobbyId) {
+        Lobby lobbyToReset = repositoryProvider.getLobbyRepository().findByLobbyId(lobbyId);
+
+        lobbyToReset.setCountNightaction(0);
+        lobbyToReset.setWinnerSide(WinnerSide.NOWINNER);
+
+        repositoryProvider.getLobbyRepository().save(lobbyToReset);
+        repositoryProvider.getLobbyRepository().flush();
     }
 }
