@@ -70,7 +70,7 @@
 
 | Date | Name | Links to Github Issues | Comments |
 |---|---|---|---|
-|   |   |   |   |
+|30.04.2024|Lukas|[#134](https://github.com/sopra-fs24-group-42/client/issues/134)|   |
 |   |   |   |   |
 |   |   |   |   |
 
