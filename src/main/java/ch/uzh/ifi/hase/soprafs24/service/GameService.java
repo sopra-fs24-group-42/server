@@ -70,6 +70,10 @@ public class GameService {
         }
     }
 
+    public void deletePlayer(Long playerToBeDeletedId){
+        repositoryProvider.getPlayerRepository().deleteByPlayerId(playerToBeDeletedId);
+    }
+
     public Lobby createLobby(Lobby newLobby) {
         try{
             String lobbyCode = LobbyCodeGenerator.generateLobbyCode();
