@@ -141,9 +141,13 @@ public class PlayerService {
     }
 
     public void sacrificePlayer (String username) {
-        Player playerToSacrifice = repositoryProvider.getPlayerRepository().findByUsername(username);
+        try {
+            Player playerToSacrifice = repositoryProvider.getPlayerRepository().findByUsername(username);
+            playerToSacrifice.setIsSacrificed(Boolean.TRUE);
+        } catch (Exception e) {
+            log.info("An error during sacrificePlayer, probably nobody was selected to sacrifice: " + e.getMessage());
+        }
 
-        playerToSacrifice.setIsSacrificed(Boolean.TRUE);
     }
 
     public boolean playersLobbyEqual (String usernameOne, String usernameTwo) {
