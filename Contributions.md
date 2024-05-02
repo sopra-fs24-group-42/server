@@ -71,7 +71,8 @@
 | Date | Name | Links to Github Issues | Comments |
 |---|---|---|---|
 |30.04.2024|Lukas|[#134](https://github.com/sopra-fs24-group-42/client/issues/134)|   |
-|   |   |   |   |
+|01.05.2024|Lukas|[#154](https://github.com/sopra-fs24-group-42/client/issues/154)|   |
+|02.05.2024|Lukas|[#159](https://github.com/sopra-fs24-group-42/client/issues/159)|   |
 |   |   |   |   |
 
 ## <font style="color: #00d7ff">Week 5 *(04.05 – 08.05)*</font>
