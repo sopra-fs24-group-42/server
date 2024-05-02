@@ -75,7 +75,7 @@ public class StompController {
         //TODO: check if player is werewolf
 
         //check that both players are in same lobby
-        if (serviceProvider.getPlayerService().playersLobbyEqual(request.getUsername(), request.getSelection())) {
+        if (serviceProvider.getPlayerService().playersLobbyEqual(request.getUsername(), request.getSelection()) && !request.getSelection().isEmpty()) {
             gameService.werewolfNightAction(request.getSelection());
         } else {
             logger.info("user {} is not in the same lobby as {} or there is no selection!", request.getUsername(), request.getSelection());
