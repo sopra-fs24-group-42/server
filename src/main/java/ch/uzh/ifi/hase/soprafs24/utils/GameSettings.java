@@ -22,11 +22,11 @@ public class GameSettings implements Serializable {
         numberOfWerewolves = 1;
         numberOfVillagers = 1;
         numberOfProtectors = 0;
-        numberOfSeers = 1;
+        numberOfSeers = 0;
         numberOfSheriffs = 0;
         numberOfMayors = 0;
         numberOfJesters = 0;
-        numberOfSacrifices = 0;
+        numberOfSacrifices = 1;
         numberOfAmours = 0;
         numberOfHunters = 0;
         numberOfSwappers = 0;

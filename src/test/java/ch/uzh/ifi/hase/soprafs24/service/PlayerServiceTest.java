@@ -279,6 +279,16 @@ public class PlayerServiceTest {
     }
 
     @Test
+    void sacrificePlayer_success() {
+        Mockito.when(repositoryProvider.getPlayerRepository().findByUsername(testPlayer.getUsername())).thenReturn(testPlayer);
+        playerService.sacrificePlayer(testPlayer.getUsername());
+
+        Mockito.verify(repositoryProvider.getPlayerRepository()).findByUsername(testPlayer.getUsername());
+
+        Mockito.verify(testPlayer).setIsSacrificed(true);;
+    }
+
+    @Test
     void resetPlayersByLobbyId_success() {
         //given
         Player player1 = mock(Player.class);
