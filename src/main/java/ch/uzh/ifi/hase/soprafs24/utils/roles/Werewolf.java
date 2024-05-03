@@ -16,7 +16,7 @@ public class Werewolf extends Role{
     }
 
     @Override
-    public void doNightAction(){
+    public void doNightAction() {
         serviceProvider.getPlayerService().killPlayer(this.getSelection());
     }
 
