@@ -21,7 +21,6 @@ public class StompController {
     private static final Logger logger = LoggerFactory.getLogger(StompController.class);
     private final ServiceProvider serviceProvider;
     private final GameService gameService;
-
     private final WebsocketService wsService;
 
     @Autowired
