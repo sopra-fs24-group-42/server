@@ -86,6 +86,26 @@ public class StompController {
         gameService.processNightphase(lobbyIdOfUsername);
     }
 
+    @MessageMapping("/Protector/nightaction")
+    public void performProtectorNightAction(final SelectionRequest request) {
+
+        logger.info("Protector {} selected {} during NIGHT", request.getUsername(), request.getSelection());
+
+        //TODO: check if player is protector
+
+        //check that both players are in same lobby
+        if (serviceProvider.getPlayerService().playersLobbyEqual(request.getUsername(), request.getSelection()) && !request.getSelection().isEmpty()) {
+            gameService.protectorNightAction(request.getSelection());
+        } else {
+            logger.info("user {} is not in the same lobby as {} or there is no selection!", request.getUsername(), request.getSelection());
+        }
+
+        //let lobby know that someone performed nightaction
+        Long lobbyIdOfUsername = serviceProvider.getPlayerService().getLobbyIdFromPlayerByUsername(request.getUsername());
+        serviceProvider.getLobbyService().incrementCountNightaction(lobbyIdOfUsername);
+        gameService.processNightphase(lobbyIdOfUsername);
+    }
+
     @MessageMapping("/Sacrifice/nightaction")
     public void performSacrificeNightAction(final SelectionRequest request) {
 

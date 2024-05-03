@@ -6,6 +6,7 @@ import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs24.entity.Player;
 import ch.uzh.ifi.hase.soprafs24.repository.RepositoryProvider;
 import ch.uzh.ifi.hase.soprafs24.utils.LobbyCodeGenerator;
+import ch.uzh.ifi.hase.soprafs24.utils.roles.Protector;
 import ch.uzh.ifi.hase.soprafs24.utils.roles.Sacrifice;
 import ch.uzh.ifi.hase.soprafs24.utils.roles.Werewolf;
 
@@ -31,13 +32,15 @@ public class GameService {
     private final ServiceProvider serviceProvider;
     private final Werewolf werewolf;
     private final Sacrifice sacrifice;
+    private final Protector protector;
 
     @Autowired
-    public GameService(RepositoryProvider repositoryProvider, ServiceProvider serviceProvider, Werewolf werewolf, Sacrifice sacrifice) {
+    public GameService(RepositoryProvider repositoryProvider, ServiceProvider serviceProvider, Werewolf werewolf, Sacrifice sacrifice, Protector protector) {
         this.repositoryProvider = repositoryProvider;
         this.serviceProvider = serviceProvider;
         this.werewolf = werewolf;
         this.sacrifice = sacrifice;
+        this.protector = protector;
     }
 
     public Player createPlayer(Player newPlayer) {
@@ -191,6 +194,11 @@ public class GameService {
     public void werewolfNightAction(String selection) {
         werewolf.setSelection(selection);
         werewolf.doNightAction();
+    }
+
+    public void protectorNightAction(String selection) {
+        protector.setSelection(selection);
+        protector.doNightAction();
     }
 
     public void sacrificeNightAction(String username, String selection) {
