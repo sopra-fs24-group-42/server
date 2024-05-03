@@ -13,6 +13,6 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
     List<Player> findByLobbyId(Long lobbyId);
     List<Player> findByLobbyIdAndIsKilled(Long lobbyId, Boolean isKilled);
     List<Player> findByLobbyIdAndIsAlive(Long lobbyId, Boolean isAlive);
-    List<Player> findByLobbyIdAndIsSacrificed(lobbyId, Boolean.TRUE);
+    List<Player> findByLobbyIdAndIsSacrificed(Long lobbyId, Boolean.TRUE);
     void deleteByPlayerId(Long playerId);
 }
