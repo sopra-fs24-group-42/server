@@ -27,6 +27,9 @@ public class Player implements Serializable {
     private Boolean isKilled;
 
     @Column(nullable = false)
+    private Boolean isSacrificed;
+
+    @Column(nullable = false)
     private Boolean isReady;
 
     @Column(nullable = false, unique = true)
@@ -97,6 +100,14 @@ public class Player implements Serializable {
 
     public void setIsKilled(Boolean isKilled) {
         this.isKilled = isKilled;
+    }
+
+    public Boolean getIsSacrificed() {
+        return isSacrificed;
+    }
+
+    public void setIsSacrificed(Boolean isSacrificed) {
+        this.isSacrificed = isSacrificed;
     }
 
     public Boolean getIsReady() {
