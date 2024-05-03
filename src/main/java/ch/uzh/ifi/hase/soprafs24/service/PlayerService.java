@@ -131,13 +131,38 @@ public class PlayerService {
     }
 
     public void killPlayer (String unsername) {
-        Player playerToKill = repositoryProvider.getPlayerRepository().findByUsername(unsername);
+        try {
+            Player playerToKill = repositoryProvider.getPlayerRepository().findByUsername(unsername);
+            playerToKill.setIsKilled(Boolean.TRUE);
+        } catch (Exception e) {
+            log.info("An error during killPlayer, probably nobody was selected to kill: " + e.getMessage());
+        }
         
-        playerToKill.setIsKilled(true);
+    }
+
+    public void sacrificePlayer (String username) {
+        try {
+            Player playerToSacrifice = repositoryProvider.getPlayerRepository().findByUsername(username);
+            playerToSacrifice.setIsSacrificed(Boolean.TRUE);
+        } catch (Exception e) {
+            log.info("An error during sacrificePlayer, probably nobody was selected to sacrifice: " + e.getMessage());
+        }
+
+    }
+
+    public void protectPlayer (String username) {
+        try {
+            Player playerToProtect = repositoryProvider.getPlayerRepository().findByUsername(username);
+            playerToProtect.setIsProtected(Boolean.TRUE);
+        } catch (Exception e) {
+            log.info("An error during protectPlayer, probably nobody was selected to protect: " + e.getMessage());
+        }
     }
 
     public boolean playersLobbyEqual (String usernameOne, String usernameTwo) {
-
+        if (usernameTwo.isEmpty()) {
+            return true;
+        }
         return getLobbyIdFromPlayerByUsername(usernameOne).equals(getLobbyIdFromPlayerByUsername(usernameTwo));
     }
 
@@ -164,6 +189,7 @@ public class PlayerService {
             player.setIsAlive(Boolean.TRUE);
             player.setIsProtected(Boolean.FALSE);
             player.setIsKilled(Boolean.FALSE);
+            player.setIsSacrificed(Boolean.FALSE);
             player.setIsReady(Boolean.FALSE);
             player.setNumberOfVotes(0);
         }

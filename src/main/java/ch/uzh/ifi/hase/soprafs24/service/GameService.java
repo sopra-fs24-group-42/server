@@ -6,6 +6,8 @@ import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs24.entity.Player;
 import ch.uzh.ifi.hase.soprafs24.repository.RepositoryProvider;
 import ch.uzh.ifi.hase.soprafs24.utils.LobbyCodeGenerator;
+import ch.uzh.ifi.hase.soprafs24.utils.roles.Protector;
+import ch.uzh.ifi.hase.soprafs24.utils.roles.Sacrifice;
 import ch.uzh.ifi.hase.soprafs24.utils.roles.Werewolf;
 
 import org.slf4j.Logger;
@@ -16,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.Random;
 
 @Service
@@ -30,12 +31,16 @@ public class GameService {
     private final RepositoryProvider repositoryProvider;
     private final ServiceProvider serviceProvider;
     private final Werewolf werewolf;
+    private final Sacrifice sacrifice;
+    private final Protector protector;
 
     @Autowired
-    public GameService(RepositoryProvider repositoryProvider, ServiceProvider serviceProvider, Werewolf werewolf) {
+    public GameService(RepositoryProvider repositoryProvider, ServiceProvider serviceProvider, Werewolf werewolf, Sacrifice sacrifice, Protector protector) {
         this.repositoryProvider = repositoryProvider;
         this.serviceProvider = serviceProvider;
         this.werewolf = werewolf;
+        this.sacrifice = sacrifice;
+        this.protector = protector;
     }
 
     public Player createPlayer(Player newPlayer) {
@@ -52,6 +57,7 @@ public class GameService {
             newPlayer.setIsAlive(Boolean.TRUE);
             newPlayer.setIsProtected(Boolean.FALSE);
             newPlayer.setIsKilled(Boolean.FALSE);
+            newPlayer.setIsSacrificed(Boolean.FALSE);
             newPlayer.setIsReady(Boolean.FALSE);
             newPlayer.setNumberOfVotes(0);
 
@@ -169,6 +175,18 @@ public class GameService {
                         }
                     }
             }
+
+            List<Player> sacrificedPlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsSacrificed(lobbyId, Boolean.TRUE);
+
+            if (!sacrificedPlayers.isEmpty()) {
+                log.info("players get sacrificed");
+                for (Player playerToSacrifice : sacrificedPlayers) {
+                    playerToSacrifice.setIsKilled(Boolean.TRUE);
+                    playerToSacrifice.setIsAlive(Boolean.FALSE);
+                    playerToSacrifice.setIsSacrificed(Boolean.FALSE);
+                    log.info("{} got sacrificed!!", playerToSacrifice.getUsername());
+                }
+            }
             //reset CountNightaction
             serviceProvider.getLobbyService().resetNightactionCount(lobbyId);
         } else {
@@ -180,6 +198,17 @@ public class GameService {
     public void werewolfNightAction(String selection) {
         werewolf.setSelection(selection);
         werewolf.doNightAction();
+    }
+
+    public void protectorNightAction(String selection) {
+        protector.setSelection(selection);
+        protector.doNightAction();
+    }
+
+    public void sacrificeNightAction(String username, String selection) {
+        sacrifice.setUsername(username);
+        sacrifice.setSelection(selection);
+        sacrifice.doNightAction();
     }
 
     private void processVoting (Long lobbyId) {
@@ -209,12 +238,6 @@ public class GameService {
     }
 
     private void checkIfgameEnded (Long lobbyId) {
-        // List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
-
-        // //only check alive players
-        // List<Player> alivePlayers = players.stream()
-        //                                     .filter(Player::getIsAlive)
-        //                                     .collect(Collectors.toList());
 
         List<Player> alivePlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsAlive(lobbyId, Boolean.TRUE);
 

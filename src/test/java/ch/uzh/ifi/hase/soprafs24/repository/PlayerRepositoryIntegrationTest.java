@@ -35,6 +35,7 @@ public class PlayerRepositoryIntegrationTest {
     player.setIsAlive(Boolean.TRUE);
     player.setIsKilled(Boolean.FALSE);
     player.setIsProtected(Boolean.FALSE);
+    player.setIsSacrificed(Boolean.FALSE);
     player.setIsReady(Boolean.FALSE);
     player.setToken("1");
     player.setRoleName("Seer");
@@ -56,6 +57,7 @@ public class PlayerRepositoryIntegrationTest {
     assertEquals(found.getIsProtected(), player.getIsProtected());
     assertEquals(found.getIsKilled(), player.getIsKilled());
     assertEquals(found.getIsReady(), player.getIsReady());
+    assertEquals(found.getIsSacrificed(), player.getIsSacrificed());
     assertEquals(found.getToken(), player.getToken());
     assertEquals(found.getRoleName(), player.getRoleName());
   }
@@ -71,6 +73,7 @@ public class PlayerRepositoryIntegrationTest {
      player.setIsAlive(Boolean.TRUE);
      player.setIsKilled(Boolean.FALSE);
      player.setIsProtected(Boolean.FALSE);
+     player.setIsSacrificed(Boolean.FALSE);
      player.setIsReady(Boolean.FALSE);
      player.setToken("1");
      player.setRoleName("Seer");
@@ -91,6 +94,7 @@ public class PlayerRepositoryIntegrationTest {
      assertEquals(founds.get(0).getIsAlive(), player.getIsAlive());
      assertEquals(founds.get(0).getIsProtected(), player.getIsProtected());
      assertEquals(founds.get(0).getIsKilled(), player.getIsKilled());
+     assertEquals(founds.get(0).getIsSacrificed(), player.getIsSacrificed());
      assertEquals(founds.get(0).getIsReady(), player.getIsReady());
      assertEquals(founds.get(0).getToken(), player.getToken());
      assertEquals(founds.get(0).getRoleName(), player.getRoleName());

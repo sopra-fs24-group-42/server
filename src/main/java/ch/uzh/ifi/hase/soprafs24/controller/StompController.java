@@ -14,6 +14,7 @@ import ch.uzh.ifi.hase.soprafs24.service.WebsocketService;
 import ch.uzh.ifi.hase.soprafs24.websocket.dto.ReadyRequest;
 import ch.uzh.ifi.hase.soprafs24.websocket.dto.SelectionRequest;
 import ch.uzh.ifi.hase.soprafs24.websocket.dto.StartGameRequest;
+import ch.uzh.ifi.hase.soprafs24.websocket.dto.UpdatedGameSettings;
 
 @Controller
 public class StompController {
@@ -21,20 +22,21 @@ public class StompController {
     private static final Logger logger = LoggerFactory.getLogger(StompController.class);
     private final ServiceProvider serviceProvider;
     private final GameService gameService;
-
-    private WebsocketService wsService;
+    private final WebsocketService wsService;
 
     @Autowired
-    public StompController(ServiceProvider serviceProvider, GameService gameService) {
+    public StompController(ServiceProvider serviceProvider, GameService gameService, WebsocketService wsService) {
         this.serviceProvider = serviceProvider;
         this.gameService = gameService;
+        this.wsService = wsService;
     }
 
     // Set or change lobby settings
-    @MessageMapping("/settings")
-    public void updateSettings(final String lobbySettings) {
+    @MessageMapping("/settings/{lobbyId}")
+    public void updateSettings(@DestinationVariable Long lobbyId, final UpdatedGameSettings updatedGameSettings) {
         //change settings
-        //broadcast Lobby
+        //serviceProvider.getLobbyService().updatedGameSettings(lobbyId, updatedGameSettings);
+        wsService.broadcastLobby(lobbyId);
     }
    
     // Start game and distribute roles
@@ -66,7 +68,6 @@ public class StompController {
         wsService.broadcastLobby(lobbyId);
     }
   
-    // Perform night action
     @MessageMapping("/Werewolf/nightaction")
     public void performWerewolfNightAction(final SelectionRequest request) {
 
@@ -75,10 +76,50 @@ public class StompController {
         //TODO: check if player is werewolf
 
         //check that both players are in same lobby
-        if (serviceProvider.getPlayerService().playersLobbyEqual(request.getUsername(), request.getSelection())) {
+        if (serviceProvider.getPlayerService().playersLobbyEqual(request.getUsername(), request.getSelection()) && !request.getSelection().isEmpty()) {
             gameService.werewolfNightAction(request.getSelection());
         } else {
-            logger.info("user {} is not in the same lobby as {}!", request.getUsername(), request.getSelection());
+            logger.info("user {} is not in the same lobby as {} or there is no selection!", request.getUsername(), request.getSelection());
+        }
+
+        //let lobby know that someone performed nightaction
+        Long lobbyIdOfUsername = serviceProvider.getPlayerService().getLobbyIdFromPlayerByUsername(request.getUsername());
+        serviceProvider.getLobbyService().incrementCountNightaction(lobbyIdOfUsername);
+        gameService.processNightphase(lobbyIdOfUsername);
+    }
+
+    @MessageMapping("/Protector/nightaction")
+    public void performProtectorNightAction(final SelectionRequest request) {
+
+        logger.info("Protector {} selected {} during NIGHT", request.getUsername(), request.getSelection());
+
+        //TODO: check if player is protector
+
+        //check that both players are in same lobby
+        if (serviceProvider.getPlayerService().playersLobbyEqual(request.getUsername(), request.getSelection()) && !request.getSelection().isEmpty()) {
+            gameService.protectorNightAction(request.getSelection());
+        } else {
+            logger.info("user {} is not in the same lobby as {} or there is no selection!", request.getUsername(), request.getSelection());
+        }
+
+        //let lobby know that someone performed nightaction
+        Long lobbyIdOfUsername = serviceProvider.getPlayerService().getLobbyIdFromPlayerByUsername(request.getUsername());
+        serviceProvider.getLobbyService().incrementCountNightaction(lobbyIdOfUsername);
+        gameService.processNightphase(lobbyIdOfUsername);
+    }
+
+    @MessageMapping("/Sacrifice/nightaction")
+    public void performSacrificeNightAction(final SelectionRequest request) {
+
+        logger.info("Sacrifice {} selected {} during NIGHT", request.getUsername(), request.getSelection());
+
+        //TODO: check if player is Sacrifice
+
+        //check that both players are in same lobby
+        if (serviceProvider.getPlayerService().playersLobbyEqual(request.getUsername(), request.getSelection()) && !request.getSelection().isEmpty()) {
+            gameService.sacrificeNightAction(request.getUsername(), request.getSelection());
+        } else {
+            logger.info("user {} is not in the same lobby as {} or there is no selection!", request.getUsername(), request.getSelection());
         }
 
         //let lobby know that someone performed nightaction
