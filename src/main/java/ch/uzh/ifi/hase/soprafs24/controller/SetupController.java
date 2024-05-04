@@ -50,4 +50,13 @@ public class SetupController {
         // convert internal representation of user back to API
         return DTOMapper.INSTANCE.convertEntityToLobbyDTO(createdLobby);
     }
+
+    @DeleteMapping("/players/{playerId}")
+    @ResponseStatus(HttpStatus.GONE)
+    public void deletePlayer(@PathVariable Long playerId) {
+        gameService.deletePlayer(playerId);
+
+        logger.info("deleted Player with playerId: {}", playerId);
+    }
+
 }

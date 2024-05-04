@@ -79,6 +79,6 @@
 
 | Date | Name | Links to Github Issues | Comments |
 |---|---|---|---|
-|   |   |   |   |
+|04.05.2024|Lukas|[#158](https://github.com/sopra-fs24-group-42/server/issues/158), [#160](https://github.com/sopra-fs24-group-42/server/issues/160)|   |
 |   |   |   |   |
 |   |   |   |   |

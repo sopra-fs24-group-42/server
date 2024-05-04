@@ -6,6 +6,7 @@ import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs24.entity.Player;
 import ch.uzh.ifi.hase.soprafs24.repository.RepositoryProvider;
 import ch.uzh.ifi.hase.soprafs24.utils.LobbyCodeGenerator;
+import ch.uzh.ifi.hase.soprafs24.utils.roles.Protector;
 import ch.uzh.ifi.hase.soprafs24.utils.roles.Sacrifice;
 import ch.uzh.ifi.hase.soprafs24.utils.roles.Werewolf;
 
@@ -31,13 +32,15 @@ public class GameService {
     private final ServiceProvider serviceProvider;
     private final Werewolf werewolf;
     private final Sacrifice sacrifice;
+    private final Protector protector;
 
     @Autowired
-    public GameService(RepositoryProvider repositoryProvider, ServiceProvider serviceProvider, Werewolf werewolf, Sacrifice sacrifice) {
+    public GameService(RepositoryProvider repositoryProvider, ServiceProvider serviceProvider, Werewolf werewolf, Sacrifice sacrifice, Protector protector) {
         this.repositoryProvider = repositoryProvider;
         this.serviceProvider = serviceProvider;
         this.werewolf = werewolf;
         this.sacrifice = sacrifice;
+        this.protector = protector;
     }
 
     public Player createPlayer(Player newPlayer) {
@@ -71,6 +74,10 @@ public class GameService {
             log.info("Player was not created, try again!");
             throw ex;
         }
+    }
+
+    public void deletePlayer(Long playerToBeDeletedId){
+        repositoryProvider.getPlayerRepository().deleteByPlayerId(playerToBeDeletedId);
     }
 
     public Lobby createLobby(Lobby newLobby) {
@@ -178,8 +185,9 @@ public class GameService {
     public void processNightphase(Long lobbyId) {
         Lobby lobbyToProcess = repositoryProvider.getLobbyRepository().findByLobbyId(lobbyId);
 
+        //only process if everyone alive did nightaction
         if(serviceProvider.getPlayerService().numberOfPlayersAlive(lobbyId) == lobbyToProcess.getCountNightaction()) {
-            //process nightaction
+            
             List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
 
             List<Player> killedPlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsKilled(lobbyId, Boolean.TRUE);
@@ -197,6 +205,7 @@ public class GameService {
                     }
             }
 
+            //kill sacrificed Players from game
             List<Player> sacrificedPlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsSacrificed(lobbyId, Boolean.TRUE);
 
             if (!sacrificedPlayers.isEmpty()) {
@@ -208,6 +217,19 @@ public class GameService {
                     log.info("{} got sacrificed!!", playerToSacrifice.getUsername());
                 }
             }
+
+            //let protected Players survive
+            List<Player> protectedPlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsProtected(lobbyId, Boolean.TRUE);
+
+            if (!protectedPlayers.isEmpty()) {
+                for (Player playerToProtect : protectedPlayers) {
+                    playerToProtect.setIsKilled(Boolean.FALSE);
+                    playerToProtect.setIsAlive(Boolean.TRUE);
+                    playerToProtect.setIsProtected(Boolean.FALSE);
+                    log.info("Player {} is protected", playerToProtect.getUsername());
+                }
+            }
+
             //reset CountNightaction
             serviceProvider.getLobbyService().resetNightactionCount(lobbyId);
         } else {
@@ -219,6 +241,11 @@ public class GameService {
     public void werewolfNightAction(String selection) {
         werewolf.setSelection(selection);
         werewolf.doNightAction();
+    }
+
+    public void protectorNightAction(String selection) {
+        protector.setSelection(selection);
+        protector.doNightAction();
     }
 
     public void sacrificeNightAction(String username, String selection) {

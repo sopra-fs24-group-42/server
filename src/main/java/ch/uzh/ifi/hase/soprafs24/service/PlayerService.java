@@ -153,6 +153,15 @@ public class PlayerService {
 
     }
 
+    public void protectPlayer (String username) {
+        try {
+            Player playerToProtect = repositoryProvider.getPlayerRepository().findByUsername(username);
+            playerToProtect.setIsProtected(Boolean.TRUE);
+        } catch (Exception e) {
+            log.info("An error during protectPlayer, probably nobody was selected to protect: " + e.getMessage());
+        }
+    }
+
     public boolean playersLobbyEqual (String usernameOne, String usernameTwo) {
         if (usernameTwo.isEmpty()) {
             return true;
