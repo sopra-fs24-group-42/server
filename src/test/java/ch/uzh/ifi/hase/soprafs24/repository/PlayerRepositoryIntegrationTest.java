@@ -113,6 +113,7 @@ public class PlayerRepositoryIntegrationTest {
       player.setIsKilled(Boolean.FALSE);
       player.setIsProtected(Boolean.FALSE);
       player.setIsReady(Boolean.FALSE);
+      player.setIsSacrificed(Boolean.FALSE);
       player.setToken("1");
       player.setRoleName("Seer");
       player.setNumberOfVotes(0);
