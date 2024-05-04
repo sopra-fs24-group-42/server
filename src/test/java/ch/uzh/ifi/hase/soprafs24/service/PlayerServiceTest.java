@@ -289,6 +289,16 @@ public class PlayerServiceTest {
     }
 
     @Test
+    void protectPlayer_success() {
+        Mockito.when(repositoryProvider.getPlayerRepository().findByUsername(testPlayer.getUsername())).thenReturn(testPlayer);
+        playerService.protectPlayer(testPlayer.getUsername());
+
+        Mockito.verify(repositoryProvider.getPlayerRepository()).findByUsername(testPlayer.getUsername());
+
+        Mockito.verify(testPlayer).setIsProtected(true);
+    }
+
+    @Test
     void resetPlayersByLobbyId_success() {
         //given
         Player player1 = mock(Player.class);
