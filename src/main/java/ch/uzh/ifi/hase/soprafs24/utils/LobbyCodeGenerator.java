@@ -4,7 +4,7 @@ import java.security.SecureRandom;
 
 public class LobbyCodeGenerator {
     private static final int Length = 5; // code lenght
-    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789";
 
     // object of the java class SecureRandom
     // to generate cryptographically strong random number

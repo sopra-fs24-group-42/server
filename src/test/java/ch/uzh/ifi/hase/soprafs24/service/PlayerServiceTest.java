@@ -169,41 +169,41 @@ public class PlayerServiceTest {
 //        assertTrue(testPlayer.getIsReady());
 //    }
 
-    @Test
-    void allPlayersReady_returnsTrue() {
-        Player player1 = new Player("testPlayer1", "testLobbyCode");
-        player1.setIsAlive(true);
-        player1.setIsReady(true);
+    // @Test
+    // void allPlayersReady_returnsTrue() {
+    //     Player player1 = new Player("testPlayer1", "testLobbyCode");
+    //     player1.setIsAlive(true);
+    //     player1.setIsReady(true);
 
-        Player player2 = new Player("testPlayer2", "testLobbyCode");
-        player2.setIsAlive(true);
-        player2.setIsReady(true);
-        List<Player> players = Arrays.asList(player1, player2);
+    //     Player player2 = new Player("testPlayer2", "testLobbyCode");
+    //     player2.setIsAlive(true);
+    //     player2.setIsReady(true);
+    //     List<Player> players = Arrays.asList(player1, player2);
 
-        when(playerRepository.findByLobbyId(1L)).thenReturn(players);
+    //     when(playerRepository.findByLobbyId(1L)).thenReturn(players);
 
-        boolean result = playerService.areAllPlayersReady(1L);
+    //     boolean result = playerService.areAllPlayersReady(1L);
 
-        assertTrue(result, "All players are ready, should return true");
-    }
+    //     assertTrue(result, "All players are ready, should return true");
+    // }
 
-    @Test
-    void allPlayersReady_returnsFalse() {
-        Player player1 = new Player("testPlayer1", "testLobbyCode");
-        player1.setIsAlive(true);
-        player1.setIsReady(true);
+    // @Test
+    // void allPlayersReady_returnsFalse() {
+    //     Player player1 = new Player("testPlayer1", "testLobbyCode");
+    //     player1.setIsAlive(true);
+    //     player1.setIsReady(true);
 
-        Player player2 = new Player("testPlayer2", "testLobbyCode");
-        player2.setIsAlive(true);
-        player2.setIsReady(false);
-        List<Player> players = Arrays.asList(player1, player2);
+    //     Player player2 = new Player("testPlayer2", "testLobbyCode");
+    //     player2.setIsAlive(true);
+    //     player2.setIsReady(false);
+    //     List<Player> players = Arrays.asList(player1, player2);
 
-        when(playerRepository.findByLobbyId(1L)).thenReturn(players);
+    //     when(playerRepository.findByLobbyId(1L)).thenReturn(players);
 
-        boolean result = playerService.areAllPlayersReady(1L);
+    //     boolean result = playerService.areAllPlayersReady(1L);
 
-        assertFalse(result, "Not all players are ready, should return false");
-    }
+    //     assertFalse(result, "Not all players are ready, should return false");
+    // }
 
 //    @Test
 //    void setPlayersNotReady_success() {

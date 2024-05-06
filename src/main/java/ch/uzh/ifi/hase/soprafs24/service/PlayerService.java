@@ -57,11 +57,13 @@ public class PlayerService {
     
             // Shuffle roles
             Collections.shuffle(roles);
-    
+            
             // Assign roles to players
             for (int i = 0; i < roles.size(); i++) {
                 players.get(i).setRoleName(roles.get(i));
             }
+
+            repositoryProvider.getPlayerRepository().saveAll(players); //if roleassignemt breaks remove this!
         } catch (Exception e) {
             // Log the exception and possibly throw it to be handled by a higher-level function
             log.info("An error occurred during role assignment: " + e.getMessage());
@@ -80,22 +82,33 @@ public class PlayerService {
         }
 
         readyPlayer.setIsReady(true);
+        repositoryProvider.getPlayerRepository().save(readyPlayer);
 
         log.info("User {} is set ready in lobby {}", readyPlayer.getUsername(), lobbyOfReadyPlayer.getLobbyId());
     }
 
     public boolean areAllPlayersReady(Long lobbyId) {
         //if too slow it could be implemented with SQL
-        int countNotReady = 0;
-        List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
+        List<Player> readyPlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsReady(lobbyId, Boolean.TRUE);
+        Lobby lobby = repositoryProvider.getLobbyRepository().findByLobbyId(lobbyId);
 
-        for (int i = 0; i < players.size(); i++) {
-            if (players.get(i).getIsReady().equals(Boolean.FALSE)) {countNotReady++;}
-        }
+        int numOfPlayers = lobby.getNumberOfPlayers();
+        int countNotReady = numOfPlayers - readyPlayers.size();
 
         log.info("{} Players are not ready yet", countNotReady);
 
         return countNotReady == 0;
+
+        // int countNotReady = 0;
+        // List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
+
+        // for (int i = 0; i < players.size(); i++) {
+        //     if (players.get(i).getIsReady().equals(Boolean.FALSE)) {countNotReady++;}
+        // }
+
+        // log.info("{} Players are not ready yet", countNotReady);
+
+        // return countNotReady == 0;
     }
 
     public void setPlayersNotReady (Long lobbyId) {
@@ -131,49 +144,36 @@ public class PlayerService {
     public void voteForPlayer(String selectedPlayerName) {
         Player votedPlayer = repositoryProvider.getPlayerRepository().findByUsername(selectedPlayerName);
         votedPlayer.setNumberOfVotes(votedPlayer.getNumberOfVotes() + 1);
+        
+        repositoryProvider.getPlayerRepository().save(votedPlayer);
     }
 
     public void killPlayer (String unsername) {
-        try {
-            Player playerToKill = repositoryProvider.getPlayerRepository().findByUsername(unsername);
-            playerToKill.setIsKilled(Boolean.TRUE);
-        } catch (Exception e) {
-            log.info("An error during killPlayer, probably nobody was selected to kill: " + e.getMessage());
-        }
+        Player playerToKill = repositoryProvider.getPlayerRepository().findByUsername(unsername);
+        playerToKill.setIsKilled(Boolean.TRUE);
         
+        repositoryProvider.getPlayerRepository().save(playerToKill);
     }
 
     public void sacrificePlayer (String username) {
-        try {
-            Player playerToSacrifice = repositoryProvider.getPlayerRepository().findByUsername(username);
-            playerToSacrifice.setIsSacrificed(Boolean.TRUE);
-        } catch (Exception e) {
-            log.info("An error during sacrificePlayer, probably nobody was selected to sacrifice: " + e.getMessage());
-        }
+        Player playerToSacrifice = repositoryProvider.getPlayerRepository().findByUsername(username);
+        playerToSacrifice.setIsSacrificed(Boolean.TRUE);
 
+        repositoryProvider.getPlayerRepository().save(playerToSacrifice);
     }
 
     public void protectPlayer (String username) {
-        try {
-            Player playerToProtect = repositoryProvider.getPlayerRepository().findByUsername(username);
-            playerToProtect.setIsProtected(Boolean.TRUE);
-        } catch (Exception e) {
-            log.info("An error during protectPlayer, probably nobody was selected to protect: " + e.getMessage());
-        }
+        Player playerToProtect = repositoryProvider.getPlayerRepository().findByUsername(username);
+        playerToProtect.setIsProtected(Boolean.TRUE);
+
+        repositoryProvider.getPlayerRepository().save(playerToProtect);
     }
 
     public boolean playersLobbyEqual (String usernameOne, String usernameTwo) {
-        if (usernameTwo.isEmpty()) {
-            return true;
-        }
         return getLobbyIdFromPlayerByUsername(usernameOne).equals(getLobbyIdFromPlayerByUsername(usernameTwo));
     }
 
-    public String getRoleByUsername (String username) {
-        Player player = repositoryProvider.getPlayerRepository().findByUsername(username);
-        return player.getRoleName();
-    }
-
+    //TODO: delete later
     public int numberOfPlayersAlive (Long lobbyId) {
         int count = 0;
         List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);

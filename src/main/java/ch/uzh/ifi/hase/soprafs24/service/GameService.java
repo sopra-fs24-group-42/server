@@ -6,9 +6,11 @@ import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs24.entity.Player;
 import ch.uzh.ifi.hase.soprafs24.repository.RepositoryProvider;
 import ch.uzh.ifi.hase.soprafs24.utils.LobbyCodeGenerator;
+import ch.uzh.ifi.hase.soprafs24.utils.Role;
 import ch.uzh.ifi.hase.soprafs24.utils.roles.Protector;
 import ch.uzh.ifi.hase.soprafs24.utils.roles.Sacrifice;
 import ch.uzh.ifi.hase.soprafs24.utils.roles.Werewolf;
+import ch.uzh.ifi.hase.soprafs24.websocket.dto.SelectionRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -188,23 +190,27 @@ public class GameService {
 
         //only process if everyone alive did nightaction
         if(serviceProvider.getPlayerService().numberOfPlayersAlive(lobbyId) == lobbyToProcess.getCountNightaction()) {
+            log.info("start processNight");
             
-            List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
+            //List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
 
             List<Player> killedPlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsKilled(lobbyId, Boolean.TRUE);
 
             if (!killedPlayers.isEmpty()) {
-                    // Randomly select one player to keep as killed
-                    Player playerToKeepKilled = killedPlayers.get(rand.nextInt(killedPlayers.size()));
-                    //permanent eliminated from game
-                    playerToKeepKilled.setIsAlive(false);                
-                    // Set all killed players' isKilled to false, except the randomly selected one
-                    for (Player player : players) {         
-                        if (player.getIsKilled().equals(Boolean.TRUE) && !player.equals(playerToKeepKilled)) {
-                            player.setIsKilled(false);
-                        }
+                log.info("there are players killed");
+                // Randomly select one player to keep as killed
+                Player playerToKeepKilled = killedPlayers.get(rand.nextInt(killedPlayers.size()));
+                //permanent eliminated from game
+                playerToKeepKilled.setIsAlive(false);
+                // Set all killed players' isKilled to false, except the randomly selected one
+                for (Player player : killedPlayers) {         
+                    if (player.getIsKilled().equals(Boolean.TRUE) && !player.equals(playerToKeepKilled)) {
+                        player.setIsKilled(false);
                     }
+                }
             }
+
+            repositoryProvider.getPlayerRepository().saveAll(killedPlayers);
 
             //kill sacrificed Players from game
             List<Player> sacrificedPlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsSacrificed(lobbyId, Boolean.TRUE);
@@ -219,6 +225,8 @@ public class GameService {
                 }
             }
 
+            repositoryProvider.getPlayerRepository().saveAll(sacrificedPlayers);
+
             //let protected Players survive
             List<Player> protectedPlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsProtected(lobbyId, Boolean.TRUE);
 
@@ -231,7 +239,9 @@ public class GameService {
                 }
             }
 
-            //reset CountNightaction
+            repositoryProvider.getPlayerRepository().saveAll(protectedPlayers);
+
+            //TODO: replace and move to VOTING/NIGHT
             serviceProvider.getLobbyService().resetNightactionCount(lobbyId);
         } else {
             log.info("Waiting for Players to perform their Nightaction");
@@ -239,20 +249,55 @@ public class GameService {
 
     }
 
-    public void werewolfNightAction(String selection) {
-        werewolf.setSelection(selection);
-        werewolf.doNightAction();
+    public void werewolfNightAction(SelectionRequest request) {
+        werewolf.setSelection(request.getSelection());
+        werewolf.setUsername(request.getUsername());
+
+        // check if it is a correct role
+        if(isValidForNightAction(werewolf) && checkRole(werewolf.getUsername(), werewolf.getRoleName())){
+            werewolf.doNightAction();
+        }
     }
 
-    public void protectorNightAction(String selection) {
-        protector.setSelection(selection);
-        protector.doNightAction();
+    private boolean isValidForNightAction(Role role){
+        if(role.getSelection().isEmpty()){
+            log.info("Player {} does not select anyone", role.getUsername());
+            return false;
+        }
+
+        if(!serviceProvider.getPlayerService().playersLobbyEqual(role.getUsername(), role.getSelection())) {
+            log.info("PLayers {} and {} are not in the same lobby", role.getUsername(), role.getSelection());
+            return false;
+        }
+        return true;
     }
 
-    public void sacrificeNightAction(String username, String selection) {
-        sacrifice.setUsername(username);
-        sacrifice.setSelection(selection);
-        sacrifice.doNightAction();
+    public void protectorNightAction(SelectionRequest request) {
+        protector.setSelection(request.getSelection());
+        protector.setUsername(request.getUsername());
+
+        if(isValidForNightAction(protector) && checkRole(request.getUsername(), protector.getRoleName())){
+            protector.doNightAction();
+        }
+    }
+
+    public void sacrificeNightAction(SelectionRequest request) {
+        sacrifice.setSelection(request.getSelection());
+        sacrifice.setUsername(request.getUsername());
+
+        if(isValidForNightAction(sacrifice) && checkRole(request.getUsername(), sacrifice.getRoleName())){
+            sacrifice.doNightAction();
+        }
+    }
+
+    private boolean checkRole(String userName, String roleName){
+        Player player = repositoryProvider.getPlayerRepository().findByUsername(userName);
+        if (player.getRoleName().equals(roleName)){
+            return true;
+        }
+        log.info("Player {} has role {}, but requested {}", userName, player.getRoleName(), roleName);
+        return false;
+
     }
 
     private void processVoting (Long lobbyId) {
@@ -278,6 +323,8 @@ public class GameService {
         if (playerWithMostVotes != null && maxVotes > 0 && numOfMaxVotes == 1) {
             playerWithMostVotes.setIsKilled(true);
             playerWithMostVotes.setIsAlive(false);
+            playerWithMostVotes = repositoryProvider.getPlayerRepository().save(playerWithMostVotes);
+            log.info("Player {} has the most votes", playerWithMostVotes.getUsername());
         }
     }
 
@@ -304,7 +351,8 @@ public class GameService {
         } else if (countWerewolf >= countVillager) {
             lobby.setWinnerSide(WinnerSide.WEREWOLVES);
             lobby.setGameState(GameState.ENDGAME);
-        }
+        } else {return;}
+        repositoryProvider.getLobbyRepository().save(lobby);
     }
 
     private void resetGame (Long lobbyId) {

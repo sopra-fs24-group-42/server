@@ -14,6 +14,7 @@ public class Sacrifice extends Role {
     @Autowired
     public Sacrifice(ServiceProvider serviceProvider) {
         this.serviceProvider = serviceProvider;
+        this.roleName = "Sacrifice";
     }
 
     @Override
