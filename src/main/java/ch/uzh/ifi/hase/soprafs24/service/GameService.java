@@ -115,7 +115,7 @@ public class GameService {
             log.info("Not all Players are ready yet to go to next Phase");
         } else {
             Lobby lobby = repositoryProvider.getLobbyRepository().findByLobbyId(lobbyId);
-            boolean isNarrationActive = true; //add field in lobby in case we want to be able to deactivate it
+            boolean isNarrationActive = false; //add field in lobby in case we want to be able to deactivate it
             switch (lobby.getGameState()) {
                 case WAITINGROOM:
                     if(isNarrationActive) {
@@ -178,6 +178,7 @@ public class GameService {
                 default:
                     break;
             }
+            repositoryProvider.getLobbyRepository().save(lobby);
             log.info("lobby {} is now in phase {}", lobby.getLobbyId(), lobby.getGameState());
         }
     }
