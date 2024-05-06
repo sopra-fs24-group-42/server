@@ -12,7 +12,10 @@ public class Protector extends Role {
 
     @Autowired
     public Protector(ServiceProvider serviceProvider) {
+
         this.serviceProvider = serviceProvider;
+        this.roleName = "Protector";
+
     }
 
     @Override

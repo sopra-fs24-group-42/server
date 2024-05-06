@@ -68,84 +68,84 @@ public class StompController {
         wsService.broadcastLobby(lobbyId);
     }
   
-    @MessageMapping("/Werewolf/nightaction")
-    public void performWerewolfNightAction(final SelectionRequest request) {
-
-        logger.info("Werewolf {} selected {} during NIGHT", request.getUsername(), request.getSelection());
-
-        //TODO: check if player is werewolf
-
-        //check that both players are in same lobby
-        if (serviceProvider.getPlayerService().playersLobbyEqual(request.getUsername(), request.getSelection()) && !request.getSelection().isEmpty()) {
-            gameService.werewolfNightAction(request.getSelection());
-        } else {
-            logger.info("user {} is not in the same lobby as {} or there is no selection!", request.getUsername(), request.getSelection());
-        }
-
-        //let lobby know that someone performed nightaction
-        Long lobbyIdOfUsername = serviceProvider.getPlayerService().getLobbyIdFromPlayerByUsername(request.getUsername());
-        serviceProvider.getLobbyService().incrementCountNightaction(lobbyIdOfUsername);
-        gameService.processNightphase(lobbyIdOfUsername);
-    }
-
-    @MessageMapping("/Protector/nightaction")
-    public void performProtectorNightAction(final SelectionRequest request) {
-
-        logger.info("Protector {} selected {} during NIGHT", request.getUsername(), request.getSelection());
-
-        //TODO: check if player is protector
-
-        //check that both players are in same lobby
-        if (serviceProvider.getPlayerService().playersLobbyEqual(request.getUsername(), request.getSelection()) && !request.getSelection().isEmpty()) {
-            gameService.protectorNightAction(request.getSelection());
-        } else {
-            logger.info("user {} is not in the same lobby as {} or there is no selection!", request.getUsername(), request.getSelection());
-        }
-
-        //let lobby know that someone performed nightaction
-        Long lobbyIdOfUsername = serviceProvider.getPlayerService().getLobbyIdFromPlayerByUsername(request.getUsername());
-        serviceProvider.getLobbyService().incrementCountNightaction(lobbyIdOfUsername);
-        gameService.processNightphase(lobbyIdOfUsername);
-    }
-
-    @MessageMapping("/Sacrifice/nightaction")
-    public void performSacrificeNightAction(final SelectionRequest request) {
-
-        logger.info("Sacrifice {} selected {} during NIGHT", request.getUsername(), request.getSelection());
-
-        //TODO: check if player is Sacrifice
-
-        //check that both players are in same lobby
-        if (serviceProvider.getPlayerService().playersLobbyEqual(request.getUsername(), request.getSelection()) && !request.getSelection().isEmpty()) {
-            gameService.sacrificeNightAction(request.getUsername(), request.getSelection());
-        } else {
-            logger.info("user {} is not in the same lobby as {} or there is no selection!", request.getUsername(), request.getSelection());
-        }
-
-        //let lobby know that someone performed nightaction
-        Long lobbyIdOfUsername = serviceProvider.getPlayerService().getLobbyIdFromPlayerByUsername(request.getUsername());
-        serviceProvider.getLobbyService().incrementCountNightaction(lobbyIdOfUsername);
-        gameService.processNightphase(lobbyIdOfUsername);
-    }
-
-    @MessageMapping("/Villager/nightaction")
-    public void performVillagerNightAction(final SelectionRequest request) {
-        //No logic needed for now
-        logger.info("Villager {} selected {} during NIGHT", request.getUsername(), request.getSelection());
-        //let lobby know that someone performed nightaction
-        Long lobbyIdOfUsername = serviceProvider.getPlayerService().getLobbyIdFromPlayerByUsername(request.getUsername());
-        serviceProvider.getLobbyService().incrementCountNightaction(lobbyIdOfUsername);
-        gameService.processNightphase(lobbyIdOfUsername);
-    }
-
-    @MessageMapping("/Seer/nightaction")
-    public void performSeerNightAction(final SelectionRequest request) {
-        //No logic needed for now
-        logger.info("Seer {} selected {} during NIGHT", request.getUsername(), request.getSelection());
-        //let lobby know that someone performed nightaction
-        Long lobbyIdOfUsername = serviceProvider.getPlayerService().getLobbyIdFromPlayerByUsername(request.getUsername());
-        serviceProvider.getLobbyService().incrementCountNightaction(lobbyIdOfUsername);
-        gameService.processNightphase(lobbyIdOfUsername);
+//    @MessageMapping("/Werewolf/nightaction")
+//    public void performWerewolfNightAction(final SelectionRequest request) {
+//
+//        logger.info("Werewolf {} selected {} during NIGHT", request.getUsername(), request.getSelection());
+//
+//
+//
+//        //check that both players are in same lobby
+//        if (serviceProvider.getPlayerService().playersLobbyEqual(request.getUsername(), request.getSelection()) && !request.getSelection().isEmpty()) {
+//            gameService.werewolfNightAction(request.getSelection());
+//        } else {
+//            logger.info("user {} is not in the same lobby as {} or there is no selection!", request.getUsername(), request.getSelection());
+//        }
+//
+//        //let lobby know that someone performed nightaction
+//        Long lobbyIdOfUsername = serviceProvider.getPlayerService().getLobbyIdFromPlayerByUsername(request.getUsername());
+//        serviceProvider.getLobbyService().incrementCountNightaction(lobbyIdOfUsername);
+//        gameService.processNightphase(lobbyIdOfUsername);
+//    }
+//
+//    @MessageMapping("/Protector/nightaction")
+//    public void performProtectorNightAction(final SelectionRequest request) {
+//
+//        logger.info("Protector {} selected {} during NIGHT", request.getUsername(), request.getSelection());
+//
+//
+//
+//        //check that both players are in same lobby
+//        if (serviceProvider.getPlayerService().playersLobbyEqual(request.getUsername(), request.getSelection()) && !request.getSelection().isEmpty()) {
+//            gameService.protectorNightAction(request.getSelection());
+//        } else {
+//            logger.info("user {} is not in the same lobby as {} or there is no selection!", request.getUsername(), request.getSelection());
+//        }
+//
+//        //let lobby know that someone performed nightaction
+//        Long lobbyIdOfUsername = serviceProvider.getPlayerService().getLobbyIdFromPlayerByUsername(request.getUsername());
+//        serviceProvider.getLobbyService().incrementCountNightaction(lobbyIdOfUsername);
+//        gameService.processNightphase(lobbyIdOfUsername);
+//    }
+//
+//    @MessageMapping("/Sacrifice/nightaction")
+//    public void performSacrificeNightAction(final SelectionRequest request) {
+//
+//        logger.info("Sacrifice {} selected {} during NIGHT", request.getUsername(), request.getSelection());
+//
+//
+//
+//        //check that both players are in same lobby
+//        if (serviceProvider.getPlayerService().playersLobbyEqual(request.getUsername(), request.getSelection()) && !request.getSelection().isEmpty()) {
+//            gameService.sacrificeNightAction(request.getUsername(), request.getSelection());
+//        } else {
+//            logger.info("user {} is not in the same lobby as {} or there is no selection!", request.getUsername(), request.getSelection());
+//        }
+//
+//        //let lobby know that someone performed nightaction
+//        Long lobbyIdOfUsername = serviceProvider.getPlayerService().getLobbyIdFromPlayerByUsername(request.getUsername());
+//        serviceProvider.getLobbyService().incrementCountNightaction(lobbyIdOfUsername);
+//        gameService.processNightphase(lobbyIdOfUsername);
+//    }
+//
+//    @MessageMapping("/Villager/nightaction")
+//    public void performVillagerNightAction(final SelectionRequest request) {
+//        //No logic needed for now
+//        logger.info("Villager {} selected {} during NIGHT", request.getUsername(), request.getSelection());
+//        //let lobby know that someone performed nightaction
+//        Long lobbyIdOfUsername = serviceProvider.getPlayerService().getLobbyIdFromPlayerByUsername(request.getUsername());
+//        serviceProvider.getLobbyService().incrementCountNightaction(lobbyIdOfUsername);
+//        gameService.processNightphase(lobbyIdOfUsername);
+//    }
+//
+//    @MessageMapping("/Seer/nightaction")
+//    public void performSeerNightAction(final SelectionRequest request) {
+//        //No logic needed for now
+//        logger.info("Seer {} selected {} during NIGHT", request.getUsername(), request.getSelection());
+//        //let lobby know that someone performed nightaction
+//        Long lobbyIdOfUsername = serviceProvider.getPlayerService().getLobbyIdFromPlayerByUsername(request.getUsername());
+//        serviceProvider.getLobbyService().incrementCountNightaction(lobbyIdOfUsername);
+//        gameService.processNightphase(lobbyIdOfUsername);
     }
    
     // Vote during voting phase
@@ -164,6 +164,33 @@ public class StompController {
     @SendTo("/topic/lobby/{lobbyId}")
     public Lobby sendLobbyInfo(@DestinationVariable String lobbyId, Lobby lobby) {
        return lobby;
+    }
+
+    @MessageMapping("/{roleName}/nightaction")
+    public void performNightAction(@DestinationVariable String roleName, final SelectionRequest request){
+        logger.info("{} {} selected {} during NIGHT", roleName, request.getUsername(), request.getSelection());
+
+        switch(roleName) {
+            case "Seer":
+                break;
+            case "Werewolf":
+                gameService.werewolfNightAction(request);
+                break;
+            case "Villager":
+                break;
+            case "Protector":
+                gameService.protectorNightAction(request);
+                break;
+            case "Sacrifice":
+                gameService.sacrificefNightAction(request);
+                break;
+            default:
+                logger.info("{} is not a valid role", roleName);
+        }
+        Long lobbyIdOfUsername = serviceProvider.getPlayerService().getLobbyIdFromPlayerByUsername(request.getUsername());
+        serviceProvider.getLobbyService().incrementCountNightaction(lobbyIdOfUsername);
+        gameService.processNightphase(lobbyIdOfUsername);
+        // wsService.broadcastLobby(lobbyIdOfUsername);
     }
     
 }

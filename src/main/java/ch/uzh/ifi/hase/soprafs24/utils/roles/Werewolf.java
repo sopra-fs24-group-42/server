@@ -13,6 +13,7 @@ public class Werewolf extends Role{
     @Autowired
     public Werewolf(ServiceProvider serviceProvider) {
         this.serviceProvider = serviceProvider;
+        this.roleName = "Werewolf";
     }
 
     @Override

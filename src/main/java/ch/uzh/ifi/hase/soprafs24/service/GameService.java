@@ -210,20 +210,55 @@ public class GameService {
 
     }
 
-    public void werewolfNightAction(String selection) {
-        werewolf.setSelection(selection);
-        werewolf.doNightAction();
+    public void werewolfNightAction(SelectionRequest request) {
+        werewolf.setSelection(request.getSelection());
+        werewolf.setUsername(request.getUsername());
+
+        // check if it is a correct role
+        if(isValidForNightAction(werewolf) && checkRole(werewolf.getUsername(), werewolf.getRoleName())){
+            werewolf.doNightAction();
+        }
     }
 
-    public void protectorNightAction(String selection) {
-        protector.setSelection(selection);
-        protector.doNightAction();
+    private boolean isValidForNightAction(Role role){
+        if(role.getSelection.isEmpty()){
+            log.info("Player {} does not select anyone", role.getUsername());
+            return false;
+        }
+
+        if(!serviceProvider.getPlayerService.playersLobbyEqual(role.getUsername(), role.getSelection())) {
+            log.info("PLayers {} and {} are not in the same lobby", role.getUsername(), role.getSelection());
+            return false;
+        }
+        return true;
     }
 
-    public void sacrificeNightAction(String username, String selection) {
-        sacrifice.setUsername(username);
-        sacrifice.setSelection(selection);
-        sacrifice.doNightAction();
+    public void protectorNightAction(SelectionRequest request) {
+        protector.setSelection(request.getSelection());
+        protector.setUsername(request.getUsername());
+
+        if(isValidForNightAction(protector) && checkRole(request.getUsername(), protector.getRoleName())){
+            protector.doNightAction();
+        }
+    }
+
+    public void sacrificeNightAction(SelectionRequest request) {
+        sacrifice.setSelection(request.getSelection());
+        sacrifice.setUsername(request.getUsername());
+
+        if(isValidForNightAction(sacrifice) && checkRole(request.getUsername(), sacrifice.getRoleName())){
+            sacrifice.doNightAction();
+        }
+    }
+
+    private boolean checkRole(String userName, String roleName){
+        Player player = repositoryProvider.getPlayerRepository().findByUsername();
+        if (player.getRoleName().equals(roleName)){
+            return true;
+        }
+        log.info("Player {} has role {}, but requested {}", userName, player.getRoleName(), roleName);
+        return false
+
     }
 
     private void processVoting (Long lobbyId) {
