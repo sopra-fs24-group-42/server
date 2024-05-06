@@ -79,6 +79,7 @@
 
 | Date | Name | Links to Github Issues | Comments |
 |---|---|---|---|
-|04.05.2024|Lukas|[#158](https://github.com/sopra-fs24-group-42/server/issues/158), [#160](https://github.com/sopra-fs24-group-42/server/issues/160)|   |
-|   |   |   |   |
+|04.05.2024|Lukas|[#158](https://github.com/sopra-fs24-group-42/server/issues/158), [#160](https://github.com/sopra-fs24-group-42/server/issues/160),[#118](https://github.com/sopra-fs24-group-42/client/issues/118), [#119](https://github.com/sopra-fs24-group-42/client/issues/119), [#121](https://github.com/sopra-fs24-group-42/client/issues/121)|   |
+|05.05.2024|Lukas|[#120](https://github.com/sopra-fs24-group-42/client/issues/120)|   |
+|06.05.2024|Polina/Lukas|[#171](https://github.com/sopra-fs24-group-42/server/issues/171), [#172](https://github.com/sopra-fs24-group-42/server/issues/172)||
 |   |   |   |   |
