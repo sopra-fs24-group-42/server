@@ -241,7 +241,7 @@ public class GameService {
 
             repositoryProvider.getPlayerRepository().saveAll(protectedPlayers);
 
-            //reset CountNightaction
+            //TODO: replace and move to VOTING/NIGHT
             serviceProvider.getLobbyService().resetNightactionCount(lobbyId);
         } else {
             log.info("Waiting for Players to perform their Nightaction");
@@ -323,6 +323,8 @@ public class GameService {
         if (playerWithMostVotes != null && maxVotes > 0 && numOfMaxVotes == 1) {
             playerWithMostVotes.setIsKilled(true);
             playerWithMostVotes.setIsAlive(false);
+            playerWithMostVotes = repositoryProvider.getPlayerRepository().save(playerWithMostVotes);
+            log.info("Player {} has the most votes", playerWithMostVotes.getUsername());
         }
     }
 
@@ -349,7 +351,8 @@ public class GameService {
         } else if (countWerewolf >= countVillager) {
             lobby.setWinnerSide(WinnerSide.WEREWOLVES);
             lobby.setGameState(GameState.ENDGAME);
-        }
+        } else {return;}
+        repositoryProvider.getLobbyRepository().save(lobby);
     }
 
     private void resetGame (Long lobbyId) {
