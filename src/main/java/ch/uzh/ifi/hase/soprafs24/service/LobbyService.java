@@ -57,7 +57,7 @@ public class LobbyService {
         int numberOfSeers = 1;
         gameSettings.setNumberOfSeers(numberOfSeers);
 
-        int numberOfProtectors = 1;
+        int numberOfProtectors = 0;
         gameSettings.setNumberOfProtectors(numberOfProtectors);
 
         int numberOfSacrifices = 0;
