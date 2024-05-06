@@ -117,42 +117,71 @@ public class GameService {
             log.info("Not all Players are ready yet to go to next Phase");
         } else {
             Lobby lobby = repositoryProvider.getLobbyRepository().findByLobbyId(lobbyId);
+            boolean isNarrationActive = false; //add field in lobby in case we want to be able to deactivate it
             switch (lobby.getGameState()) {
                 case WAITINGROOM:
+                    if(isNarrationActive) {
+                        lobby.setGameState(GameState.PRENIGHT);
+                        hostNotReady(lobbyId);
+                    } else {
+                        lobby.setGameState(GameState.NIGHT);
+                        serviceProvider.getPlayerService().setPlayersNotReady(lobbyId);
+                    }
+                    break;
+                case PRENIGHT:
                     lobby.setGameState(GameState.NIGHT);
+                    serviceProvider.getPlayerService().setPlayersNotReady(lobbyId);
                     break;
                 case NIGHT:
                     lobby.setGameState(GameState.REVEALNIGHT);
+                    serviceProvider.getPlayerService().setPlayersNotReady(lobbyId);
                     break;
                 case REVEALNIGHT:
                     lobby.setGameState(GameState.DISCUSSION);
                     serviceProvider.getPlayerService().resetIsKilled(lobbyId);
                     checkIfgameEnded(lobbyId);
+                    serviceProvider.getPlayerService().setPlayersNotReady(lobbyId);
                     break;
                 case DISCUSSION:
+                    if(isNarrationActive) {
+                        lobby.setGameState(GameState.PREVOTING);
+                        hostNotReady(lobbyId);
+                    } else {
+                        lobby.setGameState(GameState.VOTING);
+                        serviceProvider.getPlayerService().setPlayersNotReady(lobbyId);
+                    }
+                    break;
+                case PREVOTING:
                     lobby.setGameState(GameState.VOTING);
+                    serviceProvider.getPlayerService().setPlayersNotReady(lobbyId);
                     break;
                 case VOTING:
                     processVoting(lobbyId);
                     lobby.setGameState(GameState.REVEALVOTING);
+                    serviceProvider.getPlayerService().setPlayersNotReady(lobbyId);
                     break;
                 case REVEALVOTING:
-                    lobby.setGameState(GameState.NIGHT);
-                    serviceProvider.getPlayerService().resetVotes(lobbyId);
-                    serviceProvider.getPlayerService().resetIsKilled(lobbyId);
-                    checkIfgameEnded(lobbyId);
+                    if(isNarrationActive) {
+                        lobby.setGameState(GameState.PRENIGHT);
+                        hostNotReady(lobbyId);
+                    } else {
+                        lobby.setGameState(GameState.NIGHT);
+                        serviceProvider.getPlayerService().resetVotes(lobbyId);
+                        serviceProvider.getPlayerService().resetIsKilled(lobbyId);
+                        checkIfgameEnded(lobbyId);
+                        serviceProvider.getPlayerService().setPlayersNotReady(lobbyId);
+                    }
                     break;
                 case ENDGAME:
                     resetGame(lobbyId);
                     lobby.setGameState(GameState.WAITINGROOM);
+                    serviceProvider.getPlayerService().setPlayersNotReady(lobbyId);
                     break;
                 default:
                     break;
             }
+            repositoryProvider.getLobbyRepository().save(lobby);
             log.info("lobby {} is now in phase {}", lobby.getLobbyId(), lobby.getGameState());
-
-            //reset all alive players to isReady = false
-            serviceProvider.getPlayerService().setPlayersNotReady(lobbyId);
         }
     }
 
@@ -326,5 +355,13 @@ public class GameService {
     private void resetGame (Long lobbyId) {
         serviceProvider.getLobbyService().resetLobby(lobbyId);
         serviceProvider.getPlayerService().resetPlayersByLobbyId(lobbyId);
+    }
+
+    private void hostNotReady(Long lobbyId) {
+        Lobby lobby = repositoryProvider.getLobbyRepository().findByLobbyId(lobbyId);
+        Player hostPlayer = repositoryProvider.getPlayerRepository().findByUsername(lobby.getHostName());
+
+        hostPlayer.setIsReady(Boolean.FALSE);
+        repositoryProvider.getPlayerRepository().save(hostPlayer);
     }
 }

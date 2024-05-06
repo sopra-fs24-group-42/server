@@ -99,30 +99,33 @@ public class PlayerService {
     }
 
     public void setPlayersNotReady (Long lobbyId) {
-        List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
+        List<Player> alivePlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsAlive(lobbyId, Boolean.TRUE);
 
-        for (int i = 0; i < players.size(); i++) {
-            //only set alive players to not ready (non alive players are always ready)
-            if (players.get(i).getIsAlive()) {
-                players.get(i).setIsReady(false);
-            }
+        for (Player player : alivePlayers) {
+            player.setIsReady(Boolean.FALSE);
         }
+
+        repositoryProvider.getPlayerRepository().saveAll(alivePlayers);
     }
 
     public void resetIsKilled (Long lobbyId) {
         List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
 
-        for (int i = 0; i < players.size(); i++) {
-            players.get(i).setIsKilled(false);
+        for(Player player : players) {
+            player.setIsKilled(Boolean.FALSE);
         }
+
+        repositoryProvider.getPlayerRepository().saveAll(players);
     }
 
     public void resetVotes(Long lobbyId) {
         List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
 
-        for (int i = 0; i < players.size(); i++) {
-            players.get(i).setNumberOfVotes(0);
+        for(Player player : players) {
+            player.setNumberOfVotes(0);
         }
+
+        repositoryProvider.getPlayerRepository().saveAll(players);
     }
 
     public void voteForPlayer(String selectedPlayerName) {
