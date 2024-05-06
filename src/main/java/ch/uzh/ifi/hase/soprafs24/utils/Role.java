@@ -1,9 +1,9 @@
 package ch.uzh.ifi.hase.soprafs24.utils;
 
 public class Role {
-    private Sting roleName;
-    private String username;
-    private String selection;
+    protected String roleName;
+    protected String username;
+    protected String selection;
 
     public String getUsername() {
         return username;
@@ -21,11 +21,11 @@ public class Role {
         this.selection = selection;
     }
 
-    public Sting getRoleName() {
+    public String getRoleName() {
         return roleName;
     }
 
-    public void setRoleName(Sting roleName) {
+    public void setRoleName(String roleName) {
         this.roleName = roleName;
     }
 

@@ -146,7 +146,7 @@ public class StompController {
 //        Long lobbyIdOfUsername = serviceProvider.getPlayerService().getLobbyIdFromPlayerByUsername(request.getUsername());
 //        serviceProvider.getLobbyService().incrementCountNightaction(lobbyIdOfUsername);
 //        gameService.processNightphase(lobbyIdOfUsername);
-    }
+//    }
    
     // Vote during voting phase
     @MessageMapping("/voting")
@@ -182,7 +182,7 @@ public class StompController {
                 gameService.protectorNightAction(request);
                 break;
             case "Sacrifice":
-                gameService.sacrificefNightAction(request);
+                gameService.sacrificeNightAction(request);
                 break;
             default:
                 logger.info("{} is not a valid role", roleName);

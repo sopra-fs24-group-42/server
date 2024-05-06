@@ -6,9 +6,11 @@ import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs24.entity.Player;
 import ch.uzh.ifi.hase.soprafs24.repository.RepositoryProvider;
 import ch.uzh.ifi.hase.soprafs24.utils.LobbyCodeGenerator;
+import ch.uzh.ifi.hase.soprafs24.utils.Role;
 import ch.uzh.ifi.hase.soprafs24.utils.roles.Protector;
 import ch.uzh.ifi.hase.soprafs24.utils.roles.Sacrifice;
 import ch.uzh.ifi.hase.soprafs24.utils.roles.Werewolf;
+import ch.uzh.ifi.hase.soprafs24.websocket.dto.SelectionRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -221,12 +223,12 @@ public class GameService {
     }
 
     private boolean isValidForNightAction(Role role){
-        if(role.getSelection.isEmpty()){
+        if(role.getSelection().isEmpty()){
             log.info("Player {} does not select anyone", role.getUsername());
             return false;
         }
 
-        if(!serviceProvider.getPlayerService.playersLobbyEqual(role.getUsername(), role.getSelection())) {
+        if(!serviceProvider.getPlayerService().playersLobbyEqual(role.getUsername(), role.getSelection())) {
             log.info("PLayers {} and {} are not in the same lobby", role.getUsername(), role.getSelection());
             return false;
         }
@@ -252,12 +254,12 @@ public class GameService {
     }
 
     private boolean checkRole(String userName, String roleName){
-        Player player = repositoryProvider.getPlayerRepository().findByUsername();
+        Player player = repositoryProvider.getPlayerRepository().findByUsername(userName);
         if (player.getRoleName().equals(roleName)){
             return true;
         }
         log.info("Player {} has role {}, but requested {}", userName, player.getRoleName(), roleName);
-        return false
+        return false;
 
     }
 
