@@ -3,11 +3,14 @@ package ch.uzh.ifi.hase.soprafs24.service;
 import ch.uzh.ifi.hase.soprafs24.constant.WinnerSide;
 import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs24.utils.GameSettings;
+import ch.uzh.ifi.hase.soprafs24.websocket.dto.UpdatedGameSettings;
 import ch.uzh.ifi.hase.soprafs24.entity.Player;
 import ch.uzh.ifi.hase.soprafs24.repository.RepositoryProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -16,6 +19,9 @@ import java.util.List;
 @Service
 @Transactional
 public class LobbyService {
+
+    private final Logger log = LoggerFactory.getLogger(LobbyService.class);
+
     private final RepositoryProvider repositoryProvider;
 
 
@@ -45,14 +51,23 @@ public class LobbyService {
         }
     }
 
-    public void updateGameSettings(Long lobbyId, updatedGameSettings){
-        Lobby lobby = repositoryProvider.getLobbyRepository().findLobbyById();
+    public void updateGameSettings(Long lobbyId, UpdatedGameSettings updatedGameSettings){
+        try {
+            Lobby lobby = repositoryProvider.getLobbyRepository().findByLobbyId(lobbyId);
+            int numberOfPlayers = lobby.getNumberOfPlayers();
+            int numberOfUpdatedRoles = updatedGameSettings.getTotalNumberOfRoles();
 
-        if (lobby.getNumberOfPlayers() == )
-    }
+            if (numberOfPlayers == numberOfUpdatedRoles) {
+                throw new Exception(String.format("Invalid number of the roles, total number of players is %d and you selected %d", numberOfPlayers, numberOfUpdatedRoles));
+            }
 
-    public void getNumberOfPlayersFromUpdatedSettings() {
+            // check if there is a werewolf
+            // set the settings
 
+        }
+        catch (Exception ex){
+            log.info("Invalid number of the roles");
+        }
     }
 
 

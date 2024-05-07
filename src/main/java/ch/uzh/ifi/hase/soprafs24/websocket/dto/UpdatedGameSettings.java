@@ -1,4 +1,8 @@
 package ch.uzh.ifi.hase.soprafs24.websocket.dto;
+import java.beans.BeanInfo;
+import java.beans.Introspector;
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
 
 public class UpdatedGameSettings {
     private int numberOfWerewolves;
@@ -101,8 +105,49 @@ public class UpdatedGameSettings {
         this.numberOfSwappers = numberOfSwappers;
     }
 
-    public int getTotalNumber(){
-        //introspection
+    public int getTotalNumberOfRoles() {
+        int totalNumberOfRoles = 0;
+        BeanInfo info = Introspector.getBeanInfo( UpdatedGameSettings.class, Object.class );
+        for ( PropertyDescriptor pd : info.getPropertyDescriptors() ){
+            if(pd.startsWith("getNumberOf")){
+                totalNumberOfRoles += pd;
+            }
+        }
+
     }
     
 }
+
+
+/*    public int getTotalNumberOfRoles() {
+        int totalNumberOfRoles = 0;
+        try {
+            // Get the bean info for the UpdatedGameSettings class
+            BeanInfo info = Introspector.getBeanInfo(UpdatedGameSettings.class, Object.class);
+
+            // Loop through the property descriptors
+            for (PropertyDescriptor pd : info.getPropertyDescriptors()) {
+                // Check if the property's getter method starts with "getNumberOf"
+                Method readMethod = pd.getReadMethod();
+                if (readMethod != null && readMethod.getName().startsWith("getNumberOf")) {
+                    try {
+                        // Invoke the getter method on an instance of UpdatedGameSettings
+                        UpdatedGameSettings settings = new UpdatedGameSettings();
+                        Integer value = (Integer) readMethod.invoke(settings);
+
+                        // Add the value to the total if it's not null
+                        if (value != null) {
+                            totalNumberOfRoles += value;
+                        }
+                    } catch (Exception e) {
+                        // Handle potential exceptions when invoking the getter method
+                        System.err.println("Error while invoking method " + readMethod.getName() + ": " + e.getMessage());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error during introspection: " + e.getMessage());
+        }
+
+        return totalNumberOfRoles;
+    }*/
