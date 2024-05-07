@@ -18,9 +18,11 @@ public class SetupController {
 
     private static final Logger logger = LoggerFactory.getLogger(SetupController.class);
     private final GameService gameService;
+    private final WebsocketService wsService;
 
-    SetupController(GameService gameService) {
+    SetupController(GameService gameService, WebsocketService wsService) {
         this.gameService = gameService;
+        this.wsService = wsService;
     }
 
     @PostMapping("/players")
@@ -55,8 +57,8 @@ public class SetupController {
     @ResponseStatus(HttpStatus.GONE)
     public void deletePlayer(@PathVariable Long playerId) {
         gameService.deletePlayer(playerId);
-
-        logger.info("deleted Player with playerId: {}", playerId);
+        wsService.broadcastLobby(playerId);
+        logger.info("deleted player with playerId: {}, new player can enter the lobby", playerId);
     }
 
 }

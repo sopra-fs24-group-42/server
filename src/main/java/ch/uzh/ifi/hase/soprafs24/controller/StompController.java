@@ -35,7 +35,7 @@ public class StompController {
     @MessageMapping("/settings/{lobbyId}")
     public void updateSettings(@DestinationVariable Long lobbyId, final UpdatedGameSettings updatedGameSettings) {
         //change settings
-        //serviceProvider.getLobbyService().updatedGameSettings(lobbyId, updatedGameSettings);
+        serviceProvider.getLobbyService().updatedGameSettings(lobbyId, updatedGameSettings);
         wsService.broadcastLobby(lobbyId);
     }
    

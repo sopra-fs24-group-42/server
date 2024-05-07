@@ -45,6 +45,17 @@ public class LobbyService {
         }
     }
 
+    public void updateGameSettings(Long lobbyId, updatedGameSettings){
+        Lobby lobby = repositoryProvider.getLobbyRepository().findLobbyById();
+
+        if (lobby.getNumberOfPlayers() == )
+    }
+
+    public void getNumberOfPlayersFromUpdatedSettings() {
+
+    }
+
+
     public GameSettings setDefaultSettings(int numberOfPlayers) {
         if(numberOfPlayers < 3) {
             throw new NullPointerException("Lobby needs more Players");
