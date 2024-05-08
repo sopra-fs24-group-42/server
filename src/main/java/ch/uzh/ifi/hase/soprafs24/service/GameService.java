@@ -90,7 +90,7 @@ public class GameService {
             newLobby.setGameState(GameState.WAITINGROOM);
             newLobby.setCountNightaction(0);
             newLobby.setWinnerSide(WinnerSide.NOWINNER);
-            newLobby.setGameSettings(serviceProvider.getLobbyService().setDefaultSettings(newLobby.getNumberOfPlayers()));
+            newLobby.setGameSettings(serviceProvider.getLobbyService().setDefaultSettings(newLobby));
 
             newLobby = repositoryProvider.getLobbyRepository().save(newLobby);
             repositoryProvider.getLobbyRepository().flush();

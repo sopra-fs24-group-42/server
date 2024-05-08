@@ -14,7 +14,7 @@ import ch.uzh.ifi.hase.soprafs24.service.WebsocketService;
 import ch.uzh.ifi.hase.soprafs24.websocket.dto.ReadyRequest;
 import ch.uzh.ifi.hase.soprafs24.websocket.dto.SelectionRequest;
 import ch.uzh.ifi.hase.soprafs24.websocket.dto.StartGameRequest;
-import ch.uzh.ifi.hase.soprafs24.websocket.dto.UpdatedGameSettings;
+import ch.uzh.ifi.hase.soprafs24.utils.GameSettings;
 
 @Controller
 public class StompController {
@@ -33,7 +33,7 @@ public class StompController {
 
     // Set or change lobby settings
     @MessageMapping("/settings/{lobbyId}")
-    public void updateSettings(@DestinationVariable Long lobbyId, final UpdatedGameSettings updatedGameSettings) {
+    public void updateSettings(@DestinationVariable Long lobbyId, final GameSettings updatedGameSettings) {
         //change settings
         serviceProvider.getLobbyService().updateGameSettings(lobbyId, updatedGameSettings);
         wsService.broadcastLobby(lobbyId);

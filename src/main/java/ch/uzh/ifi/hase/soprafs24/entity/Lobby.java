@@ -26,6 +26,9 @@ public class Lobby implements Serializable {
     @Column(nullable = false, unique = true)
     private String lobbyCode;
 
+    @Column(nullable = false)
+    private int minNumOfPlayers = 3;
+
     @Transient
     private List<Player> players;
 
@@ -125,5 +128,9 @@ public class Lobby implements Serializable {
 
     public void setCountNightaction(int countNightaction) {
         this.countNightaction = countNightaction;
+    }
+
+    public int getMinNumOfPlayers() {
+        return minNumOfPlayers;
     }
 }

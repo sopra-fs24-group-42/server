@@ -3,7 +3,6 @@ package ch.uzh.ifi.hase.soprafs24.service;
 import ch.uzh.ifi.hase.soprafs24.constant.WinnerSide;
 import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs24.utils.GameSettings;
-import ch.uzh.ifi.hase.soprafs24.websocket.dto.UpdatedGameSettings;
 import ch.uzh.ifi.hase.soprafs24.entity.Player;
 import ch.uzh.ifi.hase.soprafs24.repository.RepositoryProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,33 +50,39 @@ public class LobbyService {
         }
     }
 
-    public void updateGameSettings(Long lobbyId, UpdatedGameSettings updatedGameSettings){
+    public void updateGameSettings(Long lobbyId, GameSettings updatedGameSettings){
         try {
             Lobby lobby = repositoryProvider.getLobbyRepository().findByLobbyId(lobbyId);
-            int numberOfPlayers = lobby.getNumberOfPlayers();
             int numberOfUpdatedRoles = updatedGameSettings.getTotalNumberOfRoles();
 
-            if (numberOfPlayers == numberOfUpdatedRoles) {
-                throw new Exception(String.format("Invalid number of the roles, total number of players is %d and you selected %d", numberOfPlayers, numberOfUpdatedRoles));
+            log.info("Invalid number of the roles, total number of players is %d and you selected %d", lobby.getNumberOfPlayers(), numberOfUpdatedRoles);
+
+            // check if there more than 4 players at least
+            if(numberOfUpdatedRoles < lobby.getMinNumOfPlayers()){
+                throw new Exception(String.format("Invalid number of roles, it is less than reqired '%d < %d'", numberOfUpdatedRoles, lobby.getMinNumOfPlayers()));
             }
 
-            // check if there is a werewolf
-            // set the settings
+            // change the number of the players in the game
+            lobby.setNumberOfPlayers(numberOfUpdatedRoles);
+            lobby.setGameSettings(updatedGameSettings);
+
+            repositoryProvider.getLobbyRepository().save(lobby);
+            log.info("New settings are applied %d", lobby.getGameSettings());
 
         }
         catch (Exception ex){
-            log.info("Invalid number of the roles");
+            log.info("Something went wrong while updating settings");
         }
     }
 
 
-    public GameSettings setDefaultSettings(int numberOfPlayers) {
-        if(numberOfPlayers < 3) {
+    public GameSettings setDefaultSettings(Lobby lobby) {
+        if(lobby.getNumberOfPlayers() < lobby.getMinNumOfPlayers()) {
             throw new NullPointerException("Lobby needs more Players");
         }
         GameSettings gameSettings = new GameSettings();
 
-        int numberOfWerewolves = numberOfPlayers / 3; 
+        int numberOfWerewolves = lobby.getNumberOfPlayers() / 3;
         gameSettings.setNumberOfWerewolves(numberOfWerewolves);
 
         int numberOfSeers = 1;
@@ -89,7 +94,7 @@ public class LobbyService {
         int numberOfSacrifices = 0;
         gameSettings.setNumberOfSacrifices(numberOfSacrifices);
         
-        int numberOfVillagers = numberOfPlayers - numberOfWerewolves - numberOfSeers - numberOfProtectors - numberOfSacrifices;
+        int numberOfVillagers = lobby.getNumberOfPlayers() - numberOfWerewolves - numberOfSeers - numberOfProtectors - numberOfSacrifices;
         gameSettings.setNumberOfVillagers(numberOfVillagers);
         return gameSettings;
     }

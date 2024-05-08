@@ -8,6 +8,7 @@ import ch.uzh.ifi.hase.soprafs24.rest.dto.PlayerPostDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.LobbyPostDTO;
 import ch.uzh.ifi.hase.soprafs24.service.GameService;
 import ch.uzh.ifi.hase.soprafs24.service.WebsocketService;
+import ch.uzh.ifi.hase.soprafs24.service.ServiceProvider;
 import ch.uzh.ifi.hase.soprafs24.rest.mapper.DTOMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -19,11 +20,14 @@ public class SetupController {
 
     private static final Logger logger = LoggerFactory.getLogger(SetupController.class);
     private final GameService gameService;
+    private final ServiceProvider serviceProvider;
     private final WebsocketService wsService;
 
-    SetupController(GameService gameService, WebsocketService wsService) {
+    SetupController(GameService gameService, WebsocketService wsService,
+                    ServiceProvider serviceProvider) {
         this.gameService = gameService;
         this.wsService = wsService;
+        this.serviceProvider = serviceProvider;
     }
 
     @PostMapping("/players")
@@ -57,8 +61,9 @@ public class SetupController {
     @DeleteMapping("/players/{playerId}")
     @ResponseStatus(HttpStatus.GONE)
     public void deletePlayer(@PathVariable Long playerId) {
+        Long lobbyId = serviceProvider.getPlayerService().getLobbIdyFromPlayerById(playerId);
         gameService.deletePlayer(playerId);
-        wsService.broadcastLobby(playerId);
+        wsService.broadcastLobby(lobbyId);
         logger.info("deleted player with playerId: {}, new player can enter the lobby", playerId);
     }
 
