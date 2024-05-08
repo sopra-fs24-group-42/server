@@ -143,15 +143,6 @@ public class GameService {
                     serviceProvider.getPlayerService().setPlayersNotReady(lobbyId);
                     break;
                 case DISCUSSION:
-                    if(isNarrationActive) {
-                        lobby.setGameState(GameState.PREVOTING);
-                        hostNotReady(lobbyId);
-                    } else {
-                        lobby.setGameState(GameState.VOTING);
-                        serviceProvider.getPlayerService().setPlayersNotReady(lobbyId);
-                    }
-                    break;
-                case PREVOTING:
                     lobby.setGameState(GameState.VOTING);
                     serviceProvider.getPlayerService().setPlayersNotReady(lobbyId);
                     break;
