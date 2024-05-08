@@ -4,6 +4,13 @@ var notificationCount = 0;
 //set lobbyId for testing
 var lobbyId = 1;
 
+var numberOfSheriffs = 0;
+var numberOfMayors = 0;
+var numberOfJesters = 0;
+var numberOfAmours = 0;
+var numberOfHunters = 0;
+var numberOfSwappers = 0;
+
 $(document).ready(function() {
     console.log("Index page is ready");
     connect();
@@ -26,6 +33,10 @@ $(document).ready(function() {
 
     $("#voting").click(function() {
         voting();
+    });
+
+    $("#changeSettings").click(function() {
+        chageSettings();
     });
 
     /*
@@ -93,6 +104,23 @@ function nightaction () {
 
 function voting () {
     stompClient.send("/app/voting", {}, JSON.stringify({'username': $("#username").val(), 'selection': $("#selection").val()}));
+}
+
+function chageSettings () {
+    var path = "/app/settings/" + $("#lobbyId").val()
+    stompClient.send(path, {}, JSON.stringify({
+        'numberOfWerewolves': parseInt($("#numberOfWerewolves").val(), 10),
+        'numberOfVillagers': parseInt($("#numberOfVillagers").val(), 10),
+        'numberOfProtectors': parseInt($("#numberOfProtectors").val(), 10),
+        'numberOfSeers': parseInt($("#numberOfSeers").val(), 10),
+        'numberOfSheriffs': numberOfSheriffs,
+        'numberOfMayors': numberOfMayors,
+        'numberOfJesters': numberOfJesters,
+        'numberOfSacrifices': parseInt($("#numberOfSacrifices").val(), 10),
+        'numberOfAmours': numberOfAmours,
+        'numberOfHunters': numberOfHunters,
+        'numberOfSwappers': numberOfSwappers
+    }));
 }
 
 /*

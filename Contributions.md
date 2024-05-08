@@ -64,7 +64,7 @@
 |26.04.2024|Lukas||cleanup code for M3, work on deployment|
 |25.04.2024|Charlotte|[#81](https://github.com/sopra-fs24-group-42/client/issues/81), [#26](https://github.com/sopra-fs24-group-42/client/issues/26), [#25](https://github.com/sopra-fs24-group-42/client/issues/25), [#30](https://github.com/sopra-fs24-group-42/client/issues/30)|updated voting and voting reveal logic and implemented a DeadScreen view for players who were voted out or killed|
 |26.04.2024|Rafael|[#103](https://github.com/sopra-fs24-group-42/client/issues/103), [#104](https://github.com/sopra-fs24-group-42/client/issues/104) |Working on the Clickable Infopopup regarding gmerules and the assigned role |
-|   |   |   |   |
+|26.04.2024| Rafael |Working on the Design and Testing different Deisgns|   |
 
 ## <font style="color: #00d7ff">Week 4 *(27.04 – 03.05)*</font>
 
@@ -73,7 +73,11 @@
 |30.04.2024|Lukas|[#134](https://github.com/sopra-fs24-group-42/server/issues/134)|   |
 |01.05.2024|Lukas|[#154](https://github.com/sopra-fs24-group-42/server/issues/154)|   |
 |02.05.2024|Lukas|[#159](https://github.com/sopra-fs24-group-42/server/issues/159)|   |
-|   |   |   |   |
+|03.05.2024|Polina|[#135](https://github.com/sopra-fs24-group-42/server/issues/135), [#150](https://github.com/sopra-fs24-group-42/server/issues/150)|   |
+|02.05.2024|Charlotte|[#112](https://github.com/sopra-fs24-group-42/client/issues/112)|added display of other werewolf players to werewolves (if others exist) in waitingRoom|
+|29.04.2024|Rafael|[#103](https://github.com/sopra-fs24-group-42/client/issues/103), [#104](https://github.com/sopra-fs24-group-42/client/issues/104) |Working on the Clickable Infopopup regarding gmerules and the assigned role aswell as on The Desing, was put on Hold if Favour of the API |
+|29.04.2024| Rafael |    | Working on the Design and Testing different Deisgns, put n Hold if Favour of the API |
+|02.05.2024| Rafael | [#124](https://github.com/sopra-fs24-group-42/client/issues/124), [#136](https://github.com/sopra-fs24-group-42/client/issues/36) | Working on th Integration of the API into the gameflow
 
 ## <font style="color: #00d7ff">Week 5 *(04.05 – 08.05)*</font>
 
@@ -82,4 +86,8 @@
 |04.05.2024|Lukas|[#158](https://github.com/sopra-fs24-group-42/server/issues/158), [#160](https://github.com/sopra-fs24-group-42/server/issues/160),[#118](https://github.com/sopra-fs24-group-42/client/issues/118), [#119](https://github.com/sopra-fs24-group-42/client/issues/119), [#121](https://github.com/sopra-fs24-group-42/client/issues/121)|   |
 |05.05.2024|Lukas|[#120](https://github.com/sopra-fs24-group-42/client/issues/120)|   |
 |06.05.2024|Polina/Lukas|[#171](https://github.com/sopra-fs24-group-42/server/issues/171), [#172](https://github.com/sopra-fs24-group-42/server/issues/172)||
+|04.05.2024|Charlotte|[#114](https://github.com/sopra-fs24-group-42/client/issues/114)|added flag to other werewolves in nightAction for werewolves (so they know who not to kill)|
+|06.05.2024|Charlotte|[#97](https://github.com/sopra-fs24-group-42/client/issues/97), [#108](https://github.com/sopra-fs24-group-42/client/issues/108)|worked on rerouting back to waitingRoom after game ends, also reworked UI of all views (each view is now mobile-friendly and scrollanble (no specific dev tasks)|
+|06.05.2024| Rafael | [#124](https://github.com/sopra-fs24-group-42/client/issues/124), [#169](https://github.com/sopra-fs24-group-42/server/issues/169), [#125](https://github.com/sopra-fs24-group-42/client/issues/125), [#36](https://github.com/sopra-fs24-group-42/client/issues/36) |
+|07.05.2024| Rafael | [#128](https://github.com/sopra-fs24-group-42/client/issues/128) | Implementing that multiple PLayers can be killed in RevealNight and that it gets handled correctly
 |   |   |   |   |
