@@ -84,5 +84,5 @@
 |05.05.2024|Lukas|[#120](https://github.com/sopra-fs24-group-42/client/issues/120)|   |
 |06.05.2024|Polina/Lukas|[#171](https://github.com/sopra-fs24-group-42/server/issues/171), [#172](https://github.com/sopra-fs24-group-42/server/issues/172)||
 |04.05.2024|Charlotte|[#114](https://github.com/sopra-fs24-group-42/client/issues/114)|added flag to other werewolves in nightAction for werewolves (so they know who not to kill)|
-|06.05.2024|Charlotte|[#97](https://github.com/sopra-fs24-group-42/client/issues/97), [#108](https://github.com/sopra-fs24-group-42/client/issues/108)|worked on rerouting back to waitingRoom after game ends|
+|06.05.2024|Charlotte|[#97](https://github.com/sopra-fs24-group-42/client/issues/97), [#108](https://github.com/sopra-fs24-group-42/client/issues/108)|worked on rerouting back to waitingRoom after game ends, also reworked UI of all views (each view is now mobile-friendly and scrollanble (no specific dev tasks)|
 |   |   |   |   |
