@@ -140,7 +140,7 @@ public class GameService {
                 case REVEALNIGHT:
                     lobby.setGameState(GameState.DISCUSSION);
                     serviceProvider.getPlayerService().resetIsKilled(lobbyId);
-                    checkIfgameEnded(lobbyId);
+                    checkIfgameEnded(lobby);
                     serviceProvider.getPlayerService().setPlayersNotReady(lobbyId);
                     break;
                 case DISCUSSION:
@@ -170,7 +170,7 @@ public class GameService {
                         lobby.setGameState(GameState.NIGHT);
                         serviceProvider.getPlayerService().resetVotes(lobbyId);
                         serviceProvider.getPlayerService().resetIsKilled(lobbyId);
-                        checkIfgameEnded(lobbyId);
+                        checkIfgameEnded(lobby);
                         serviceProvider.getPlayerService().setPlayersNotReady(lobbyId);
                     }
                     break;
@@ -341,14 +341,13 @@ public class GameService {
         }
     }
 
-    private void checkIfgameEnded (Long lobbyId) {
+    private void checkIfgameEnded (Lobby lobby) {
 
+        Long lobbyId = lobby.getLobbyId();
         List<Player> alivePlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsAlive(lobbyId, Boolean.TRUE);
-        Lobby lobby = repositoryProvider.getLobbyRepository().findByLobbyId(lobbyId);
 
         if (alivePlayers.isEmpty()) {
             lobby.setGameState(GameState.ENDGAME);
-            repositoryProvider.getLobbyRepository().save(lobby);
             return;
         }
 
@@ -370,7 +369,6 @@ public class GameService {
             lobby.setWinnerSide(WinnerSide.WEREWOLVES);
             lobby.setGameState(GameState.ENDGAME);
         } else {return;}
-        repositoryProvider.getLobbyRepository().save(lobby);
     }
 
     private void resetGame (Long lobbyId) {
