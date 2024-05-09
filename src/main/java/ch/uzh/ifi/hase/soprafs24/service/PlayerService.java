@@ -16,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Optional;
 
 
 @Service
@@ -41,6 +42,12 @@ public class PlayerService {
 
     public Long getLobbyIdFromPlayerByUsername(String username) {
         Player player = repositoryProvider.getPlayerRepository().findByUsername(username);
+        return player.getLobbyId();
+    }
+
+    public Long getLobbIdyFromPlayerById(Long playerId) {
+        Optional<Player>  optionalPlayer = repositoryProvider.getPlayerRepository().findById(playerId);
+        Player player = optionalPlayer.orElseThrow(() -> new RuntimeException("Player not found with ID: " + playerId));
         return player.getLobbyId();
     }
 

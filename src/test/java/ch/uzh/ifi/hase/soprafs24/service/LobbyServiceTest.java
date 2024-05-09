@@ -49,30 +49,30 @@ public class LobbyServiceTest {
         testLobby.setHostName("testHost");
         testLobby.setNumberOfPlayers(7);
         testLobby.setGameState(GameState.NIGHT);
-        testLobby.setCountNightaction(0);
+        //testLobby.setCountNightaction(0);
         testLobby.setWinnerSide(WinnerSide.NOWINNER);
         this.gameSettings = Mockito.mock(GameSettings.class);
         Mockito.when(lobbyRepository.save(Mockito.any())).thenReturn(testLobby);
 
     }
 
-    @Test
-    void resetNightactionCount_success() {
-        when(lobbyRepository.findByLobbyId(testLobby.getLobbyId())).thenReturn(testLobby);
+    // @Test
+    // void resetNightactionCount_success() {
+    //     when(lobbyRepository.findByLobbyId(testLobby.getLobbyId())).thenReturn(testLobby);
 
-        lobbyService.resetNightactionCount(testLobby.getLobbyId());
-        verify(lobbyRepository).findByLobbyId(testLobby.getLobbyId());
-        assertEquals(0, testLobby.getCountNightaction(), "Night action count should be reset to 0");
-    }
+    //     lobbyService.resetNightactionCount(testLobby.getLobbyId());
+    //     verify(lobbyRepository).findByLobbyId(testLobby.getLobbyId());
+    //     assertEquals(0, testLobby.getCountNightaction(), "Night action count should be reset to 0");
+    // }
 
-    @Test
-    void incrementCountNightaction_success() {
-        when(lobbyRepository.findByLobbyId(testLobby.getLobbyId())).thenReturn(testLobby);
+    // @Test
+    // void incrementCountNightaction_success() {
+    //     when(lobbyRepository.findByLobbyId(testLobby.getLobbyId())).thenReturn(testLobby);
 
-        lobbyService.incrementCountNightaction(testLobby.getLobbyId());
+    //     lobbyService.incrementCountNightaction(testLobby.getLobbyId());
 
-        verify(lobbyRepository).findByLobbyId(testLobby.getLobbyId());
-        assertEquals(1, testLobby.getCountNightaction(), "Night action count should be incremented by 1");
-    }
+    //     verify(lobbyRepository).findByLobbyId(testLobby.getLobbyId());
+    //     assertEquals(1, testLobby.getCountNightaction(), "Night action count should be incremented by 1");
+    // }
 
 }
