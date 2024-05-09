@@ -45,13 +45,13 @@ public class LobbyService {
         }
     }
 
-    public GameSettings setDefaultSettings(int numberOfPlayers) {
-        if(numberOfPlayers < 4) {
+    public GameSettings setDefaultSettings(Lobby lobby) {
+        if(lobby.getNumberOfPlayers() < lobby.getMinNumOfPlayers()) {
             throw new NullPointerException("Lobby needs more Players");
         }
         GameSettings gameSettings = new GameSettings();
 
-        int numberOfWerewolves = numberOfPlayers / 3; 
+        int numberOfWerewolves = lobby.getNumberOfPlayers() / 3;
         gameSettings.setNumberOfWerewolves(numberOfWerewolves);
 
         int numberOfSeers = 1;
@@ -63,7 +63,7 @@ public class LobbyService {
         int numberOfSacrifices = 1;
         gameSettings.setNumberOfSacrifices(numberOfSacrifices);
         
-        int numberOfVillagers = numberOfPlayers - numberOfWerewolves - numberOfSeers - numberOfProtectors - numberOfSacrifices;
+        int numberOfVillagers = lobby.getNumberOfPlayers() - numberOfWerewolves - numberOfSeers - numberOfProtectors - numberOfSacrifices;
         gameSettings.setNumberOfVillagers(numberOfVillagers);
         return gameSettings;
     }

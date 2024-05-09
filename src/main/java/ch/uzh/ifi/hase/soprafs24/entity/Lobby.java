@@ -41,6 +41,9 @@ public class Lobby implements Serializable {
     @Column(nullable = false)
     private int numberOfPlayers;
 
+    @Column(nullable = false)
+    private int minNumOfPlayers = 4;
+
     @Embedded
     private GameSettings gameSettings;
 
@@ -114,5 +117,9 @@ public class Lobby implements Serializable {
 
     public void setPlayerMap(Map<String, Player> playerMap) {
         this.playerMap = playerMap;
+    }
+
+    public int getMinNumOfPlayers() {
+        return minNumOfPlayers;
     }
 }
