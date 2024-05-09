@@ -97,5 +97,5 @@
 | Date | Name | Links to Github Issues | Comments |
 |---|---|---|---|
 |09.05.2024|Lukas|[#172](https://github.com/sopra-fs24-group-42/server/issues/172)|refactoring processNightphase|
-|   |   |   |   |
+|09.05.2024|Polina|[#147](https://github.com/sopra-fs24-group-42/server/issues/147)|implemented the game settings update|
 |   |   |   |   |
