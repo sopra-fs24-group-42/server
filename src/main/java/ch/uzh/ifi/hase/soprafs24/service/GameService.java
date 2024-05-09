@@ -133,6 +133,7 @@ public class GameService {
                     break;
                 case NIGHT:
                     processNightphase(lobbyId);
+                    ifHostDeadSetNewHost(lobby);
                     lobby.setGameState(GameState.REVEALNIGHT);
                     serviceProvider.getPlayerService().setPlayersNotReady(lobbyId);
                     break;
@@ -157,6 +158,7 @@ public class GameService {
                     break;
                 case VOTING:
                     processVoting(lobbyId);
+                    ifHostDeadSetNewHost(lobby);
                     lobby.setGameState(GameState.REVEALVOTING);
                     serviceProvider.getPlayerService().setPlayersNotReady(lobbyId);
                     break;
@@ -182,6 +184,16 @@ public class GameService {
             }
             repositoryProvider.getLobbyRepository().save(lobby);
             log.info("lobby {} is now in phase {}", lobby.getLobbyId(), lobby.getGameState());
+        }
+    }
+
+    private void ifHostDeadSetNewHost (Lobby lobby) {
+        Long lobbyId = lobby.getLobbyId();
+        Player hosPlayer = repositoryProvider.getPlayerRepository().findByUsername(lobby.getHostName());
+        if (!hosPlayer.getIsAlive()) {
+            List<Player> alivePlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsAlive(lobbyId, Boolean.TRUE);
+            String newHostName = alivePlayers.get(0).getUsername();
+            lobby.setHostName(newHostName);
         }
     }
 
