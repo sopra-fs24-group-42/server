@@ -192,6 +192,10 @@ public class GameService {
         Player hosPlayer = repositoryProvider.getPlayerRepository().findByUsername(lobby.getHostName());
         if (!hosPlayer.getIsAlive()) {
             List<Player> alivePlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsAlive(lobbyId, Boolean.TRUE);
+            if(alivePlayers.isEmpty()) {
+                hostNotReady(lobbyId);
+                return;
+            }
             String newHostName = alivePlayers.get(0).getUsername();
             lobby.setHostName(newHostName);
         }
@@ -340,6 +344,13 @@ public class GameService {
     private void checkIfgameEnded (Long lobbyId) {
 
         List<Player> alivePlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsAlive(lobbyId, Boolean.TRUE);
+        Lobby lobby = repositoryProvider.getLobbyRepository().findByLobbyId(lobbyId);
+
+        if (alivePlayers.isEmpty()) {
+            lobby.setGameState(GameState.ENDGAME);
+            repositoryProvider.getLobbyRepository().save(lobby);
+            return;
+        }
 
         int countWerewolf = 0;
         int countVillager = 0;
@@ -351,9 +362,7 @@ public class GameService {
                 countVillager++;
             }
         }
-
-        Lobby lobby = repositoryProvider.getLobbyRepository().findByLobbyId(lobbyId);
-
+        
         if (countWerewolf == 0) {
             lobby.setWinnerSide(WinnerSide.VILLAGERS);
             lobby.setGameState(GameState.ENDGAME);
