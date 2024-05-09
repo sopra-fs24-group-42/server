@@ -73,13 +73,34 @@ public class GameService {
             return newPlayer;
         }
         catch (Exception ex){
-            log.info("Player was not created, try again!");
+            log.info("Player was not created, try again");
             throw ex;
         }
     }
 
-    public void deletePlayer(Long playerToBeDeletedId){
-        repositoryProvider.getPlayerRepository().deleteByPlayerId(playerToBeDeletedId);
+    public void deletePlayer(Player player){
+        // get the player
+        Player playerToBeDeleted = repositoryProvider.getPlayerRepository().findByUsername(player.getUsername());
+        Lobby lobbyOfPlayerToBeDeleted = repositoryProvider.getLobbyRepository().findByLobbyId(playerToBeDeleted.getLobbyId());
+
+        if(playerToBeDeleted.getUsername().equals(lobbyOfPlayerToBeDeleted.getHostName())){
+            changeHost(lobbyOfPlayerToBeDeleted);
+        }
+
+        repositoryProvider.getPlayerRepository().deleteByPlayerId(playerToBeDeleted.getPlayerId());
+        log.info("Player was deleted");
+    }
+
+    private void changeHost(Lobby lobby){
+        lobby.setPlayers(serviceProvider.getLobbyService().getListOfLobbyPlayers(lobby.getLobbyCode()));
+        log.info("It is called, and the amount of the playes is {}", lobby.getPlayers().size());
+
+        if(lobby.getPlayers().size() > 1) {
+            lobby.setHostName(lobby.getPlayers().get(0).getUsername());
+            return;
+        }
+        repositoryProvider.getLobbyRepository().deleteByLobbyId(lobby.getLobbyId());
+        log.info("All players left and lobby was deleted");
     }
 
     public Lobby createLobby(Lobby newLobby) {
@@ -105,7 +126,7 @@ public class GameService {
             return newLobby;
         }
         catch(Exception ex){
-            log.info("Player was not created, try again!");
+            log.info("Player was not created, try again");
             throw ex;
         }
     }

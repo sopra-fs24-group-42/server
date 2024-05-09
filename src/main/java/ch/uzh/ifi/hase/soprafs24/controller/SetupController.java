@@ -5,6 +5,7 @@ import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.LobbyDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.PlayerDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.PlayerPostDTO;
+import ch.uzh.ifi.hase.soprafs24.rest.dto.PlayerDeleteDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.LobbyPostDTO;
 import ch.uzh.ifi.hase.soprafs24.service.GameService;
 import ch.uzh.ifi.hase.soprafs24.service.WebsocketService;
@@ -20,14 +21,11 @@ public class SetupController {
 
     private static final Logger logger = LoggerFactory.getLogger(SetupController.class);
     private final GameService gameService;
-    private final ServiceProvider serviceProvider;
     private final WebsocketService wsService;
 
-    SetupController(GameService gameService, WebsocketService wsService,
-                    ServiceProvider serviceProvider) {
+    SetupController(GameService gameService, WebsocketService wsService) {
         this.gameService = gameService;
         this.wsService = wsService;
-        this.serviceProvider = serviceProvider;
     }
 
     @PostMapping("/players")
@@ -60,11 +58,11 @@ public class SetupController {
 
     @DeleteMapping("/players/{playerId}")
     @ResponseStatus(HttpStatus.GONE)
-    public void deletePlayer(@PathVariable Long playerId) {
-        Long lobbyId = serviceProvider.getPlayerService().getLobbIdyFromPlayerById(playerId);
-        gameService.deletePlayer(playerId);
-        wsService.broadcastLobby(lobbyId);
-        logger.info("deleted player with playerId: {}, new player can enter the lobby", playerId);
+    public void deletePlayer(@PathVariable Long playerId, @RequestBody PlayerDeleteDTO playerDeleteDTO) {
+        Player playerToDelete = DTOMapper.INSTANCE.convertPlayerDeleteDTOtoEntity(playerDeleteDTO);
+
+        gameService.deletePlayer(playerToDelete);
+        wsService.broadcastLobby(playerToDelete.getLobbyId());
     }
 
 }
