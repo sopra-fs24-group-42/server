@@ -187,10 +187,6 @@ public class StompController {
             default:
                 logger.info("{} is not a valid role", roleName);
         }
-        Long lobbyIdOfUsername = serviceProvider.getPlayerService().getLobbyIdFromPlayerByUsername(request.getUsername());
-        serviceProvider.getLobbyService().incrementCountNightaction(lobbyIdOfUsername);
-        gameService.processNightphase(lobbyIdOfUsername);
-        // wsService.broadcastLobby(lobbyIdOfUsername);
     }
     
 }

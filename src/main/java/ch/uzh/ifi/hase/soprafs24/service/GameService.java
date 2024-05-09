@@ -88,7 +88,6 @@ public class GameService {
 
             newLobby.setLobbyCode(lobbyCode);
             newLobby.setGameState(GameState.WAITINGROOM);
-            newLobby.setCountNightaction(0);
             newLobby.setWinnerSide(WinnerSide.NOWINNER);
             newLobby.setGameSettings(serviceProvider.getLobbyService().setDefaultSettings(newLobby.getNumberOfPlayers()));
 
@@ -133,6 +132,7 @@ public class GameService {
                     serviceProvider.getPlayerService().setPlayersNotReady(lobbyId);
                     break;
                 case NIGHT:
+                    processNightphase(lobbyId);
                     lobby.setGameState(GameState.REVEALNIGHT);
                     serviceProvider.getPlayerService().setPlayersNotReady(lobbyId);
                     break;
@@ -185,68 +185,65 @@ public class GameService {
         }
     }
 
-    public void processNightphase(Long lobbyId) {
-        Lobby lobbyToProcess = repositoryProvider.getLobbyRepository().findByLobbyId(lobbyId);
+    private void processNightphase(Long lobbyId) {
+        log.info("start processNight");
+        //kill only one Player selected by Werewolves
+        processWerewolf(lobbyId);
+        //kill sacrificed Players
+        processSacrifice(lobbyId);
+        //let protected Players survive
+        processProtect(lobbyId);        
+        //serviceProvider.getLobbyService().resetNightactionCount(lobbyId);
+    }
 
-        //only process if everyone alive did nightaction
-        if(serviceProvider.getPlayerService().numberOfPlayersAlive(lobbyId) == lobbyToProcess.getCountNightaction()) {
-            log.info("start processNight");
-            
-            //List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
+    private void processWerewolf (Long lobbyId) {
+        List<Player> killedPlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsKilled(lobbyId, Boolean.TRUE);
 
-            List<Player> killedPlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsKilled(lobbyId, Boolean.TRUE);
-
-            if (!killedPlayers.isEmpty()) {
-                log.info("there are players killed");
-                // Randomly select one player to keep as killed
-                Player playerToKeepKilled = killedPlayers.get(rand.nextInt(killedPlayers.size()));
-                //permanent eliminated from game
-                playerToKeepKilled.setIsAlive(false);
-                // Set all killed players' isKilled to false, except the randomly selected one
-                for (Player player : killedPlayers) {         
-                    if (player.getIsKilled().equals(Boolean.TRUE) && !player.equals(playerToKeepKilled)) {
-                        player.setIsKilled(false);
-                    }
+        if (!killedPlayers.isEmpty()) {
+            // Randomly select one player to keep as killed
+            Player playerToKeepKilled = killedPlayers.get(rand.nextInt(killedPlayers.size()));
+            log.info("{} got selected to be killed", playerToKeepKilled.getUsername());
+            //permanent eliminated from game
+            playerToKeepKilled.setIsAlive(Boolean.FALSE);
+            // Set all killed players' isKilled to false, except the randomly selected one
+            for (Player player : killedPlayers) {         
+                if (player.getIsKilled().equals(Boolean.TRUE) && !player.equals(playerToKeepKilled)) {
+                    player.setIsKilled(false);
                 }
             }
-
-            repositoryProvider.getPlayerRepository().saveAll(killedPlayers);
-
-            //kill sacrificed Players from game
-            List<Player> sacrificedPlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsSacrificed(lobbyId, Boolean.TRUE);
-
-            if (!sacrificedPlayers.isEmpty()) {
-                log.info("players get sacrificed");
-                for (Player playerToSacrifice : sacrificedPlayers) {
-                    playerToSacrifice.setIsKilled(Boolean.TRUE);
-                    playerToSacrifice.setIsAlive(Boolean.FALSE);
-                    playerToSacrifice.setIsSacrificed(Boolean.FALSE);
-                    log.info("{} got sacrificed!!", playerToSacrifice.getUsername());
-                }
-            }
-
-            repositoryProvider.getPlayerRepository().saveAll(sacrificedPlayers);
-
-            //let protected Players survive
-            List<Player> protectedPlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsProtected(lobbyId, Boolean.TRUE);
-
-            if (!protectedPlayers.isEmpty()) {
-                for (Player playerToProtect : protectedPlayers) {
-                    playerToProtect.setIsKilled(Boolean.FALSE);
-                    playerToProtect.setIsAlive(Boolean.TRUE);
-                    playerToProtect.setIsProtected(Boolean.FALSE);
-                    log.info("Player {} is protected", playerToProtect.getUsername());
-                }
-            }
-
-            repositoryProvider.getPlayerRepository().saveAll(protectedPlayers);
-
-            //TODO: replace and move to VOTING/NIGHT
-            serviceProvider.getLobbyService().resetNightactionCount(lobbyId);
-        } else {
-            log.info("Waiting for Players to perform their Nightaction");
         }
 
+        repositoryProvider.getPlayerRepository().saveAll(killedPlayers);
+    }
+
+    private void processSacrifice (Long lobbyId) {
+        List<Player> sacrificedPlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsSacrificed(lobbyId, Boolean.TRUE);
+
+        if (!sacrificedPlayers.isEmpty()) {
+            for (Player playerToSacrifice : sacrificedPlayers) {
+                playerToSacrifice.setIsKilled(Boolean.TRUE);
+                playerToSacrifice.setIsAlive(Boolean.FALSE);
+                playerToSacrifice.setIsSacrificed(Boolean.FALSE);
+                log.info("{} got sacrificed!!", playerToSacrifice.getUsername());
+            }
+        }
+
+        repositoryProvider.getPlayerRepository().saveAll(sacrificedPlayers);
+    }
+
+    private void processProtect (Long lobbyId) {
+        List<Player> protectedPlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsProtected(lobbyId, Boolean.TRUE);
+
+        if (!protectedPlayers.isEmpty()) {
+            for (Player playerToProtect : protectedPlayers) {
+                playerToProtect.setIsKilled(Boolean.FALSE);
+                playerToProtect.setIsAlive(Boolean.TRUE);
+                playerToProtect.setIsProtected(Boolean.FALSE);
+                log.info("Player {} is protected", playerToProtect.getUsername());
+            }
+        }
+
+        repositoryProvider.getPlayerRepository().saveAll(protectedPlayers);
     }
 
     public void werewolfNightAction(SelectionRequest request) {

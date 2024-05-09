@@ -68,27 +68,11 @@ public class LobbyService {
         return gameSettings;
     }
 
-    //TODO: delete later
-    public void resetNightactionCount(Long lobbyId) {
-        Lobby lobbyToReset = repositoryProvider.getLobbyRepository().findByLobbyId(lobbyId);
-        lobbyToReset.setCountNightaction(0);
-
-        repositoryProvider.getLobbyRepository().save(lobbyToReset);
-    }
-
-    //TODO: delete later
-    public void incrementCountNightaction(Long lobbyId) {
-        Lobby lobby = repositoryProvider.getLobbyRepository().findByLobbyId(lobbyId);
-        lobby.setCountNightaction(lobby.getCountNightaction() + 1);
-
-        repositoryProvider.getLobbyRepository().save(lobby);
-    }
-
     @Transactional
     public void resetLobby (Long lobbyId) {
         Lobby lobbyToReset = repositoryProvider.getLobbyRepository().findByLobbyId(lobbyId);
 
-        lobbyToReset.setCountNightaction(0);
+        //lobbyToReset.setCountNightaction(0);
         lobbyToReset.setWinnerSide(WinnerSide.NOWINNER);
 
         repositoryProvider.getLobbyRepository().save(lobbyToReset);
