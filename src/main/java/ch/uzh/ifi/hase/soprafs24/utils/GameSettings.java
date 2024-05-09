@@ -1,5 +1,6 @@
 package ch.uzh.ifi.hase.soprafs24.utils;
 
+import ch.uzh.ifi.hase.soprafs24.repository.RepositoryProvider;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.io.Serializable;
@@ -8,6 +9,8 @@ import java.beans.Introspector;
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
+
 
 @Embeddable
 public class GameSettings implements Serializable {
@@ -23,19 +26,19 @@ public class GameSettings implements Serializable {
     private int numberOfHunters;
     private int numberOfSwappers;
 
-    public GameSettings() {
-        numberOfWerewolves = 1;
-        numberOfVillagers = 1;
-        numberOfProtectors = 0;
-        numberOfSeers = 1;
-        numberOfSheriffs = 0;
-        numberOfMayors = 0;
-        numberOfJesters = 0;
-        numberOfSacrifices = 0;
-        numberOfAmours = 0;
-        numberOfHunters = 0;
-        numberOfSwappers = 0;
-    }
+//    public GameSettings() {
+//        numberOfWerewolves = 1;
+//        numberOfVillagers = 1;
+//        numberOfProtectors = 0;
+//        numberOfSeers = 1;
+//        numberOfSheriffs = 0;
+//        numberOfMayors = 0;
+//        numberOfJesters = 0;
+//        numberOfSacrifices = 0;
+//        numberOfAmours = 0;
+//        numberOfHunters = 0;
+//        numberOfSwappers = 0;
+//    }
 
     public int getNumberOfWerewolves() {
         return numberOfWerewolves;
@@ -165,65 +168,30 @@ public class GameSettings implements Serializable {
         return roles;
     }
 
-    public int getTotalNumberOfRoles() throws IntrospectionException  {
+    public int getTotalNumberOfRoles() {
         int totalNumberOfRoles = 0;
         try {
-            BeanInfo info = Introspector.getBeanInfo(GameSettings.class, Object.class);
+            // return the name of the class 'GameSettings'
+            Class classType = this.getClass();
 
-            for (PropertyDescriptor pd : info.getPropertyDescriptors()) {
-                Method readMethod = pd.getReadMethod();
-                try {
-                    if (readMethod != null && readMethod.getName().startsWith("getNumberOf")) {
-                        GameSettings settings = new GameSettings();
-                        Integer value = (Integer) readMethod.invoke(settings);
-                        if (value != null) {
-                            totalNumberOfRoles += value;
-                        }
-                    }
-                } catch (Exception e){
-                    System.err.println("Error while invoking method " + readMethod.getName() + ": " + e.getMessage());
+            // get all the methods of the class
+            Method[] methods = classType.getDeclaredMethods();
+
+            // iterate ovet each in the list
+            for (Method method : methods) {
+                // filter on getters with the name of the method that starts with 'getNumberOf'
+                if (method.getName().startsWith("getNumberOf")) {
+                    // value is what is returned by a getter
+                    Object value = method.invoke(this, (Object[]) null);
+                    // sum up all the getters
+                    totalNumberOfRoles += (int) value;
                 }
             }
         } catch (Exception e) {
-            System.err.println("Error during introspection: " + e.getMessage());
+            // have to catch error in case there is IllegalAccessException (thrying to access the class, method)
+            // or InvocationTargetException (throwm upon trying to access the method or constructor)
+            System.err.println("Error while invoking methods to get the total number of roles");
         }
-
         return totalNumberOfRoles;
-
     }
-
 }
-
-
-/*    public int getTotalNumberOfRoles() {
-        int totalNumberOfRoles = 0;
-        try {
-            // Get the bean info for the UpdatedGameSettings class
-            BeanInfo info = Introspector.getBeanInfo(UpdatedGameSettings.class, Object.class);
-
-            // Loop through the property descriptors
-            for (PropertyDescriptor pd : info.getPropertyDescriptors()) {
-                // Check if the property's getter method starts with "getNumberOf"
-                Method readMethod = pd.getReadMethod();
-                if (readMethod != null && readMethod.getName().startsWith("getNumberOf")) {
-                    try {
-                        // Invoke the getter method on an instance of UpdatedGameSettings
-                        UpdatedGameSettings settings = new UpdatedGameSettings();
-                        Integer value = (Integer) readMethod.invoke(settings);
-
-                        // Add the value to the total if it's not null
-                        if (value != null) {
-                            totalNumberOfRoles += value;
-                        }
-                    } catch (Exception e) {
-                        // Handle potential exceptions when invoking the getter method
-                        System.err.println("Error while invoking method " + readMethod.getName() + ": " + e.getMessage());
-                    }
-                }
-            }
-        } catch (Exception e) {
-            System.err.println("Error during introspection: " + e.getMessage());
-        }
-
-        return totalNumberOfRoles;
-    }*/

@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import java.lang.reflect.Method;
 
 import java.util.List;
 
@@ -22,7 +23,6 @@ public class LobbyService {
     private final Logger log = LoggerFactory.getLogger(LobbyService.class);
 
     private final RepositoryProvider repositoryProvider;
-
 
     @Autowired
     public LobbyService(RepositoryProvider repositoryProvider) {
@@ -55,26 +55,25 @@ public class LobbyService {
             Lobby lobby = repositoryProvider.getLobbyRepository().findByLobbyId(lobbyId);
             int numberOfUpdatedRoles = updatedGameSettings.getTotalNumberOfRoles();
 
-            log.info("Invalid number of the roles, total number of players is %d and you selected %d", lobby.getNumberOfPlayers(), numberOfUpdatedRoles);
-
             // check if there more than 4 players at least
             if(numberOfUpdatedRoles < lobby.getMinNumOfPlayers()){
-                throw new Exception(String.format("Invalid number of roles, it is less than reqired '%d < %d'", numberOfUpdatedRoles, lobby.getMinNumOfPlayers()));
+                log.info("Invalid number of roles, it is less than reqired '{} < {}'. Roles were not updated", numberOfUpdatedRoles, lobby.getMinNumOfPlayers());
+                return;
             }
 
             // change the number of the players in the game
+            log.info("numberOfUpdatedRoles is {} ", numberOfUpdatedRoles);
             lobby.setNumberOfPlayers(numberOfUpdatedRoles);
             lobby.setGameSettings(updatedGameSettings);
 
             repositoryProvider.getLobbyRepository().save(lobby);
-            log.info("New settings are applied %d", lobby.getGameSettings());
+            log.info("New settings are applied to lobby with id {}", lobby.getLobbyId());
 
         }
         catch (Exception ex){
             log.info("Something went wrong while updating settings");
         }
     }
-
 
     public GameSettings setDefaultSettings(Lobby lobby) {
         if(lobby.getNumberOfPlayers() < lobby.getMinNumOfPlayers()) {
