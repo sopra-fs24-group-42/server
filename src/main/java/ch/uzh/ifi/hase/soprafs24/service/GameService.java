@@ -47,6 +47,7 @@ public class GameService {
 
     public Player createPlayer(Player newPlayer) {
         try {
+            newPlayer.setUsername(newPlayer.getUsername() + newPlayer.getLobbyCode());
             newPlayer.setToken(UUID.randomUUID().toString());
             serviceProvider.getPlayerService().checkIfUserExists(newPlayer); // check if the same username is entered
             serviceProvider.getLobbyService().checkIfLobbyExists(newPlayer); // check if the lobby code is correct
@@ -106,7 +107,11 @@ public class GameService {
     public Lobby createLobby(Lobby newLobby) {
         try{
             String lobbyCode = LobbyCodeGenerator.generateLobbyCode();
+            // store the host name without lobby code for player creation
+            String hostName = newLobby.getHostName();
 
+            // concatenate with lobby code for lobby creation
+            newLobby.setHostName(newLobby.getHostName() + lobbyCode);
             newLobby.setLobbyCode(lobbyCode);
             newLobby.setGameState(GameState.WAITINGROOM);
             newLobby.setWinnerSide(WinnerSide.NOWINNER);
@@ -116,7 +121,7 @@ public class GameService {
             repositoryProvider.getLobbyRepository().flush();
 
             // Trigger the Creation of Host Player
-            Player hostPlayer = new Player(newLobby.getHostName(), newLobby.getLobbyCode());
+            Player hostPlayer = new Player(hostName, newLobby.getLobbyCode());
             createPlayer(hostPlayer);
 
             List<Player> players = serviceProvider.getLobbyService().getListOfLobbyPlayers(lobbyCode);
