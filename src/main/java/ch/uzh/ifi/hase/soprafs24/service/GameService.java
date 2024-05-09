@@ -78,9 +78,9 @@ public class GameService {
         }
     }
 
-    public void deletePlayer(Player player){
+    public void deletePlayer(String usernameOfPlayerToBeDeleted){
         // get the player
-        Player playerToBeDeleted = repositoryProvider.getPlayerRepository().findByUsername(player.getUsername());
+        Player playerToBeDeleted = repositoryProvider.getPlayerRepository().findByUsername(usernameOfPlayerToBeDeleted);
         Lobby lobbyOfPlayerToBeDeleted = repositoryProvider.getLobbyRepository().findByLobbyId(playerToBeDeleted.getLobbyId());
 
         if(playerToBeDeleted.getUsername().equals(lobbyOfPlayerToBeDeleted.getHostName())){
