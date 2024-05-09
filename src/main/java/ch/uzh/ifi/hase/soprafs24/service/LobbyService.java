@@ -46,7 +46,7 @@ public class LobbyService {
     }
 
     public GameSettings setDefaultSettings(int numberOfPlayers) {
-        if(numberOfPlayers < 3) {
+        if(numberOfPlayers < 4) {
             throw new NullPointerException("Lobby needs more Players");
         }
         GameSettings gameSettings = new GameSettings();
@@ -60,7 +60,7 @@ public class LobbyService {
         int numberOfProtectors = 1;
         gameSettings.setNumberOfProtectors(numberOfProtectors);
 
-        int numberOfSacrifices = 0;
+        int numberOfSacrifices = 1;
         gameSettings.setNumberOfSacrifices(numberOfSacrifices);
         
         int numberOfVillagers = numberOfPlayers - numberOfWerewolves - numberOfSeers - numberOfProtectors - numberOfSacrifices;
