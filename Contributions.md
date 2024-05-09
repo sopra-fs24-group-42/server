@@ -83,11 +83,19 @@
 
 | Date | Name | Links to Github Issues | Comments |
 |---|---|---|---|
-|04.05.2024|Lukas|[#158](https://github.com/sopra-fs24-group-42/server/issues/158), [#160](https://github.com/sopra-fs24-group-42/server/issues/160),[#118](https://github.com/sopra-fs24-group-42/client/issues/118), [#119](https://github.com/sopra-fs24-group-42/client/issues/119), [#121](https://github.com/sopra-fs24-group-42/client/issues/121)|   |
+|04.05.2024|Lukas|[#158](https://github.com/sopra-fs24-group-42/server/issues/158), [#160](https://github.com/sopra-fs24-group-42/server/issues/160), [#118](https://github.com/sopra-fs24-group-42/client/issues/118), [#119](https://github.com/sopra-fs24-group-42/client/issues/119), [#121](https://github.com/sopra-fs24-group-42/client/issues/121)|   |
 |05.05.2024|Lukas|[#120](https://github.com/sopra-fs24-group-42/client/issues/120)|   |
 |06.05.2024|Polina/Lukas|[#171](https://github.com/sopra-fs24-group-42/server/issues/171), [#172](https://github.com/sopra-fs24-group-42/server/issues/172)||
 |04.05.2024|Charlotte|[#114](https://github.com/sopra-fs24-group-42/client/issues/114)|added flag to other werewolves in nightAction for werewolves (so they know who not to kill)|
 |06.05.2024|Charlotte|[#97](https://github.com/sopra-fs24-group-42/client/issues/97), [#108](https://github.com/sopra-fs24-group-42/client/issues/108)|worked on rerouting back to waitingRoom after game ends, also reworked UI of all views (each view is now mobile-friendly and scrollanble (no specific dev tasks)|
 |06.05.2024| Rafael | [#124](https://github.com/sopra-fs24-group-42/client/issues/124), [#169](https://github.com/sopra-fs24-group-42/server/issues/169), [#125](https://github.com/sopra-fs24-group-42/client/issues/125), [#36](https://github.com/sopra-fs24-group-42/client/issues/36) |
 |07.05.2024| Rafael | [#128](https://github.com/sopra-fs24-group-42/client/issues/128) | Implementing that multiple PLayers can be killed in RevealNight and that it gets handled correctly
+|   |   |   |   |
+
+## <font style="color: #00d7ff">Week 6 *(09.05 – 15.05)*</font>
+
+| Date | Name | Links to Github Issues | Comments |
+|---|---|---|---|
+|09.05.2024|Lukas|[#172](https://github.com/sopra-fs24-group-42/server/issues/172)|refactoring processNightphase|
+|   |   |   |   |
 |   |   |   |   |
