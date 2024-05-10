@@ -79,25 +79,24 @@ public class GameService {
         }
     }
 
-    public void deletePlayer(Player player){
+    public void deletePlayer(String usernameOfPlayerToBeDeleted){
         // get the player
-        Player playerToBeDeleted = repositoryProvider.getPlayerRepository().findByUsername(player.getUsername());
+        Player playerToBeDeleted = repositoryProvider.getPlayerRepository().findByUsername(usernameOfPlayerToBeDeleted);
         Lobby lobbyOfPlayerToBeDeleted = repositoryProvider.getLobbyRepository().findByLobbyId(playerToBeDeleted.getLobbyId());
+        repositoryProvider.getPlayerRepository().deleteByPlayerId(playerToBeDeleted.getPlayerId());
 
-        if(playerToBeDeleted.getUsername().equals(lobbyOfPlayerToBeDeleted.getHostName())){
+        if(usernameOfPlayerToBeDeleted.equals(lobbyOfPlayerToBeDeleted.getHostName())){
             changeHost(lobbyOfPlayerToBeDeleted);
         }
-
-        repositoryProvider.getPlayerRepository().deleteByPlayerId(playerToBeDeleted.getPlayerId());
         log.info("Player was deleted");
     }
 
     private void changeHost(Lobby lobby){
         lobby.setPlayers(serviceProvider.getLobbyService().getListOfLobbyPlayers(lobby.getLobbyCode()));
-        log.info("It is called, and the amount of the playes is {}", lobby.getPlayers().size());
 
-        if(lobby.getPlayers().size() > 1) {
+        if(lobby.getPlayers().size() >= 1) {
             lobby.setHostName(lobby.getPlayers().get(0).getUsername());
+            repositoryProvider.getLobbyRepository().save(lobby);
             return;
         }
         repositoryProvider.getLobbyRepository().deleteByLobbyId(lobby.getLobbyId());

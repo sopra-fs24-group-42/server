@@ -5,7 +5,6 @@ import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.LobbyDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.PlayerDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.PlayerPostDTO;
-import ch.uzh.ifi.hase.soprafs24.rest.dto.PlayerDeleteDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.LobbyPostDTO;
 import ch.uzh.ifi.hase.soprafs24.service.GameService;
 import ch.uzh.ifi.hase.soprafs24.service.WebsocketService;
@@ -13,6 +12,7 @@ import ch.uzh.ifi.hase.soprafs24.service.ServiceProvider;
 import ch.uzh.ifi.hase.soprafs24.rest.mapper.DTOMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,10 +22,14 @@ public class SetupController {
     private static final Logger logger = LoggerFactory.getLogger(SetupController.class);
     private final GameService gameService;
     private final WebsocketService wsService;
+    private final ServiceProvider serviceProvider;
 
-    SetupController(GameService gameService, WebsocketService wsService) {
+    @Autowired
+    SetupController(GameService gameService, WebsocketService wsService,
+                    ServiceProvider  serviceProvider) {
         this.gameService = gameService;
         this.wsService = wsService;
+        this.serviceProvider = serviceProvider;
     }
 
     @PostMapping("/players")
@@ -56,13 +60,13 @@ public class SetupController {
         return DTOMapper.INSTANCE.convertEntityToLobbyDTO(createdLobby);
     }
 
-    @DeleteMapping("/players/{playerId}")
+    @DeleteMapping("/players/{username}")
     @ResponseStatus(HttpStatus.GONE)
-    public void deletePlayer(@PathVariable Long playerId, @RequestBody PlayerDeleteDTO playerDeleteDTO) {
-        Player playerToDelete = DTOMapper.INSTANCE.convertPlayerDeleteDTOtoEntity(playerDeleteDTO);
+    public void deletePlayer(@PathVariable("username") String usernameOfPlayerToBeDeleted) {
+        Long lobbyIdOfPlayerToBeDeleted = serviceProvider.getPlayerService().getLobbyIdFromPlayerByUsername(usernameOfPlayerToBeDeleted);
+        gameService.deletePlayer(usernameOfPlayerToBeDeleted);
 
-        gameService.deletePlayer(playerToDelete);
-        wsService.broadcastLobby(playerToDelete.getLobbyId());
+        wsService.broadcastLobby(lobbyIdOfPlayerToBeDeleted);
     }
 
 }
