@@ -83,7 +83,9 @@ public class GameService {
         // get the player
         Player playerToBeDeleted = repositoryProvider.getPlayerRepository().findByUsername(usernameOfPlayerToBeDeleted);
         Lobby lobbyOfPlayerToBeDeleted = repositoryProvider.getLobbyRepository().findByLobbyId(playerToBeDeleted.getLobbyId());
-        repositoryProvider.getPlayerRepository().deleteByPlayerId(playerToBeDeleted.getPlayerId());
+        //repositoryProvider.getPlayerRepository().deleteByPlayerId(playerToBeDeleted.getPlayerId());
+        playerToBeDeleted.setLobbyCode("");
+        repositoryProvider.getPlayerRepository().save(playerToBeDeleted);
 
         if(usernameOfPlayerToBeDeleted.equals(lobbyOfPlayerToBeDeleted.getHostName())){
             changeHost(lobbyOfPlayerToBeDeleted);
@@ -158,8 +160,8 @@ public class GameService {
                     break;
                 case NIGHT:
                     processNightphase(lobbyId);
-                    ifHostDeadSetNewHost(lobby);
                     lobby.setGameState(GameState.REVEALNIGHT);
+                    ifHostDeadSetNewHost(lobby);
                     serviceProvider.getPlayerService().setPlayersNotReady(lobbyId);
                     break;
                 case REVEALNIGHT:
@@ -219,6 +221,7 @@ public class GameService {
             List<Player> alivePlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsAlive(lobbyId, Boolean.TRUE);
             if(alivePlayers.isEmpty()) {
                 hostNotReady(lobbyId);
+                lobby.setGameState(GameState.ENDGAME);
                 return;
             }
             String newHostName = alivePlayers.get(0).getUsername();

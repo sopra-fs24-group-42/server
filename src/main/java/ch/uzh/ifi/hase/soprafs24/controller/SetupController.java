@@ -61,7 +61,7 @@ public class SetupController {
     }
 
     @DeleteMapping("/players/{username}")
-    @ResponseStatus(HttpStatus.GONE)
+    @ResponseStatus(HttpStatus.OK)
     public void deletePlayer(@PathVariable("username") String usernameOfPlayerToBeDeleted) {
         Long lobbyIdOfPlayerToBeDeleted = serviceProvider.getPlayerService().getLobbyIdFromPlayerByUsername(usernameOfPlayerToBeDeleted);
         gameService.deletePlayer(usernameOfPlayerToBeDeleted);
