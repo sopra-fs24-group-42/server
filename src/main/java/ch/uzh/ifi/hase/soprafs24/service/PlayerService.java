@@ -180,14 +180,14 @@ public class PlayerService {
     }
 
     //TODO: delete later
-    public int numberOfPlayersAlive (Long lobbyId) {
-        int count = 0;
-        List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
-        for (int i = 0; i < players.size(); i++) {
-            if (players.get(i).getIsAlive().equals(Boolean.TRUE)) {count++;}
-        } 
-        return count;
-    }
+    // public int numberOfPlayersAlive (Long lobbyId) {
+    //     int count = 0;
+    //     List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
+    //     for (int i = 0; i < players.size(); i++) {
+    //         if (players.get(i).getIsAlive().equals(Boolean.TRUE)) {count++;}
+    //     } 
+    //     return count;
+    // }
 
     @Transactional
     public void resetPlayersByLobbyId (Long lobbyId) {
