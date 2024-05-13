@@ -26,6 +26,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.web.server.ResponseStatusException;
+import ch.uzh.ifi.hase.soprafs24.service.WebsocketService;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -47,58 +48,61 @@ class SetupControllerTest {
   @MockBean
   private GameService gameService;
 
-//  @Test
-//  void createPlayer_validInput_playerCreated() throws Exception {
-//    Player player = new Player();
-//    player.setPlayerId(1L);
-//    player.setUsername("testUsername");
-//    player.setToken("1");
-//    player.setLobbyCode("AH1PL");
-//
-//    PlayerPostDTO playerPostDTO = new PlayerPostDTO();
-//    playerPostDTO.setUsername("testUsername");
-//    playerPostDTO.setLobbyCode("AH1PL");
-//
-//    given(gameService.createPlayer(Mockito.any())).willReturn(player);
-//
-//    MockHttpServletRequestBuilder postRequest = post("/players")
-//        .contentType(MediaType.APPLICATION_JSON)
-//        .content(asJsonString(playerPostDTO));
-//
-//    mockMvc.perform(postRequest)
-//        .andExpect(status().isCreated())
-//        .andExpect(jsonPath("$.playerId", is(player.getPlayerId().intValue())))
-//        .andExpect(jsonPath("$.username", is(player.getUsername())))
-//        .andExpect(jsonPath("$.lobbyCode", is(player.getLobbyCode())));
-//  }
-//
-//    @Test
-//    void createLobby_validInput_lobbyCreated() throws Exception {
-//      Lobby lobby = new Lobby();
-//      lobby.setLobbyId(2L);
-//      lobby.setHostName("testHost");
-//      lobby.setNumberOfPlayers(7);
-//      lobby.setGameSettings(new GameSettings());
-//      lobby.setGameState(GameState.NIGHT);
-//      //lobby.setCountNightaction(0);
-//      lobby.setWinnerSide(WinnerSide.NOWINNER);
-//
-//      LobbyPostDTO lobbyPostDTO = new LobbyPostDTO();
-//      lobbyPostDTO.setHostName("testHost");
-//      lobbyPostDTO.setNumberOfPlayers(7);
-//
-//      given(gameService.createLobby(Mockito.any())).willReturn(lobby);
-//
-//      MockHttpServletRequestBuilder postRequest = post("/lobbies")
-//              .contentType(MediaType.APPLICATION_JSON)
-//              .content(asJsonString(lobbyPostDTO));
-//
-//      mockMvc.perform(postRequest)
-//              .andExpect(status().isCreated())
-//              .andExpect(jsonPath("$.lobbyId", is(lobby.getLobbyId().intValue())))
-//              .andExpect(jsonPath("$.hostName", is(lobby.getHostName())))
-//              .andExpect(jsonPath("$.numberOfPlayers", is(lobby.getNumberOfPlayers())));
-//    }
+  @MockBean
+  private WebsocketService wsService;
+
+ @Test
+ void createPlayer_validInput_playerCreated() throws Exception {
+   Player player = new Player();
+   player.setPlayerId(1L);
+   player.setUsername("testUsername");
+   player.setToken("1");
+   player.setLobbyCode("AH1PL");
+   player.setNumberOfVotes(0);
+
+   PlayerPostDTO playerPostDTO = new PlayerPostDTO();
+   playerPostDTO.setUsername("testUsername");
+   playerPostDTO.setLobbyCode("AH1PL");
+
+   given(gameService.createPlayer(Mockito.any())).willReturn(player);
+
+   MockHttpServletRequestBuilder postRequest = post("/players")
+       .contentType(MediaType.APPLICATION_JSON)
+       .content(asJsonString(playerPostDTO));
+
+   mockMvc.perform(postRequest)
+       .andExpect(status().isCreated())
+       .andExpect(jsonPath("$.playerId", is(player.getPlayerId().intValue())))
+       .andExpect(jsonPath("$.username", is(player.getUsername())))
+       .andExpect(jsonPath("$.lobbyCode", is(player.getLobbyCode())));
+ }
+
+   @Test
+   void createLobby_validInput_lobbyCreated() throws Exception {
+     Lobby lobby = new Lobby();
+     lobby.setLobbyId(2L);
+     lobby.setHostName("testHost");
+     lobby.setNumberOfPlayers(7);
+     lobby.setGameSettings(new GameSettings());
+     lobby.setGameState(GameState.NIGHT);
+     lobby.setWinnerSide(WinnerSide.NOWINNER);
+
+     LobbyPostDTO lobbyPostDTO = new LobbyPostDTO();
+     lobbyPostDTO.setHostName("testHost");
+     lobbyPostDTO.setNumberOfPlayers(7);
+
+     given(gameService.createLobby(Mockito.any())).willReturn(lobby);
+
+     MockHttpServletRequestBuilder postRequest = post("/lobbies")
+             .contentType(MediaType.APPLICATION_JSON)
+             .content(asJsonString(lobbyPostDTO));
+
+     mockMvc.perform(postRequest)
+             .andExpect(status().isCreated())
+             .andExpect(jsonPath("$.lobbyId", is(lobby.getLobbyId().intValue())))
+             .andExpect(jsonPath("$.hostName", is(lobby.getHostName())))
+             .andExpect(jsonPath("$.numberOfPlayers", is(lobby.getNumberOfPlayers())));
+   }
 
     private String asJsonString(final Object object) {
     try {
