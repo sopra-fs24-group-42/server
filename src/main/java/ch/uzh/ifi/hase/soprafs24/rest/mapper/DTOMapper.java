@@ -5,6 +5,7 @@ import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.LobbyPostDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.PlayerPostDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.PlayerDTO;
+import ch.uzh.ifi.hase.soprafs24.rest.dto.LeaderboardGetDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.LobbyDTO;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
@@ -41,5 +42,11 @@ public interface DTOMapper {
     @Mapping(source = "gameSettings", target = "gameSettings")
     @Mapping(source = "players", target = "players")
     LobbyDTO convertEntityToLobbyDTO(Lobby lobby);
+
+    @Mapping(source = "username", target = "username")
+    @Mapping(source = "numberOfVillagerWins", target = "numberOfVillagerWins")
+    @Mapping(source = "numberOfWerewolfWins", target = "numberOfWerewolfWins")
+    @Mapping(source = "numberOfWins", target = "numberOfWins")
+    LeaderboardGetDTO convertEntityToLeaderboardGetDTO(Player player);
 
 }

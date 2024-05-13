@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -231,5 +233,20 @@ public class PlayerService {
         }
 
         repositoryProvider.getPlayerRepository().saveAll(players);
+    }
+
+    public List<Player> getTopPlayers (int playerLimit) {
+        List<Player> topPlayers = repositoryProvider.getPlayerRepository().findAll();
+
+        if (topPlayers.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No players found");
+        }
+
+        List<Player> topPlayersSorted = topPlayers.stream()
+            .sorted(Comparator.comparingInt(Player::getNumberOfWins).reversed())
+            .limit(playerLimit)
+            .collect(Collectors.toList());
+
+        return topPlayersSorted;
     }
 }
