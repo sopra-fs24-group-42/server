@@ -206,4 +206,30 @@ public class PlayerService {
         repositoryProvider.getPlayerRepository().saveAll(players);
         repositoryProvider.getPlayerRepository().flush();
     }
+
+    public void updateLeaderboardWerewolfWin (Long lobbyId) {
+        List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
+
+        for (Player player : players) {
+            if (player.getRoleName().equals("Werewolf")) {
+                player.setNumberOfWerewolfWins(player.getNumberOfWerewolfWins() + 1);
+                player.setNumberOfWins(player.getNumberOfWins() + 1);
+            }
+        }
+
+        repositoryProvider.getPlayerRepository().saveAll(players);
+    }
+
+    public void updateLeaderboardVillagerWin (Long lobbyId) {
+        List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
+
+        for (Player player : players) {
+            if (!player.getRoleName().equals("Werewolf")) {
+                player.setNumberOfVillagerWins(player.getNumberOfVillagerWins() + 1);
+                player.setNumberOfWins(player.getNumberOfWins() + 1);
+            }
+        }
+
+        repositoryProvider.getPlayerRepository().saveAll(players);
+    }
 }

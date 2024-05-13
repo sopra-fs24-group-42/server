@@ -47,6 +47,15 @@ public class Player implements Serializable {
     @Column(nullable = false)
     private int numberOfVotes;
 
+    @Column(nullable = false)
+    private int numberOfVillagerWins;
+
+    @Column(nullable = false)
+    private int numberOfWerewolfWins;
+
+    @Column(nullable = false)
+    private int numberOfWins;
+
     public Player() {}
 
     public Player(String username, String lobbyCode) {
@@ -148,5 +157,29 @@ public class Player implements Serializable {
 
     public void setNumberOfVotes(int numberOfVotes) {
         this.numberOfVotes = numberOfVotes;
+    }
+
+    public int getNumberOfVillagerWins() {
+        return numberOfVillagerWins;
+    }
+
+    public void setNumberOfVillagerWins(int numberOfVillagerWins) {
+        this.numberOfVillagerWins = numberOfVillagerWins;
+    }
+
+    public int getNumberOfWerewolfWins() {
+        return numberOfWerewolfWins;
+    }
+
+    public void setNumberOfWerewolfWins(int numberOfWerewolfWins) {
+        this.numberOfWerewolfWins = numberOfWerewolfWins;
+    }
+
+    public int getNumberOfWins() {
+        return numberOfWins;
+    }
+
+    public void setNumberOfWins(int numberOfWins) {
+        this.numberOfWins = numberOfWins;
     }
 }

@@ -63,6 +63,9 @@ public class GameService {
             newPlayer.setIsSacrificed(Boolean.FALSE);
             newPlayer.setIsReady(Boolean.FALSE);
             newPlayer.setNumberOfVotes(0);
+            newPlayer.setNumberOfVillagerWins(0);
+            newPlayer.setNumberOfWerewolfWins(0);
+            newPlayer.setNumberOfWins(0);
 
             // get the lobby id by the lobby code
             newPlayer.setLobbyId(repositoryProvider.getLobbyRepository().findByLobbyCode(newPlayer.getLobbyCode()).getLobbyId());
@@ -197,6 +200,7 @@ public class GameService {
                     }
                     break;
                 case ENDGAME:
+                    updateLeaderboard(lobby);
                     resetGame(lobbyId);
                     lobby.setGameState(GameState.WAITINGROOM);
                     serviceProvider.getPlayerService().setPlayersNotReady(lobbyId);
@@ -206,6 +210,21 @@ public class GameService {
             }
             repositoryProvider.getLobbyRepository().save(lobby);
             log.info("lobby {} is now in phase {}", lobby.getLobbyId(), lobby.getGameState());
+        }
+    }
+
+    private void updateLeaderboard (Lobby lobby) {
+        switch (lobby.getWinnerSide()) {
+            case WEREWOLVES:
+                serviceProvider.getPlayerService().updateLeaderboardWerewolfWin(lobby.getLobbyId());
+                break;
+            case VILLAGERS:
+                serviceProvider.getPlayerService().updateLeaderboardVillagerWin(lobby.getLobbyId());
+                break;
+            case NOWINNER:
+                break;
+            default:
+                break;
         }
     }
 
