@@ -84,6 +84,7 @@ public class GameService {
         Lobby lobbyOfPlayerToBeDeleted = repositoryProvider.getLobbyRepository().findByLobbyId(playerToBeDeleted.getLobbyId());
         //repositoryProvider.getPlayerRepository().deleteByPlayerId(playerToBeDeleted.getPlayerId());
         playerToBeDeleted.setLobbyCode("");
+        playerToBeDeleted.setLobbyId(-playerToBeDeleted.getLobbyId());
         repositoryProvider.getPlayerRepository().save(playerToBeDeleted);
 
         if(usernameOfPlayerToBeDeleted.equals(lobbyOfPlayerToBeDeleted.getHostName())){
