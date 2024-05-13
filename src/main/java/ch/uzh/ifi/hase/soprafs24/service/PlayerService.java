@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
 
-
 @Service
 @Transactional
 public class PlayerService {

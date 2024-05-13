@@ -55,14 +55,6 @@ public class Lobby implements Serializable {
         this.lobbyId = lobbyId;
     }
 
-    public String getHostName() {
-        return hostName;
-    }
-
-    public void setHostName(String hostName) {
-        this.hostName = hostName;
-    }
-
     public String getLobbyCode() {
         return lobbyCode;
     }
@@ -121,5 +113,13 @@ public class Lobby implements Serializable {
 
     public int getMinNumOfPlayers() {
         return minNumOfPlayers;
+    }
+
+    public String getHostName() {
+        return hostName;
+    }
+
+    public void setHostName(String hostName) {
+        this.hostName = hostName;
     }
 }

@@ -73,13 +73,36 @@ public class GameService {
             return newPlayer;
         }
         catch (Exception ex){
-            log.info("Player was not created, try again!");
+            log.info("Player was not created, try again");
             throw ex;
         }
     }
 
-    public void deletePlayer(Long playerToBeDeletedId){
-        repositoryProvider.getPlayerRepository().deleteByPlayerId(playerToBeDeletedId);
+    public void deletePlayer(String usernameOfPlayerToBeDeleted){
+        // get the player
+        Player playerToBeDeleted = repositoryProvider.getPlayerRepository().findByUsername(usernameOfPlayerToBeDeleted);
+        Lobby lobbyOfPlayerToBeDeleted = repositoryProvider.getLobbyRepository().findByLobbyId(playerToBeDeleted.getLobbyId());
+        //repositoryProvider.getPlayerRepository().deleteByPlayerId(playerToBeDeleted.getPlayerId());
+        playerToBeDeleted.setLobbyCode("");
+        playerToBeDeleted.setLobbyId(-playerToBeDeleted.getLobbyId());
+        repositoryProvider.getPlayerRepository().save(playerToBeDeleted);
+
+        if(usernameOfPlayerToBeDeleted.equals(lobbyOfPlayerToBeDeleted.getHostName())){
+            changeHost(lobbyOfPlayerToBeDeleted);
+        }
+        log.info("Player was deleted");
+    }
+
+    private void changeHost(Lobby lobby){
+        lobby.setPlayers(serviceProvider.getLobbyService().getListOfLobbyPlayers(lobby.getLobbyCode()));
+
+        if(lobby.getPlayers().size() >= 1) {
+            lobby.setHostName(lobby.getPlayers().get(0).getUsername());
+            repositoryProvider.getLobbyRepository().save(lobby);
+            return;
+        }
+        repositoryProvider.getLobbyRepository().deleteByLobbyId(lobby.getLobbyId());
+        log.info("All players left and lobby was deleted");
     }
 
     public Lobby createLobby(Lobby newLobby) {
@@ -105,7 +128,7 @@ public class GameService {
             return newLobby;
         }
         catch(Exception ex){
-            log.info("Player was not created, try again!");
+            log.info("Player was not created, try again");
             throw ex;
         }
     }
@@ -133,8 +156,8 @@ public class GameService {
                     break;
                 case NIGHT:
                     processNightphase(lobbyId);
-                    ifHostDeadSetNewHost(lobby);
                     lobby.setGameState(GameState.REVEALNIGHT);
+                    ifHostDeadSetNewHost(lobby);
                     serviceProvider.getPlayerService().setPlayersNotReady(lobbyId);
                     break;
                 case REVEALNIGHT:
@@ -185,6 +208,7 @@ public class GameService {
             List<Player> alivePlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsAlive(lobbyId, Boolean.TRUE);
             if(alivePlayers.isEmpty()) {
                 hostNotReady(lobbyId);
+                lobby.setGameState(GameState.ENDGAME);
                 return;
             }
             String newHostName = alivePlayers.get(0).getUsername();

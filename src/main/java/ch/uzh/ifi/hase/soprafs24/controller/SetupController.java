@@ -12,6 +12,7 @@ import ch.uzh.ifi.hase.soprafs24.service.ServiceProvider;
 import ch.uzh.ifi.hase.soprafs24.rest.mapper.DTOMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,11 +21,12 @@ public class SetupController {
 
     private static final Logger logger = LoggerFactory.getLogger(SetupController.class);
     private final GameService gameService;
-    private final ServiceProvider serviceProvider;
     private final WebsocketService wsService;
+    private final ServiceProvider serviceProvider;
 
+    @Autowired
     SetupController(GameService gameService, WebsocketService wsService,
-                    ServiceProvider serviceProvider) {
+                    ServiceProvider  serviceProvider) {
         this.gameService = gameService;
         this.wsService = wsService;
         this.serviceProvider = serviceProvider;
@@ -58,13 +60,13 @@ public class SetupController {
         return DTOMapper.INSTANCE.convertEntityToLobbyDTO(createdLobby);
     }
 
-    @DeleteMapping("/players/{playerId}")
-    @ResponseStatus(HttpStatus.GONE)
-    public void deletePlayer(@PathVariable Long playerId) {
-        Long lobbyId = serviceProvider.getPlayerService().getLobbIdyFromPlayerById(playerId);
-        gameService.deletePlayer(playerId);
-        wsService.broadcastLobby(lobbyId);
-        logger.info("deleted player with playerId: {}, new player can enter the lobby", playerId);
+    @DeleteMapping("/players/{username}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deletePlayer(@PathVariable("username") String usernameOfPlayerToBeDeleted) {
+        Long lobbyIdOfPlayerToBeDeleted = serviceProvider.getPlayerService().getLobbyIdFromPlayerByUsername(usernameOfPlayerToBeDeleted);
+        gameService.deletePlayer(usernameOfPlayerToBeDeleted);
+
+        wsService.broadcastLobby(lobbyIdOfPlayerToBeDeleted);
     }
 
 }
