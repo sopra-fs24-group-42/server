@@ -157,9 +157,6 @@ public class GameService {
                     break;
                 case PRENIGHT:
                     lobby.setGameState(GameState.NIGHT);
-                    serviceProvider.getPlayerService().resetVotes(lobbyId);
-                    serviceProvider.getPlayerService().resetIsKilled(lobbyId);
-                    checkIfgameEnded(lobby);
                     serviceProvider.getPlayerService().setPlayersNotReady(lobbyId);
                     break;
                 case NIGHT:
@@ -187,6 +184,9 @@ public class GameService {
                 case REVEALVOTING:
                     if(isNarrationActive) {
                         lobby.setGameState(GameState.PRENIGHT);
+                        serviceProvider.getPlayerService().resetVotes(lobbyId);
+                        serviceProvider.getPlayerService().resetIsKilled(lobbyId);
+                        checkIfgameEnded(lobby);
                         hostNotReady(lobbyId);
                     } else {
                         lobby.setGameState(GameState.NIGHT);
