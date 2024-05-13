@@ -85,6 +85,7 @@ public class GameService {
         Lobby lobbyOfPlayerToBeDeleted = repositoryProvider.getLobbyRepository().findByLobbyId(playerToBeDeleted.getLobbyId());
         //repositoryProvider.getPlayerRepository().deleteByPlayerId(playerToBeDeleted.getPlayerId());
         playerToBeDeleted.setLobbyCode("");
+        playerToBeDeleted.setLobbyId(-playerToBeDeleted.getLobbyId());
         repositoryProvider.getPlayerRepository().save(playerToBeDeleted);
 
         if(usernameOfPlayerToBeDeleted.equals(lobbyOfPlayerToBeDeleted.getHostName())){
@@ -143,7 +144,7 @@ public class GameService {
             log.info("Not all Players are ready yet to go to next Phase");
         } else {
             Lobby lobby = repositoryProvider.getLobbyRepository().findByLobbyId(lobbyId);
-            boolean isNarrationActive = false; //add field in lobby in case we want to be able to deactivate it
+            boolean isNarrationActive = true; //add field in lobby in case we want to be able to deactivate it
             switch (lobby.getGameState()) {
                 case WAITINGROOM:
                     if(isNarrationActive) {
@@ -156,6 +157,9 @@ public class GameService {
                     break;
                 case PRENIGHT:
                     lobby.setGameState(GameState.NIGHT);
+                    serviceProvider.getPlayerService().resetVotes(lobbyId);
+                    serviceProvider.getPlayerService().resetIsKilled(lobbyId);
+                    checkIfgameEnded(lobby);
                     serviceProvider.getPlayerService().setPlayersNotReady(lobbyId);
                     break;
                 case NIGHT:
@@ -171,15 +175,6 @@ public class GameService {
                     serviceProvider.getPlayerService().setPlayersNotReady(lobbyId);
                     break;
                 case DISCUSSION:
-                    if(isNarrationActive) {
-                        lobby.setGameState(GameState.PREVOTING);
-                        hostNotReady(lobbyId);
-                    } else {
-                        lobby.setGameState(GameState.VOTING);
-                        serviceProvider.getPlayerService().setPlayersNotReady(lobbyId);
-                    }
-                    break;
-                case PREVOTING:
                     lobby.setGameState(GameState.VOTING);
                     serviceProvider.getPlayerService().setPlayersNotReady(lobbyId);
                     break;
