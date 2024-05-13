@@ -152,6 +152,9 @@ public class GameService {
                     break;
                 case PRENIGHT:
                     lobby.setGameState(GameState.NIGHT);
+                    serviceProvider.getPlayerService().resetVotes(lobbyId);
+                    serviceProvider.getPlayerService().resetIsKilled(lobbyId);
+                    checkIfgameEnded(lobby);
                     serviceProvider.getPlayerService().setPlayersNotReady(lobbyId);
                     break;
                 case NIGHT:
