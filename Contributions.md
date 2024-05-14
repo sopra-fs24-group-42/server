@@ -100,3 +100,9 @@
 |13.05.2024|Lukas|   |Implement Leaderboard in Backend|
 |09.05.2024|Polina|[#147](https://github.com/sopra-fs24-group-42/server/issues/147),[#173](https://github.com/sopra-fs24-group-42/server/issues/173)|implemented the game settings update, edit player delete methods|
 |11-10.09.2024|Polina|[#147](https://github.com/sopra-fs24-group-42/client/issues/174), [#143](https://github.com/sopra-fs24-group-42/client/issues/143),[#142](https://github.com/sopra-fs24-group-42/client/issues/142)|implemented game settings in the frontend|
+|09.05.2024|Charlotte| |added 'abstain' button in nightAction and voting views to cancel one's selection or skip the phase, started on the implementation of showing the top three voted players during a round|
+|12.05.2024|Charlotte|[#139](https://github.com/sopra-fs24-group-42/client/issues/139)|added 'Leave Game' button in waitingRoom for all players with pop-up warning|
+|13.05.2024|Charlotte|[#103](https://github.com/sopra-fs24-group-42/client/issues/103)|added customized game instructions for each role in roleReveal view with a popup|
+
+
+
