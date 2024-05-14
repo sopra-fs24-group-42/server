@@ -103,6 +103,7 @@
 |09.05.2024|Charlotte| |added 'abstain' button in nightAction and voting views to cancel one's selection or skip the phase, started on the implementation of showing the top three voted players during a round|
 |12.05.2024|Charlotte|[#139](https://github.com/sopra-fs24-group-42/client/issues/139)|added 'Leave Game' button in waitingRoom for all players with pop-up warning|
 |13.05.2024|Charlotte|[#103](https://github.com/sopra-fs24-group-42/client/issues/103)|added customized game instructions for each role in roleReveal view with a popup|
+|14.05.2024|Polina|[#153](https://github.com/sopra-fs24-group-42/client/issues/103)|worked on view for leaderboard|
 
 
 
