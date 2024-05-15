@@ -115,6 +115,10 @@ public class Lobby implements Serializable {
         return minNumOfPlayers;
     }
 
+    public void setMinNumOfPlayers(int minNumOfPlayers) {
+        this.minNumOfPlayers = minNumOfPlayers;
+    }
+
     public String getHostName() {
         return hostName;
     }
