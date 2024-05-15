@@ -14,14 +14,22 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -60,8 +68,13 @@ public class PlayerServiceTest {
         testPlayer.setLobbyCode("ABCDE");
         testPlayer.setIsAlive(Boolean.TRUE);
         testPlayer.setIsKilled(Boolean.FALSE);
+        testPlayer.setIsSacrificed(Boolean.FALSE);
         testPlayer.setIsProtected(Boolean.FALSE);
         testPlayer.setIsReady(Boolean.FALSE);
+        testPlayer.setNumberOfVotes(0);
+        testPlayer.setNumberOfVillagerWins(0);
+        testPlayer.setNumberOfWerewolfWins(0);
+        testPlayer.setNumberOfWins(0);
         testPlayer.setToken("1");
         Mockito.when(playerRepository.save(Mockito.any())).thenReturn(testPlayer);
 
@@ -69,8 +82,35 @@ public class PlayerServiceTest {
         this.gameSettings = Mockito.mock(GameSettings.class);
         testLobby.setLobbyCode("ABCDE");
         testLobby.setLobbyId(2L);
+        testLobby.setGameState(GameState.WAITINGROOM);
         Mockito.when(lobbyRepository.save(Mockito.any())).thenReturn(testLobby);
 
+    }
+
+    @Test
+    public void testCheckIfUserExists_UserDoesNotExists_ShouldPassWithoutException() {
+        // Arrange
+        Player playerToBeCreated = this.testPlayer;
+        when(playerRepository.findByUsername(anyString())).thenReturn(null);
+
+        // Act & Assert
+        assertDoesNotThrow(() -> playerService.checkIfUserExists(playerToBeCreated));
+    }
+
+    @Test
+    public void testCheckIfUserExists_UserExists_ShouldThrowResponseStatusException() {
+        // Arrange
+        Player existingPlayer = this.testPlayer;
+        when(playerRepository.findByUsername(existingPlayer.getUsername())).thenReturn(existingPlayer);
+
+        // Act & Assert
+        ResponseStatusException thrownException = assertThrows(ResponseStatusException.class,
+                () -> playerService.checkIfUserExists(existingPlayer));
+
+        // Verify the ResponseStatusException details
+        assertEquals(HttpStatus.CONFLICT, thrownException.getStatus());
+        assertEquals("The username provided is not unique. Therefore, the player could not be created!",
+                thrownException.getReason());
     }
 
     @Test
@@ -149,25 +189,47 @@ public class PlayerServiceTest {
         assertEquals("Not enough players or roles available for assignment.", exception.getMessage());
     }
 
-//    @Test
-//    void setPlayerReady_success() {
-//        Lobby lobby = new Lobby();
-//        lobby.setLobbyId(2L);
-//        lobby.setHostName("testHost");
-//        lobby.setNumberOfPlayers(7);
-//        lobby.setGameState(GameState.NIGHT);
-//
-//        Mockito.when(testPlayer.getUsername()).thenReturn("testPlayer");
-//        Mockito.when(testPlayer.getIsReady()).thenReturn(false).thenReturn(true);
-//
-//        Mockito.when(playerRepository.findByUsername(Mockito.any())).thenReturn(testPlayer);
-//        Mockito.when(lobbyRepository.findByLobbyCode(Mockito.any())).thenReturn(lobby);
-//
-//        playerService.setPlayerReady(testPlayer.getUsername(), lobby.getGameState());
-//
-//        Mockito.verify(testPlayer).setIsReady(true);
-//        assertTrue(testPlayer.getIsReady());
-//    }
+    @Test
+    void setPlayerReady_success() {
+        GameState clientGameState = this.testLobby.getGameState();
+
+        Player testPlayer = mock(Player.class);
+        Lobby testLobby = mock(Lobby.class);
+        
+        when(playerRepository.findByUsername("testPlayer")).thenReturn(testPlayer);
+        when(lobbyRepository.findByLobbyCode("ABCDE")).thenReturn(testLobby);
+        when(testPlayer.getLobbyCode()).thenReturn("ABCDE");
+        
+
+        playerService.setPlayerReady("testPlayer", clientGameState);
+
+        verify(repositoryProvider.getPlayerRepository()).findByUsername("testPlayer");
+        verify(repositoryProvider.getLobbyRepository()).findByLobbyCode("ABCDE");
+        verify(testPlayer).setIsReady(true);
+        verify(playerRepository).save(testPlayer);
+    }
+
+    @Test
+    void setPlayerReady_DifferentGameState_ShouldNotSetPlayerReady() {
+        // Arrange
+        GameState clientGameState = GameState.DISCUSSION;
+        GameState serverGameState = GameState.VOTING;
+
+        Player readyPlayer = mock(Player.class);
+        Lobby lobbyOfReadyPlayer = mock(Lobby.class);
+
+        when(playerRepository.findByUsername("testPlayer")).thenReturn(readyPlayer);
+        when(lobbyRepository.findByLobbyCode(anyString())).thenReturn(lobbyOfReadyPlayer);
+        when(readyPlayer.getLobbyCode()).thenReturn("ABC123");
+        when(lobbyOfReadyPlayer.getGameState()).thenReturn(serverGameState);
+
+        // Act
+        playerService.setPlayerReady("testPlayer", clientGameState);
+
+        // Assert
+        verify(readyPlayer, never()).setIsReady(anyBoolean());
+        verify(playerRepository, never()).save(any(Player.class));
+    }
 
     // @Test
     // void allPlayersReady_returnsTrue() {
