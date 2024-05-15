@@ -16,18 +16,28 @@ public class WebsocketEvents {
 
     private static final Logger logger = LoggerFactory.getLogger(WebsocketEvents.class);
 
+    private final WebsocketService wsService;
+
     @Autowired
-    private WebsocketService wsService;
+    WebsocketEvents(WebsocketService wsService) {
+        this.wsService = wsService;
+    }
 
     @EventListener
     public void handleSessionSubscribeEvent(SessionSubscribeEvent event) {
 
-        String destination = event.getMessage().getHeaders().get("simpDestination").toString();
-        logger.info("New subscription to: {}", destination);
+        try {
+            String destination = event.getMessage().getHeaders().get("simpDestination").toString();
+            logger.info("New subscription to: {}", destination);
+    
+            Long lobbyId = getLobbyId(destination);
 
-        Long lobbyId = getLobbyId(destination);
-
-        wsService.broadcastLobby(lobbyId);
+            if (lobbyId != null) {
+                wsService.broadcastLobby(lobbyId);
+            }
+        } catch (Exception e) {
+            logger.error("Error handling subscription event", e);
+        }
     }
 
     //extract lobbyId from destinationPath ("/topic/lobby/{lobbyId}"). assumes the lobbyId is given after the last "/" character.
