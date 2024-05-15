@@ -46,11 +46,11 @@ public class PlayerService {
         return player.getLobbyId();
     }
 
-    public Long getLobbIdyFromPlayerById(Long playerId) {
-        Optional<Player>  optionalPlayer = repositoryProvider.getPlayerRepository().findById(playerId);
-        Player player = optionalPlayer.orElseThrow(() -> new RuntimeException("Player not found with ID: " + playerId));
-        return player.getLobbyId();
-    }
+    // public Long getLobbyIdFromPlayerById(Long playerId) {
+    //     Optional<Player>  optionalPlayer = repositoryProvider.getPlayerRepository().findById(playerId);
+    //     Player player = optionalPlayer.orElseThrow(() -> new RuntimeException("Player not found with ID: " + playerId));
+    //     return player.getLobbyId();
+    // }
 
     public void assignRoles(Long lobbyId) {
         try {
@@ -89,14 +89,14 @@ public class PlayerService {
             return;
         }
 
-        readyPlayer.setIsReady(true);
+        readyPlayer.setIsReady(Boolean.TRUE);
         repositoryProvider.getPlayerRepository().save(readyPlayer);
 
         log.info("User {} is set ready in lobby {}", readyPlayer.getUsername(), lobbyOfReadyPlayer.getLobbyId());
     }
 
     public boolean areAllPlayersReady(Long lobbyId) {
-        //if too slow it could be implemented with SQL
+
         List<Player> readyPlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsReady(lobbyId, Boolean.TRUE);
         Lobby lobby = repositoryProvider.getLobbyRepository().findByLobbyId(lobbyId);
 
@@ -106,17 +106,6 @@ public class PlayerService {
         log.info("{} Players are not ready yet", countNotReady);
 
         return countNotReady == 0;
-
-        // int countNotReady = 0;
-        // List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
-
-        // for (int i = 0; i < players.size(); i++) {
-        //     if (players.get(i).getIsReady().equals(Boolean.FALSE)) {countNotReady++;}
-        // }
-
-        // log.info("{} Players are not ready yet", countNotReady);
-
-        // return countNotReady == 0;
     }
 
     public void setPlayersNotReady (Long lobbyId) {
@@ -180,16 +169,6 @@ public class PlayerService {
     public boolean playersLobbyEqual (String usernameOne, String usernameTwo) {
         return getLobbyIdFromPlayerByUsername(usernameOne).equals(getLobbyIdFromPlayerByUsername(usernameTwo));
     }
-
-    //TODO: delete later
-    // public int numberOfPlayersAlive (Long lobbyId) {
-    //     int count = 0;
-    //     List<Player> players = repositoryProvider.getPlayerRepository().findByLobbyId(lobbyId);
-    //     for (int i = 0; i < players.size(); i++) {
-    //         if (players.get(i).getIsAlive().equals(Boolean.TRUE)) {count++;}
-    //     } 
-    //     return count;
-    // }
 
     @Transactional
     public void resetPlayersByLobbyId (Long lobbyId) {
