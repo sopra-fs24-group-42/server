@@ -9,6 +9,8 @@ import ch.uzh.ifi.hase.soprafs24.rest.dto.PlayerPostDTO;
 import ch.uzh.ifi.hase.soprafs24.rest.dto.LobbyPostDTO;
 import ch.uzh.ifi.hase.soprafs24.service.ServiceProvider;
 import ch.uzh.ifi.hase.soprafs24.service.GameService;
+import ch.uzh.ifi.hase.soprafs24.service.PlayerService;
+import ch.uzh.ifi.hase.soprafs24.service.LobbyService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -24,10 +26,12 @@ import org.springframework.web.server.ResponseStatusException;
 import ch.uzh.ifi.hase.soprafs24.service.WebsocketService;
 
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -43,6 +47,12 @@ class SetupControllerTest {
 
   @MockBean
   private GameService gameService;
+
+  @MockBean
+  private PlayerService playerService;
+
+  @MockBean
+  private LobbyService lobbyService;
 
   @MockBean
   private WebsocketService wsService;
@@ -108,16 +118,30 @@ class SetupControllerTest {
     player.setToken("1");
     player.setLobbyCode("AH1PL");
     player.setNumberOfVotes(0);
+    
+    Mockito.when(serviceProvider.getPlayerService()).thenReturn(playerService);
+    Mockito.when(serviceProvider.getPlayerService().getLobbyIdFromPlayerByUsername(any())).thenReturn(player.getLobbyId());
+    // doNothing().when(gameService).deletePlayer(any());
 
-    doNothing().when(gameService).deletePlayer(any());
-
-    MockHttpServletRequestBuilder deleteRequest = delete("/players/{username}")
-        .content(asJsonString(player));
+    MockHttpServletRequestBuilder deleteRequest = delete("/players/{username}", player.getUsername());
 
     mockMvc.perform(deleteRequest)
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.playerId", is(player.getPlayerId().intValue())))
-        .andExpect(jsonPath("$.username", is(player.getUsername())));
+        .andExpect(status().isOk());
+      
+    Mockito.verify(playerService).getLobbyIdFromPlayerByUsername(player.getUsername());
+    Mockito.verify(gameService).deletePlayer(player.getUsername());
+    Mockito.verify(wsService).broadcastLobby(player.getLobbyId());
+  }
+
+  @Test
+  void getLeaderboard_noPlayers_throws_error() throws Exception {
+    int invalidMaxNumberOfTopPlayers = -1;
+
+    mockMvc.perform(get("/leaderboards/{maxNumberOfTopPlayers}", invalidMaxNumberOfTopPlayers))
+           .andExpect(status().isBadRequest())
+           .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException))
+           .andExpect(result -> assertEquals("maxNumberOfTopPlayers should be int greater than zero. Received: " + invalidMaxNumberOfTopPlayers,
+           ((ResponseStatusException) result.getResolvedException()).getReason()));
   }
 
   private String asJsonString(final Object object) {
