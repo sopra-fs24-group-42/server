@@ -98,7 +98,7 @@
 |---|---|---|---|
 |09.05.2024|Lukas|[#172](https://github.com/sopra-fs24-group-42/server/issues/172)|refactoring processNightphase|
 |13.05.2024|Lukas|[#180](https://github.com/sopra-fs24-group-42/server/issues/180), [#181](https://github.com/sopra-fs24-group-42/server/issues/181), [#182](https://github.com/sopra-fs24-group-42/server/issues/182), [#183](https://github.com/sopra-fs24-group-42/server/issues/183)|Implement Leaderboard in Backend|
-|15.05.2024|Lukas|   |Work on playerServiceTests|
+|15.05.2024|Lukas|[#188](https://github.com/sopra-fs24-group-42/server/issues/188)|Work on playerServiceTests|
 |09.05.2024|Polina|[#147](https://github.com/sopra-fs24-group-42/server/issues/147),[#173](https://github.com/sopra-fs24-group-42/server/issues/173)|implemented the game settings update, edit player delete methods|
 |11-10.09.2024|Polina|[#147](https://github.com/sopra-fs24-group-42/client/issues/174), [#143](https://github.com/sopra-fs24-group-42/client/issues/143),[#142](https://github.com/sopra-fs24-group-42/client/issues/142)|implemented game settings in the frontend|
 |09.05.2024|Charlotte| |added 'abstain' button in nightAction and voting views to cancel one's selection or skip the phase, started on the implementation of showing the top three voted players during a round|
