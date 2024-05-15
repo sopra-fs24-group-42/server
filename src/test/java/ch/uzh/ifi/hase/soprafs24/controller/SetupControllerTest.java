@@ -36,6 +36,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.List; 
+import java.util.ArrayList; 
+
 @WebMvcTest(SetupController.class)
 class SetupControllerTest {
 
@@ -121,7 +124,7 @@ class SetupControllerTest {
     
     Mockito.when(serviceProvider.getPlayerService()).thenReturn(playerService);
     Mockito.when(serviceProvider.getPlayerService().getLobbyIdFromPlayerByUsername(any())).thenReturn(player.getLobbyId());
-    // doNothing().when(gameService).deletePlayer(any());
+    Mockito.doNothing().when(gameService).deletePlayer(any());
 
     MockHttpServletRequestBuilder deleteRequest = delete("/players/{username}", player.getUsername());
 
@@ -142,6 +145,46 @@ class SetupControllerTest {
            .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException))
            .andExpect(result -> assertEquals("maxNumberOfTopPlayers should be int greater than zero. Received: " + invalidMaxNumberOfTopPlayers,
            ((ResponseStatusException) result.getResolvedException()).getReason()));
+  }
+
+  @Test
+  void givenPlayers_whenGetLeaderboard_successful() throws Exception {
+      int maxNumberOfTopPlayers = 5;
+
+      //given
+      // create sample players in the game and sample leaderboard players
+      List<Player> players = createSamplePlayers(maxNumberOfTopPlayers);
+
+      Mockito.when(serviceProvider.getPlayerService()).thenReturn(playerService);
+      // mock the service method that retrives top players in the game
+      Mockito.when(playerService.getTopPlayers(maxNumberOfTopPlayers)).thenReturn(players);
+      
+      // when
+      MockHttpServletRequestBuilder getRequest = get("/leaderboards/{maxNumberOfTopPlayers}", maxNumberOfTopPlayers)
+          .contentType(MediaType.APPLICATION_JSON)
+          .accept(MediaType.APPLICATION_JSON);
+
+      mockMvc.perform(getRequest).andExpect(status().isOk())
+          .andExpect(jsonPath("$.length()", is(maxNumberOfTopPlayers)))
+          .andExpect(jsonPath("$[0].position", is(1)))
+          .andExpect(jsonPath("$[0].username", is(players.get(0).getUsername())))
+          .andExpect(jsonPath("$[0].numberOfVillagerWins", is(players.get(0).getNumberOfVillagerWins())))
+          .andExpect(jsonPath("$[0].numberOfWerewolfWins", is(players.get(0).getNumberOfWerewolfWins())))
+          .andExpect(jsonPath("$[0].numberOfWins", is(players.get(0).getNumberOfWins()))); 
+  }
+
+  private List<Player> createSamplePlayers(int count) {
+    List<Player> players = new ArrayList<>();
+    for (int i = 0; i < count; i++) {
+        Player player = new Player();
+        player.setPlayerId(Long.valueOf(i));
+        player.setUsername("Player" + i);
+        player.setNumberOfVillagerWins(i);
+        player.setNumberOfWerewolfWins(i);
+        player.setNumberOfWins(i*2);
+        players.add(player);
+    }
+    return players;
   }
 
   private String asJsonString(final Object object) {
