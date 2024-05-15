@@ -11,9 +11,16 @@ import ch.uzh.ifi.hase.soprafs24.service.ServiceProvider;
 import ch.uzh.ifi.hase.soprafs24.service.PlayerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import org.mockito.MockitoAnnotations;
 import org.springframework.web.server.ResponseStatusException;
@@ -22,6 +29,7 @@ import org.springframework.http.HttpStatus;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -60,8 +68,13 @@ public class PlayerServiceTest {
         testPlayer.setLobbyCode("ABCDE");
         testPlayer.setIsAlive(Boolean.TRUE);
         testPlayer.setIsKilled(Boolean.FALSE);
+        testPlayer.setIsSacrificed(Boolean.FALSE);
         testPlayer.setIsProtected(Boolean.FALSE);
         testPlayer.setIsReady(Boolean.FALSE);
+        testPlayer.setNumberOfVotes(0);
+        testPlayer.setNumberOfVillagerWins(0);
+        testPlayer.setNumberOfWerewolfWins(0);
+        testPlayer.setNumberOfWins(0);
         testPlayer.setToken("1");
         Mockito.when(playerRepository.save(Mockito.any())).thenReturn(testPlayer);
 
@@ -69,8 +82,35 @@ public class PlayerServiceTest {
         this.gameSettings = Mockito.mock(GameSettings.class);
         testLobby.setLobbyCode("ABCDE");
         testLobby.setLobbyId(2L);
+        testLobby.setGameState(GameState.WAITINGROOM);
         Mockito.when(lobbyRepository.save(Mockito.any())).thenReturn(testLobby);
 
+    }
+
+    @Test
+    public void testCheckIfUserExists_UserDoesNotExists_ShouldPassWithoutException() {
+        // Arrange
+        Player playerToBeCreated = this.testPlayer;
+        when(playerRepository.findByUsername(anyString())).thenReturn(null);
+
+        // Act & Assert
+        assertDoesNotThrow(() -> playerService.checkIfUserExists(playerToBeCreated));
+    }
+
+    @Test
+    public void testCheckIfUserExists_UserExists_ShouldThrowResponseStatusException() {
+        // Arrange
+        Player existingPlayer = this.testPlayer;
+        when(playerRepository.findByUsername(existingPlayer.getUsername())).thenReturn(existingPlayer);
+
+        // Act & Assert
+        ResponseStatusException thrownException = assertThrows(ResponseStatusException.class,
+                () -> playerService.checkIfUserExists(existingPlayer));
+
+        // Verify the ResponseStatusException details
+        assertEquals(HttpStatus.CONFLICT, thrownException.getStatus());
+        assertEquals("The username provided is not unique. Therefore, the player could not be created!",
+                thrownException.getReason());
     }
 
     @Test
@@ -149,83 +189,110 @@ public class PlayerServiceTest {
         assertEquals("Not enough players or roles available for assignment.", exception.getMessage());
     }
 
-//    @Test
-//    void setPlayerReady_success() {
-//        Lobby lobby = new Lobby();
-//        lobby.setLobbyId(2L);
-//        lobby.setHostName("testHost");
-//        lobby.setNumberOfPlayers(7);
-//        lobby.setGameState(GameState.NIGHT);
-//
-//        Mockito.when(testPlayer.getUsername()).thenReturn("testPlayer");
-//        Mockito.when(testPlayer.getIsReady()).thenReturn(false).thenReturn(true);
-//
-//        Mockito.when(playerRepository.findByUsername(Mockito.any())).thenReturn(testPlayer);
-//        Mockito.when(lobbyRepository.findByLobbyCode(Mockito.any())).thenReturn(lobby);
-//
-//        playerService.setPlayerReady(testPlayer.getUsername(), lobby.getGameState());
-//
-//        Mockito.verify(testPlayer).setIsReady(true);
-//        assertTrue(testPlayer.getIsReady());
-//    }
+    @Test
+    void setPlayerReady_success() {
+        GameState clientGameState = this.testLobby.getGameState();
 
-    // @Test
-    // void allPlayersReady_returnsTrue() {
-    //     Player player1 = new Player("testPlayer1", "testLobbyCode");
-    //     player1.setIsAlive(true);
-    //     player1.setIsReady(true);
+        Player testPlayer = mock(Player.class);
+        Lobby testLobby = mock(Lobby.class);
+        
+        when(playerRepository.findByUsername("testPlayer")).thenReturn(testPlayer);
+        when(lobbyRepository.findByLobbyCode("ABCDE")).thenReturn(testLobby);
+        when(testPlayer.getLobbyCode()).thenReturn("ABCDE");
+        
 
-    //     Player player2 = new Player("testPlayer2", "testLobbyCode");
-    //     player2.setIsAlive(true);
-    //     player2.setIsReady(true);
-    //     List<Player> players = Arrays.asList(player1, player2);
+        playerService.setPlayerReady("testPlayer", clientGameState);
 
-    //     when(playerRepository.findByLobbyId(1L)).thenReturn(players);
+        verify(repositoryProvider.getPlayerRepository()).findByUsername("testPlayer");
+        verify(repositoryProvider.getLobbyRepository()).findByLobbyCode("ABCDE");
+        verify(testPlayer).setIsReady(true);
+        verify(playerRepository).save(testPlayer);
+    }
 
-    //     boolean result = playerService.areAllPlayersReady(1L);
+    @Test
+    void setPlayerReady_DifferentGameState_ShouldNotSetPlayerReady() {
+        // Arrange
+        GameState clientGameState = GameState.DISCUSSION;
+        GameState serverGameState = GameState.VOTING;
 
-    //     assertTrue(result, "All players are ready, should return true");
-    // }
+        Player readyPlayer = mock(Player.class);
+        Lobby lobbyOfReadyPlayer = mock(Lobby.class);
 
-    // @Test
-    // void allPlayersReady_returnsFalse() {
-    //     Player player1 = new Player("testPlayer1", "testLobbyCode");
-    //     player1.setIsAlive(true);
-    //     player1.setIsReady(true);
+        when(playerRepository.findByUsername("testPlayer")).thenReturn(readyPlayer);
+        when(lobbyRepository.findByLobbyCode(anyString())).thenReturn(lobbyOfReadyPlayer);
+        when(readyPlayer.getLobbyCode()).thenReturn("ABC123");
+        when(lobbyOfReadyPlayer.getGameState()).thenReturn(serverGameState);
 
-    //     Player player2 = new Player("testPlayer2", "testLobbyCode");
-    //     player2.setIsAlive(true);
-    //     player2.setIsReady(false);
-    //     List<Player> players = Arrays.asList(player1, player2);
+        // Act
+        playerService.setPlayerReady("testPlayer", clientGameState);
 
-    //     when(playerRepository.findByLobbyId(1L)).thenReturn(players);
+        // Assert
+        verify(readyPlayer, never()).setIsReady(anyBoolean());
+        verify(playerRepository, never()).save(any(Player.class));
+    }
 
-    //     boolean result = playerService.areAllPlayersReady(1L);
+    @Test
+    void testAreAllPlayersReady_AllReady() {
+        Player player1 = new Player("testPlayer1", "testLobbyCode");
+        player1.setIsAlive(true);
+        player1.setIsReady(true);
 
-    //     assertFalse(result, "Not all players are ready, should return false");
-    // }
+        Player player2 = new Player("testPlayer2", "testLobbyCode");
+        player2.setIsAlive(true);
+        player2.setIsReady(true);
+        List<Player> players = Arrays.asList(player1, player2);
 
-//    @Test
-//    void setPlayersNotReady_success() {
-//        Player player1 = mock(Player.class);
-//        Player player2 = mock(Player.class);
-//
-//        when(player1.getIsAlive()).thenReturn(true);
-//        when(player2.getIsAlive()).thenReturn(true);
-//
-//        when(player1.getIsReady()).thenReturn(false);
-//        when(player2.getIsReady()).thenReturn(true);
-//
-//        List<Player> players = new ArrayList<>();
-//        players.add(player1);
-//        players.add(player2);
-//
-//        when(playerRepository.findByLobbyId(1L)).thenReturn(players);
-//        playerService.setPlayersNotReady(1L);
-//
-//        verify(player1).setIsReady(false);
-//        verify(player2, never()).setIsReady(false);
-//    }
+        when(playerRepository.findByLobbyIdAndIsReady(1L, Boolean.TRUE)).thenReturn(players);
+        when(lobbyRepository.findByLobbyId(1L)).thenReturn(testLobby);
+        when(testLobby.getNumberOfPlayers()).thenReturn(2);
+
+        boolean result = playerService.areAllPlayersReady(1L);
+
+        assertTrue(result, "All players are ready, should return true");
+    }
+
+    @Test
+    void testAreAllPlayersReady_SomeNotReady() {
+        Player player1 = new Player("testPlayer1", "testLobbyCode");
+        player1.setIsAlive(true);
+        player1.setIsReady(true);
+
+        Player player2 = new Player("testPlayer2", "testLobbyCode");
+        player2.setIsAlive(true);
+        player2.setIsReady(false);
+        List<Player> readyPlayers = Arrays.asList(player1);
+
+        when(playerRepository.findByLobbyIdAndIsReady(1L, Boolean.TRUE)).thenReturn(readyPlayers);
+        when(lobbyRepository.findByLobbyId(1L)).thenReturn(testLobby);
+        when(testLobby.getNumberOfPlayers()).thenReturn(2);
+
+        boolean result = playerService.areAllPlayersReady(1L);
+
+        assertFalse(result, "Not all players are ready, should return false");
+    }
+
+    @Test
+    void setPlayersNotReady_AllAlivePlayersSetToNotReady() {
+        Long lobbyId = 1L;
+        Player player1 = mock(Player.class);
+        Player player2 = mock(Player.class);
+
+        List<Player> alivePlayers = Arrays.asList(player1, player2);
+        when(playerRepository.findByLobbyIdAndIsAlive(lobbyId, Boolean.TRUE)).thenReturn(alivePlayers);
+
+        playerService.setPlayersNotReady(lobbyId);
+
+        // Check if setIsReady was called on all players with FALSE
+        alivePlayers.forEach(player -> verify(player).setIsReady(Boolean.FALSE));
+
+        // Ensure saveAll was called with the list of modified players
+        verify(playerRepository).saveAll(alivePlayers);
+        
+        // Verify order of operations: first set players not ready, then save them
+        InOrder inOrder = inOrder(playerRepository);
+        inOrder.verify(playerRepository).findByLobbyIdAndIsAlive(lobbyId, Boolean.TRUE);
+        inOrder.verify(playerRepository).saveAll(alivePlayers);
+   }
 
     @Test
     void resetIsKilled_success() {
@@ -323,4 +390,110 @@ public class PlayerServiceTest {
         verify(playerRepository).flush();
     }
 
+    @Test
+    public void updateLeaderboardWerewolfWin_WerewolfPlayersIncrementWins() {
+        // Arrange
+        Long lobbyId = 1L;
+        Player villager = new Player(); // Assume constructors/setters/getters provided
+        villager.setRoleName("Villager");
+        villager.setNumberOfWerewolfWins(0);
+        villager.setNumberOfWins(3);
+
+        Player werewolf = new Player();
+        werewolf.setRoleName("Werewolf");
+        werewolf.setNumberOfWerewolfWins(2);
+        werewolf.setNumberOfWins(5);
+
+        List<Player> players = Arrays.asList(villager, werewolf);
+        
+        // Mock findByLobbyId to return the prepared list of players
+        when(playerRepository.findByLobbyId(lobbyId)).thenReturn(players);
+
+        // Act
+        playerService.updateLeaderboardWerewolfWin(lobbyId);
+
+        // Assert
+        verify(playerRepository).findByLobbyId(lobbyId);
+
+        // Verify that the werewolf's win counters are incremented
+        assertEquals(3, werewolf.getNumberOfWerewolfWins());
+        assertEquals(6, werewolf.getNumberOfWins());
+
+        // Verify that the villager's win counters are not changed
+        assertEquals(0, villager.getNumberOfWerewolfWins());
+        assertEquals(3, villager.getNumberOfWins());
+
+        // Verify that saveAll was called with the updated list of players
+        verify(playerRepository).saveAll(players);
+    }
+
+    @Test
+    public void updateLeaderboardVillagerWin_NonWerewolfPlayersIncrementWins() {
+        Long lobbyId = 1L;
+        Player villager = createPlayerWithRole("Villager", 0, 0);
+        Player seer = createPlayerWithRole("Seer", 5, 10);
+        Player werewolf = createPlayerWithRole("Werewolf", 3, 7);
+
+        List<Player> players = Arrays.asList(villager, seer, werewolf);
+        when(playerRepository.findByLobbyId(lobbyId)).thenReturn(players);
+
+        playerService.updateLeaderboardVillagerWin(lobbyId);
+
+        // Check if wins have been updated for non-werewolf players
+        verify(villager).setNumberOfVillagerWins(1);
+        verify(villager).setNumberOfWins(1);
+        verify(seer).setNumberOfVillagerWins(6);
+        verify(seer).setNumberOfWins(11);
+        verify(werewolf, never()).setNumberOfVillagerWins(anyInt());
+        verify(werewolf, never()).setNumberOfWins(anyInt());
+
+        // Verify all players have been saved, regardless of role
+        verify(playerRepository).saveAll(players);
+        
+        // Verify order of operations: first update players, then save them
+        InOrder inOrder = inOrder(playerRepository);
+        inOrder.verify(playerRepository).findByLobbyId(eq(lobbyId));
+        inOrder.verify(playerRepository).saveAll(players);
+    }
+
+    private Player createPlayerWithRole(String roleName, int villagerWins, int totalWins) {
+        Player player = mock(Player.class);
+        when(player.getRoleName()).thenReturn(roleName);
+        when(player.getNumberOfVillagerWins()).thenReturn(villagerWins);
+        when(player.getNumberOfWins()).thenReturn(totalWins);
+        return player;
+    }
+
+    @Test
+    public void getTopPlayers_ReturnsSortedLimitedList() {
+        // Arrange
+        int playerLimit = 3;
+        List<Player> players = new ArrayList<>();
+
+        Player player1 = new Player();
+        player1.setNumberOfWins(4);
+        players.add(player1);
+        
+        Player player2 = new Player();
+        player2.setNumberOfWins(7);
+        players.add(player2);
+        
+        Player player3 = new Player();
+        player3.setNumberOfWins(5);
+        players.add(player3);
+
+        Player player4 = new Player();
+        player4.setNumberOfWins(2);
+        players.add(player4);
+
+        when(playerRepository.findAll()).thenReturn(players);
+
+        // Act
+        List<Player> topPlayers = playerService.getTopPlayers(playerLimit);
+
+        // Assert
+        assertEquals(playerLimit, topPlayers.size());
+        assertTrue(topPlayers.get(0).getNumberOfWins() >= topPlayers.get(1).getNumberOfWins());
+        assertTrue(topPlayers.get(1).getNumberOfWins() >= topPlayers.get(2).getNumberOfWins());
+    }
 }
