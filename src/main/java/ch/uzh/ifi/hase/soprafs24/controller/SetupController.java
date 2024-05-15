@@ -84,12 +84,17 @@ public class SetupController {
         }
 
         List<Player> topPlayers = serviceProvider.getPlayerService().getTopPlayers(maxNumberOfTopPlayers);
-        List<LeaderboardGetDTO> Leaderboard = new ArrayList<>();
+        List<LeaderboardGetDTO> leaderboard = new ArrayList<>();
+
+        int position = 1;
 
         for (Player player : topPlayers) {
-            Leaderboard.add(DTOMapper.INSTANCE.convertEntityToLeaderboardGetDTO(player));
+            LeaderboardGetDTO dto = DTOMapper.INSTANCE.convertEntityToLeaderboardGetDTO(player);
+            dto.setPosition(position);
+            leaderboard.add(dto);
+            position++;
         }
 
-        return Leaderboard;
+        return leaderboard;
     }   
 }
