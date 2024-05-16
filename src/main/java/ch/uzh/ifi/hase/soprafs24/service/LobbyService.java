@@ -34,7 +34,7 @@ public class LobbyService {
 
     public void checkIfLobbyFull(String lobbyCode){
         Lobby lobby = repositoryProvider.getLobbyRepository().findByLobbyCode(lobbyCode);
-
+        
         List<Player> players = getListOfLobbyPlayers(lobbyCode);
         if (players.size() >= lobby.getNumberOfPlayers()) {
             throw new ResponseStatusException(HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE, "The lobby is full. Therefore, the player could not be added!");
@@ -79,7 +79,7 @@ public class LobbyService {
 
             // check if there more than 4 players at least
             if(numberOfUpdatedRoles < lobby.getMinNumOfPlayers()){
-                log.info("Invalid number of roles, it is less than reqired '{} < {}'. Roles were not updated", numberOfUpdatedRoles, lobby.getMinNumOfPlayers());
+                log.info("Invalid number of roles, it is less than required '{} < {}'. Roles were not updated", numberOfUpdatedRoles, lobby.getMinNumOfPlayers());
                 return;
             }
 

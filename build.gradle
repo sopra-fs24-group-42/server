@@ -48,6 +48,18 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
 
+    // to pass the verification with logger 
+    // these allow to use Mockito for mocking and capturing logs with Logback (logging framework for Java applications)
+    testImplementation 'org.mockito:mockito-core:3.6.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:3.6.0'
+
+    // logback classic 
+    testImplementation 'ch.qos.logback:logback-classic:1.2.3'
+
+    // unified API for various logging frameworks that/ an abstraction layer for various logging frameworks
+    // delegate all logging calls to Logback
+    testImplementation 'org.slf4j:slf4j-api:1.7.30'
+
     implementation 'org.springframework:spring-websocket:5.3.18'
     implementation 'org.springframework:spring-messaging:5.3.18'
 
