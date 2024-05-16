@@ -59,7 +59,6 @@ public class LobbyRepositoryIntegrationTest {
       lobby.setNumberOfPlayers(7);
       lobby.setGameSettings(new GameSettings());
       lobby.setGameState(GameState.NIGHT);
-      //lobby.setCountNightaction(0);
       lobby.setWinnerSide(WinnerSide.NOWINNER);
 
       entityManager.persist(lobby);

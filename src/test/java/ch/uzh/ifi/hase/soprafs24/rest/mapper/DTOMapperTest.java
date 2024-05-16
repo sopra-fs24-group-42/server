@@ -53,7 +53,7 @@ public class DTOMapperTest {
     player.setNumberOfWerewolfWins(1);
     player.setNumberOfWins(2);
 
-    // MAP -> Create UserGetDTO
+    // MAP -> Create LeaderboardGetDTO
     LeaderboardGetDTO leaderboardGetDTO = DTOMapper.INSTANCE.convertEntityToLeaderboardGetDTO(player);
 
     // check content

@@ -97,38 +97,29 @@ public class PlayerRepositoryIntegrationTest {
     }
 
     // not completed test 
-    @Test
-    void findByLobbyIdAndIsKilled_empty_list_success() {
-      // given
-      Player player = new Player();
-      player.setPlayerId(1L);
-      player.setUsername("testPlayer");
-      player.setLobbyId(1L);
-      player.setLobbyCode("AG8HH");
-      player.setIsAlive(Boolean.TRUE);
-      player.setIsKilled(Boolean.FALSE);
-      player.setIsProtected(Boolean.FALSE);
-      player.setIsReady(Boolean.FALSE);
-      player.setIsSacrificed(Boolean.FALSE);
-      player.setToken("1");
-      player.setRoleName("Seer");
-      player.setNumberOfVotes(0);
+    // @Test
+    // void findByLobbyIdAndIsKilled_empty_list_success() {
+    //   // given
+    //   Player player = new Player();
+    //   player.setPlayerId(1L);
+    //   player.setUsername("testPlayer");
+    //   player.setLobbyId(1L);
+    //   player.setLobbyCode("AG8HH");
+    //   player.setIsAlive(Boolean.TRUE);
+    //   player.setIsKilled(Boolean.FALSE);
+    //   player.setIsProtected(Boolean.FALSE);
+    //   player.setIsReady(Boolean.FALSE);
+    //   player.setIsSacrificed(Boolean.FALSE);
+    //   player.setToken("1");
+    //   player.setRoleName("Seer");
+    //   player.setNumberOfVotes(0);
 
-      entityManager.merge(player);
-      entityManager.flush();
+    //   entityManager.merge(player);
+    //   entityManager.flush();
 
-      // return the list of players
-      List<Player> founds = playerRepository.findByLobbyIdAndIsKilled(player.getLobbyId(), Boolean.TRUE);
+    //   // return the list of players
+    //   List<Player> founds = playerRepository.findByLobbyIdAndIsKilled(player.getLobbyId(), Boolean.TRUE);
 
-      // assert the list is empty
-    }
-
-    @Test
-    void findByLobbyIdAndIsAlive_success() {
-    }
-
-    @Test
-    void deleteByPlayerId_success() {
-
-    }
+    //   // assert the list is empty
+    // }
 }

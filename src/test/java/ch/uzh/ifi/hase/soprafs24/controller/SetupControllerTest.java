@@ -178,7 +178,7 @@ class SetupControllerTest {
     for (int i = 0; i < count; i++) {
         Player player = new Player();
         player.setPlayerId(Long.valueOf(i));
-        player.setUsername("Player" + i);
+        player.setUsername("testPlayer" + i);
         player.setNumberOfVillagerWins(i);
         player.setNumberOfWerewolfWins(i);
         player.setNumberOfWins(i*2);
