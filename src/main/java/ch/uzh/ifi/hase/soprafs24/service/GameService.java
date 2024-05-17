@@ -15,8 +15,10 @@ import ch.uzh.ifi.hase.soprafs24.websocket.dto.SelectionRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
 import java.util.List;
@@ -85,6 +87,7 @@ public class GameService {
     public void deletePlayer(String usernameOfPlayerToBeDeleted){
         // get the player
         Player playerToBeDeleted = repositoryProvider.getPlayerRepository().findByUsername(usernameOfPlayerToBeDeleted);
+        if(playerToBeDeleted == null){throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player does not exist");}
         Lobby lobbyOfPlayerToBeDeleted = repositoryProvider.getLobbyRepository().findByLobbyId(playerToBeDeleted.getLobbyId());
         //repositoryProvider.getPlayerRepository().deleteByPlayerId(playerToBeDeleted.getPlayerId());
         playerToBeDeleted.setLobbyCode("");
