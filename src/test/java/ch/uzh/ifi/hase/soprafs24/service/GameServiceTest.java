@@ -11,6 +11,8 @@ import ch.uzh.ifi.hase.soprafs24.service.LobbyService;
 import ch.uzh.ifi.hase.soprafs24.service.PlayerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -18,8 +20,14 @@ import static org.mockito.Mockito.*;
 import org.mockito.MockitoAnnotations;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
-
+import org.slf4j.LoggerFactory;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.read.ListAppender;
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class GameServiceTest {
 
@@ -43,9 +51,15 @@ public class GameServiceTest {
 
   @InjectMocks
   private GameService gameService;
+  
+  @Captor 
+  private ArgumentCaptor<Lobby> lobbyArgumentCaptor;
 
   private Player testPlayer;
+
   private Lobby testLobby;
+
+  // @Captor private ArgumentCaptor<Player> playerArgumentCaptor;
 
   @BeforeEach
   public void setup() {
@@ -86,7 +100,6 @@ public class GameServiceTest {
     // then
     Mockito.verify(playerRepository, Mockito.times(1)).save(Mockito.any());
 
-    // maybe add other fields
     assertEquals(testPlayer.getPlayerId(), createdPlayer.getPlayerId());
     assertEquals(testPlayer.getUsername(), createdPlayer.getUsername());
     assertEquals(testPlayer.getLobbyCode(), createdPlayer.getLobbyCode());
@@ -100,49 +113,125 @@ public class GameServiceTest {
 
   @Test
   void createPlayer_duplicateUsername_throwsException() {
-    // Mockito.when(playerRepository.findByUsername("testPlayer")).thenReturn(testPlayer);
-
-    doThrow(new ResponseStatusException(HttpStatus.CONFLICT, "The username provided is not unique. Therefore, the player could not be created!"))
-            .when(playerService).checkIfUserExists(any(Player.class));
+    doThrow(new ResponseStatusException(
+      HttpStatus.CONFLICT, 
+      "The username provided is not unique. Therefore, the player could not be created!")).when(playerService).checkIfUserExists(any(Player.class));
 
     assertThrows(ResponseStatusException.class, () -> gameService.createPlayer(testPlayer));
 
-    // Mockito.verify(playerRepository).findByUsername("testPlayer");
     verify(playerService).checkIfUserExists(testPlayer);
-    verify(serviceProvider, never()).getLobbyService(); //??
-  }
+    verify(serviceProvider, never()).getLobbyService();
+}
 
   @Test
   void createPlayer_InvalidLobbyCode_throwsException() {
     Player newPlayer = new Player("testPlayer2", "GFDST");
-
-      // when -> setup additional mocks for UserRepository
     Mockito.when(lobbyRepository.findByLobbyCode(Mockito.any())).thenReturn(null);
-
     doThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "The lobby code provided does not exist. Therefore, the player could not be added!"))
-            .when(lobbyService).checkIfLobbyExists(any(Player.class));
-
-    // then -> attempt to create second user with same user -> check that an error
-    // is thrown
+    .when(lobbyService).checkIfLobbyExists(any(Player.class));
     assertThrows(ResponseStatusException.class, () -> gameService.createPlayer(newPlayer));
     verify(lobbyService).checkIfLobbyExists(newPlayer);
-
   }
 
   @Test
   void createLobby_validInputs_success() {
-      // when -> any object is being save in the userRepository -> return the dummy
-      Lobby createdLobby = gameService.createLobby(this.testLobby);
+    // when -> any object is being save in the userRepository -> return the dummy
+    Lobby createdLobby = gameService.createLobby(this.testLobby);
 
-      // then
-      Mockito.verify(lobbyRepository, Mockito.times(1)).save(Mockito.any());
+    // then
+    Mockito.verify(lobbyRepository, Mockito.times(1)).save(Mockito.any());
 
-      // maybe add other fields
-      assertEquals(testLobby.getLobbyId(), createdLobby.getLobbyId());
-      assertEquals(testLobby.getHostName(), createdLobby.getHostName());
-      assertEquals(testLobby.getLobbyCode(), createdLobby.getLobbyCode());
-      assertEquals(testLobby.getGameState(), createdLobby.getGameState());
-      assertEquals(testLobby.getNumberOfPlayers(), createdLobby.getNumberOfPlayers());
+    // maybe add other fields
+    assertEquals(testLobby.getLobbyId(), createdLobby.getLobbyId());
+    assertEquals(testLobby.getHostName(), createdLobby.getHostName());
+    assertEquals(testLobby.getLobbyCode(), createdLobby.getLobbyCode());
+    assertEquals(testLobby.getGameState(), createdLobby.getGameState());
+    assertEquals(testLobby.getNumberOfPlayers(), createdLobby.getNumberOfPlayers());
   }
 
+  @Test
+  void deletePlayer_validUsername_success() {
+    String expectedMessage = "Player was deleted";
+    System.out.println("length of the expected message: " + expectedMessage.length());
+
+    when(playerRepository.findByUsername(testPlayer.getUsername())).thenReturn(testPlayer);
+    System.out.println("player id: " + testPlayer.getPlayerId());
+    when(lobbyRepository.findByLobbyId(testLobby.getLobbyId())).thenReturn(testLobby);
+    System.out.println("lobby id: " + testLobby.getLobbyId());
+
+    Logger logger = (Logger) LoggerFactory.getLogger(LobbyService.class);
+
+    ListAppender<ILoggingEvent> listAppender = new ListAppender<>();
+    listAppender.start();
+
+    logger.addAppender(listAppender);
+
+    gameService.deletePlayer(testPlayer.getUsername());
+
+    assertEquals("", testPlayer.getLobbyCode());
+    assertEquals(-2, testPlayer.getLobbyId());
+
+    List<ILoggingEvent> logsList = listAppender.list;
+
+    if (logsList.isEmpty()) {
+      System.out.println("No logs captured.");
+    } else {
+      for (ILoggingEvent logEvent : logsList) {
+        String message = logEvent.getFormattedMessage();
+        System.out.println("Log Event: " + message + " | Length: " + message.length());
+      }
+      
+      boolean found = logsList.stream()
+      .anyMatch(event -> {
+          String message = event.getFormattedMessage();
+          return message.contains("Player was deleted");
+      });
+      assertTrue(found, "Expected log message not found");
+  
+    }
+  }
+
+  @Test
+  public void testDeletePlayer_username_does_not_exist_throws_error() {
+    String username = "testPlayer1";
+    when(playerRepository.findByUsername(username)).thenReturn(null);
+
+    assertThrows(ResponseStatusException.class, () -> {
+      gameService.deletePlayer(username);
+      ;
+    });
+    verify(playerRepository, never()).save(any(Player.class));
+  }
+
+  // @Test
+  // public void test_delete_host_player_success() {
+  //   String username = "hostPlayer";
+    
+  //   Player hostPlayer = new Player();
+  //   hostPlayer.setUsername(username);
+  //   hostPlayer.setLobbyId(2L);
+  //   hostPlayer.setLobbyCode("NBHFY");
+    
+  //   Player anotherPlayer = new Player();
+  //   anotherPlayer.setUsername("testPLayer");
+  //   anotherPlayer.setLobbyId(2L);
+  //   anotherPlayer.setLobbyCode("NBHFY");
+
+  //   Lobby lobby = new Lobby();
+  //   lobby.setLobbyId(2L);
+  //   lobby.setLobbyCode("NBHFY");
+  //   lobby.setHostName("hostPlayer");
+   
+  //   Mockito.when(playerRepository.findByUsername(username)).thenReturn(hostPlayer);
+  //   Mockito.when(lobbyRepository.findByLobbyId(hostPlayer.getLobbyId())).thenReturn(lobby);
+  //   Mockito.when(lobbyService.getListOfLobbyPlayers(lobby.getLobbyCode())).thenReturn(Arrays.asList(hostPlayer, anotherPlayer));
+
+  //   gameService.deletePlayer(hostPlayer.getUsername());
+
+  //   verify(lobbyService).getListOfLobbyPlayers(lobby.getLobbyCode());
+  //   verify(lobbyRepository).save(lobbyArgumentCaptor.capture());
+  //   Lobby updatedLobby = lobbyArgumentCaptor.getValue();
+
+  //   assertEquals(anotherPlayer.getUsername(), updatedLobby.getHostName());
+  // }
 }

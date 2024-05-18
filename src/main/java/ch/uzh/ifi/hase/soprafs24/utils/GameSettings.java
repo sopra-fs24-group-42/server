@@ -22,20 +22,8 @@ public class GameSettings implements Serializable {
     private int numberOfHunters;
     private int numberOfSwappers;
 
-// delete later, check first
-//    public GameSettings() {
-//        numberOfWerewolves = 1;
-//        numberOfVillagers = 1;
-//        numberOfProtectors = 0;
-//        numberOfSeers = 1;
-//        numberOfSheriffs = 0;
-//        numberOfMayors = 0;
-//        numberOfJesters = 0;
-//        numberOfSacrifices = 0;
-//        numberOfAmours = 0;
-//        numberOfHunters = 0;
-//        numberOfSwappers = 0;
-//    }
+    public GameSettings() {
+    }
 
     public int getNumberOfWerewolves() {
         return numberOfWerewolves;
