@@ -8,6 +8,10 @@ import ch.uzh.ifi.hase.soprafs24.repository.RepositoryProvider;
 import ch.uzh.ifi.hase.soprafs24.repository.PlayerRepository;
 import ch.uzh.ifi.hase.soprafs24.repository.LobbyRepository;
 import ch.uzh.ifi.hase.soprafs24.service.ServiceProvider;
+import ch.uzh.ifi.hase.soprafs24.utils.roles.Protector;
+import ch.uzh.ifi.hase.soprafs24.utils.roles.Sacrifice;
+import ch.uzh.ifi.hase.soprafs24.utils.roles.Werewolf;
+import ch.uzh.ifi.hase.soprafs24.websocket.dto.SelectionRequest;
 import ch.uzh.ifi.hase.soprafs24.service.LobbyService;
 import ch.uzh.ifi.hase.soprafs24.service.PlayerService;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +23,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import org.mockito.MockitoAnnotations;
 import org.springframework.web.server.ResponseStatusException;
@@ -52,6 +57,15 @@ public class GameServiceTest {
   @Mock
   private PlayerService playerService;
 
+  @Mock
+  private Werewolf werewolf;
+
+  @Mock
+  private Sacrifice sacrifice;
+
+  @Mock
+  private Protector protector;
+
   @InjectMocks
   private GameService gameService;
   
@@ -60,7 +74,6 @@ public class GameServiceTest {
 
   private Player testPlayer;
 
-  @Mock
   private Lobby testLobby;
 
   // @Captor private ArgumentCaptor<Player> playerArgumentCaptor;
@@ -452,5 +465,36 @@ public class GameServiceTest {
 
     verify(lobby).setGameState(GameState.WAITINGROOM);
     verify(lobbyRepository).save(lobby);
+  }
+
+  @Test
+  public void werewolfNightAction_ValidForActionCorrectRole_DoNightAction() {
+    // String werewolfUsername = "player1";
+    // String selectionUsername = "player2";
+    // SelectionRequest selectionRequest = new SelectionRequest();
+    // selectionRequest.setUsername(werewolfUsername);
+    // selectionRequest.setSelection(selectionUsername);
+    // Player werewolfPlayer = mock(Player.class);
+
+    // when(playerService.playersLobbyEqual(werewolfUsername, selectionUsername)).thenReturn(true);
+    // when(werewolf.getSelection()).thenReturn(selectionUsername);
+    // when(werewolf.getUsername()).thenReturn(werewolfUsername);
+    // when(werewolfPlayer.getRoleName().equals(any())).thenReturn(true);
+
+    // gameService.werewolfNightAction(selectionRequest);
+
+    // verify(werewolf).setUsername(werewolfUsername);
+    // verify(werewolf).setSelection(selectionUsername);
+    // verify(werewolf, times(1)).doNightAction();
+  }
+
+  @Test
+  public void werewolfNightAction_InvalidSelectionRequest_ShouldNotTriggerNightAction() {
+    //TODO
+  }
+
+  @Test
+  public void werewolfNightAction_IncorrectRole_ShouldNotTriggerNightAction() {
+    //TODO
   }
 }

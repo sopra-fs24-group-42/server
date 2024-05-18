@@ -356,7 +356,7 @@ public class GameService {
         }
         log.info("Player {} has role {}, but requested {}", userName, player.getRoleName(), roleName);
         return false;
-
+        
     }
 
     private void processVoting (Long lobbyId) {
