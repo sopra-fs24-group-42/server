@@ -107,6 +107,12 @@
 |14.05.2024|Polina|[#153](https://github.com/sopra-fs24-group-42/client/issues/103)|worked on view for leaderboard|
 |15.05.2024|Charlotte|[#99](https://github.com/sopra-fs24-group-42/client/issues/99)|added table for top 3 voted players in voteReveal, implemented customized EndGame view for winners & losers and handle tie cases. Refactored splitting username displays from lobbyCode.|
 
+## <font style="color: #00d7ff">Week 7 *(15.05 – 22.05)*</font>
+
+| Date | Name | Links to Github Issues | Comments |
+|---|---|---|---|
+|18.05.2024|Charlotte|[#165](https://github.com/sopra-fs24-group-42/client/issues/165), [#146](https://github.com/sopra-fs24-group-42/client/issues/146) |implemented fixes to prevent players from performing their night actions multiple times or voting multiples times by refreshing the page|
+
 
 
 
