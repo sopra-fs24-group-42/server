@@ -112,6 +112,7 @@
 | Date | Name | Links to Github Issues | Comments |
 |---|---|---|---|
 |18.05.2024|Charlotte|[#165](https://github.com/sopra-fs24-group-42/client/issues/165), [#146](https://github.com/sopra-fs24-group-42/client/issues/146) |implemented fixes to prevent players from performing their night actions multiple times or voting multiples times by refreshing the page|
+|18.05.2024|Lukas|   |working on gameServiceTests|
 
 
 
