@@ -30,8 +30,6 @@ public class GameService {
 
     private final Logger log = LoggerFactory.getLogger(GameService.class);
 
-    private Random rand = new Random();
-
     private final RepositoryProvider repositoryProvider;
     private final ServiceProvider serviceProvider;
     private final Werewolf werewolf;
@@ -249,63 +247,66 @@ public class GameService {
     private void processNightphase(Long lobbyId) {
         log.info("start processNight");
         //kill only one Player selected by Werewolves
-        processWerewolf(lobbyId);
+        //processWerewolf(lobbyId);
+        serviceProvider.getPlayerService().processWerewolf(lobbyId);
         //kill sacrificed Players
-        processSacrifice(lobbyId);
+        //processSacrifice(lobbyId);
+        serviceProvider.getPlayerService().processSacrifice(lobbyId);
         //let protected Players survive
-        processProtect(lobbyId);        
+        //processProtect(lobbyId);
+        serviceProvider.getPlayerService().processProtect(lobbyId);       
         //serviceProvider.getLobbyService().resetNightactionCount(lobbyId);
     }
 
-    private void processWerewolf (Long lobbyId) {
-        List<Player> killedPlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsKilled(lobbyId, Boolean.TRUE);
+    // private void processWerewolf (Long lobbyId) {
+    //     List<Player> killedPlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsKilled(lobbyId, Boolean.TRUE);
 
-        if (!killedPlayers.isEmpty()) {
-            // Randomly select one player to keep as killed
-            Player playerToKeepKilled = killedPlayers.get(rand.nextInt(killedPlayers.size()));
-            log.info("{} got selected to be killed", playerToKeepKilled.getUsername());
-            //permanent eliminated from game
-            playerToKeepKilled.setIsAlive(Boolean.FALSE);
-            // Set all killed players' isKilled to false, except the randomly selected one
-            for (Player player : killedPlayers) {         
-                if (player.getIsKilled().equals(Boolean.TRUE) && !player.equals(playerToKeepKilled)) {
-                    player.setIsKilled(false);
-                }
-            }
-        }
+    //     if (!killedPlayers.isEmpty()) {
+    //         // Randomly select one player to keep as killed
+    //         Player playerToKeepKilled = killedPlayers.get(rand.nextInt(killedPlayers.size()));
+    //         log.info("{} got selected to be killed", playerToKeepKilled.getUsername());
+    //         //permanent eliminated from game
+    //         playerToKeepKilled.setIsAlive(Boolean.FALSE);
+    //         // Set all killed players' isKilled to false, except the randomly selected one
+    //         for (Player player : killedPlayers) {         
+    //             if (player.getIsKilled().equals(Boolean.TRUE) && !player.equals(playerToKeepKilled)) {
+    //                 player.setIsKilled(false);
+    //             }
+    //         }
+    //     }
 
-        repositoryProvider.getPlayerRepository().saveAll(killedPlayers);
-    }
+    //     repositoryProvider.getPlayerRepository().saveAll(killedPlayers);
+    // }
 
-    private void processSacrifice (Long lobbyId) {
-        List<Player> sacrificedPlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsSacrificed(lobbyId, Boolean.TRUE);
+    // private void processSacrifice (Long lobbyId) {
+    //     List<Player> sacrificedPlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsSacrificed(lobbyId, Boolean.TRUE);
 
-        if (!sacrificedPlayers.isEmpty()) {
-            for (Player playerToSacrifice : sacrificedPlayers) {
-                playerToSacrifice.setIsKilled(Boolean.TRUE);
-                playerToSacrifice.setIsAlive(Boolean.FALSE);
-                playerToSacrifice.setIsSacrificed(Boolean.FALSE);
-                log.info("{} got sacrificed!!", playerToSacrifice.getUsername());
-            }
-        }
+    //     if (!sacrificedPlayers.isEmpty()) {
+    //         for (Player playerToSacrifice : sacrificedPlayers) {
+    //             playerToSacrifice.setIsKilled(Boolean.TRUE);
+    //             playerToSacrifice.setIsAlive(Boolean.FALSE);
+    //             playerToSacrifice.setIsSacrificed(Boolean.FALSE);
+    //             log.info("{} got sacrificed!!", playerToSacrifice.getUsername());
+    //         }
+    //     }
 
-        repositoryProvider.getPlayerRepository().saveAll(sacrificedPlayers);
-    }
+    //     repositoryProvider.getPlayerRepository().saveAll(sacrificedPlayers);
+    // }
 
-    private void processProtect (Long lobbyId) {
-        List<Player> protectedPlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsProtected(lobbyId, Boolean.TRUE);
+    // private void processProtect (Long lobbyId) {
+    //     List<Player> protectedPlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsProtected(lobbyId, Boolean.TRUE);
 
-        if (!protectedPlayers.isEmpty()) {
-            for (Player playerToProtect : protectedPlayers) {
-                playerToProtect.setIsKilled(Boolean.FALSE);
-                playerToProtect.setIsAlive(Boolean.TRUE);
-                playerToProtect.setIsProtected(Boolean.FALSE);
-                log.info("Player {} is protected", playerToProtect.getUsername());
-            }
-        }
+    //     if (!protectedPlayers.isEmpty()) {
+    //         for (Player playerToProtect : protectedPlayers) {
+    //             playerToProtect.setIsKilled(Boolean.FALSE);
+    //             playerToProtect.setIsAlive(Boolean.TRUE);
+    //             playerToProtect.setIsProtected(Boolean.FALSE);
+    //             log.info("Player {} is protected", playerToProtect.getUsername());
+    //         }
+    //     }
 
-        repositoryProvider.getPlayerRepository().saveAll(protectedPlayers);
-    }
+    //     repositoryProvider.getPlayerRepository().saveAll(protectedPlayers);
+    // }
 
     public void werewolfNightAction(SelectionRequest request) {
         werewolf.setSelection(request.getSelection());

@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 
@@ -25,6 +26,8 @@ import java.util.stream.Collectors;
 public class PlayerService {
 
     private final Logger log = LoggerFactory.getLogger(PlayerService.class);
+
+    private Random rand = new Random();
 
     private final RepositoryProvider repositoryProvider;
 
@@ -227,5 +230,55 @@ public class PlayerService {
             .collect(Collectors.toList());
 
         return topPlayersSorted;
+    }
+
+    public void processWerewolf (Long lobbyId) {
+        List<Player> killedPlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsKilled(lobbyId, Boolean.TRUE);
+
+        if (!killedPlayers.isEmpty()) {
+            // Randomly select one player to keep as killed
+            Player playerToKeepKilled = killedPlayers.get(rand.nextInt(killedPlayers.size()));
+            log.info("{} got selected to be killed", playerToKeepKilled.getUsername());
+            //permanent eliminated from game
+            playerToKeepKilled.setIsAlive(Boolean.FALSE);
+            // Set all killed players' isKilled to false, except the randomly selected one
+            for (Player player : killedPlayers) {         
+                if (player.getIsKilled().equals(Boolean.TRUE) && !player.equals(playerToKeepKilled)) {
+                    player.setIsKilled(false);
+                }
+            }
+        }
+
+        repositoryProvider.getPlayerRepository().saveAll(killedPlayers);
+    }
+
+    public void processSacrifice (Long lobbyId) {
+        List<Player> sacrificedPlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsSacrificed(lobbyId, Boolean.TRUE);
+
+        if (!sacrificedPlayers.isEmpty()) {
+            for (Player playerToSacrifice : sacrificedPlayers) {
+                playerToSacrifice.setIsKilled(Boolean.TRUE);
+                playerToSacrifice.setIsAlive(Boolean.FALSE);
+                playerToSacrifice.setIsSacrificed(Boolean.FALSE);
+                log.info("{} got sacrificed!!", playerToSacrifice.getUsername());
+            }
+        }
+
+        repositoryProvider.getPlayerRepository().saveAll(sacrificedPlayers);
+    }
+
+    public void processProtect (Long lobbyId) {
+        List<Player> protectedPlayers = repositoryProvider.getPlayerRepository().findByLobbyIdAndIsProtected(lobbyId, Boolean.TRUE);
+
+        if (!protectedPlayers.isEmpty()) {
+            for (Player playerToProtect : protectedPlayers) {
+                playerToProtect.setIsKilled(Boolean.FALSE);
+                playerToProtect.setIsAlive(Boolean.TRUE);
+                playerToProtect.setIsProtected(Boolean.FALSE);
+                log.info("Player {} is protected", playerToProtect.getUsername());
+            }
+        }
+
+        repositoryProvider.getPlayerRepository().saveAll(protectedPlayers);
     }
 }
