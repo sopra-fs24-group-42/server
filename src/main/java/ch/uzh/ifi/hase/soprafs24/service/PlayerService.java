@@ -247,9 +247,8 @@ public class PlayerService {
                     player.setIsKilled(false);
                 }
             }
+            repositoryProvider.getPlayerRepository().saveAll(killedPlayers);
         }
-
-        repositoryProvider.getPlayerRepository().saveAll(killedPlayers);
     }
 
     public void processSacrifice (Long lobbyId) {
@@ -262,9 +261,8 @@ public class PlayerService {
                 playerToSacrifice.setIsSacrificed(Boolean.FALSE);
                 log.info("{} got sacrificed!!", playerToSacrifice.getUsername());
             }
+            repositoryProvider.getPlayerRepository().saveAll(sacrificedPlayers);
         }
-
-        repositoryProvider.getPlayerRepository().saveAll(sacrificedPlayers);
     }
 
     public void processProtect (Long lobbyId) {
@@ -277,8 +275,7 @@ public class PlayerService {
                 playerToProtect.setIsProtected(Boolean.FALSE);
                 log.info("Player {} is protected", playerToProtect.getUsername());
             }
+            repositoryProvider.getPlayerRepository().saveAll(protectedPlayers);
         }
-
-        repositoryProvider.getPlayerRepository().saveAll(protectedPlayers);
     }
 }

@@ -19,6 +19,7 @@ import org.mockito.Mockito;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -495,5 +496,129 @@ public class PlayerServiceTest {
         assertEquals(playerLimit, topPlayers.size());
         assertTrue(topPlayers.get(0).getNumberOfWins() >= topPlayers.get(1).getNumberOfWins());
         assertTrue(topPlayers.get(1).getNumberOfWins() >= topPlayers.get(2).getNumberOfWins());
+    }
+
+    @Test
+    public void processWerewolf_NoKilledPlayers() {
+        Long lobbyId = 1L;
+        when(playerRepository.findByLobbyIdAndIsKilled(lobbyId, Boolean.TRUE)).thenReturn(Collections.emptyList());
+
+        playerService.processWerewolf(lobbyId);
+
+        // Verification to ensure saveAll is not called when there are no players to update
+        verify(playerRepository, times(0)).saveAll(anyList());
+    }
+
+    @Test
+    public void processWerewolf_OneKilledPlayer() {
+        Long lobbyId = 1L;
+        Player killedPlayer = mock(Player.class);
+
+        when(killedPlayer.getIsKilled()).thenReturn(Boolean.TRUE);
+        when(playerRepository.findByLobbyIdAndIsKilled(lobbyId, Boolean.TRUE)).thenReturn(Collections.singletonList(killedPlayer));
+
+        playerService.processWerewolf(lobbyId);
+
+        verify(killedPlayer).setIsAlive(Boolean.FALSE);
+        verify(killedPlayer, never()).setIsKilled(false);
+        verify(playerRepository).saveAll(Collections.singletonList(killedPlayer));
+    }
+
+    @Test
+    public void processWerewolf_MultipleKilledPlayers_OnlyOneStaysKilled() {
+        Long lobbyId = 1L;
+        List<Player> killedPlayers = new ArrayList<>();
+
+        Player player1 = new Player();
+        player1.setIsKilled(Boolean.TRUE);
+        killedPlayers.add(player1);
+        
+        Player player2 = new Player();
+        player2.setIsKilled(Boolean.TRUE);
+        killedPlayers.add(player2);
+
+        Player player3 = new Player();
+        player3.setIsKilled(Boolean.TRUE);
+        killedPlayers.add(player3);
+
+        when(playerRepository.findByLobbyIdAndIsKilled(lobbyId, Boolean.TRUE)).thenReturn(killedPlayers);
+
+        playerService.processWerewolf(lobbyId);
+
+        int countKilledPlayers = 0;
+        for (Player player : killedPlayers) {
+            if (player.getIsKilled().equals(Boolean.TRUE) && player.getIsAlive().equals(Boolean.FALSE)) {
+                countKilledPlayers++;
+            }
+        }
+
+        assertEquals(1, countKilledPlayers);
+        verify(playerRepository).saveAll(killedPlayers);
+    }
+
+    @Test
+    public void processSacrifice_NoSacrificedPlayers() {
+        Long lobbyId = 1L;
+        when(playerRepository.findByLobbyIdAndIsSacrificed(lobbyId, Boolean.TRUE)).thenReturn(Collections.emptyList());
+
+        playerService.processSacrifice(lobbyId);
+
+        // Verify that saveAll is not called when there are no sacrificed players to update
+        verify(playerRepository, never()).saveAll(anyList());
+    }
+
+    @Test
+    public void processSacrifice_WithSacrificedPlayers() {
+        Long lobbyId = 1L;
+        Player player1 = mock(Player.class);
+        Player player2 = mock(Player.class);
+        List<Player> sacrificedPlayers = Arrays.asList(player1, player2);
+
+        when(player1.getUsername()).thenReturn("Player1");
+        when(player2.getUsername()).thenReturn("Player2");
+        when(playerRepository.findByLobbyIdAndIsSacrificed(lobbyId, Boolean.TRUE)).thenReturn(sacrificedPlayers);
+
+        playerService.processSacrifice(lobbyId);
+
+        // Verify state changes for each player got sacrificed and function call to save them.
+        for (Player player : sacrificedPlayers) {
+            verify(player).setIsKilled(Boolean.TRUE);
+            verify(player).setIsAlive(Boolean.FALSE);
+            verify(player).setIsSacrificed(Boolean.FALSE);
+        }
+        verify(playerRepository).saveAll(sacrificedPlayers);
+    }
+
+    @Test
+    public void processProtect_NoProtectedPlayers() {
+        Long lobbyId = 1L;
+        when(playerRepository.findByLobbyIdAndIsProtected(lobbyId, Boolean.TRUE)).thenReturn(Collections.emptyList());
+
+        playerService.processProtect(lobbyId);
+
+        // Verify that saveAll is not called when there are no protected players to update
+        verify(playerRepository, never()).saveAll(anyList());
+    }
+
+    @Test
+    public void processProtect_WithProtectedPlayers() {
+        Long lobbyId = 1L;
+        Player player1 = mock(Player.class);
+        Player player2 = mock(Player.class);
+        List<Player> protectedPlayers = Arrays.asList(player1, player2);
+
+        when(player1.getUsername()).thenReturn("PlayerOne");
+        when(player2.getUsername()).thenReturn("PlayerTwo");
+        when(playerRepository.findByLobbyIdAndIsProtected(lobbyId, Boolean.TRUE)).thenReturn(protectedPlayers);
+
+        playerService.processProtect(lobbyId);
+
+        // Verify state changes for each player who is protected and save them after modifications.
+        for (Player player : protectedPlayers) {
+            verify(player).setIsKilled(Boolean.FALSE);
+            verify(player).setIsAlive(Boolean.TRUE);
+            verify(player).setIsProtected(Boolean.FALSE);
+        }
+        verify(playerRepository).saveAll(protectedPlayers);
     }
 }
