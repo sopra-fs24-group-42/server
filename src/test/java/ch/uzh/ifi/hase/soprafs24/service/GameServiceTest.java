@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs24.service;
 
 import ch.uzh.ifi.hase.soprafs24.constant.GameState;
+import ch.uzh.ifi.hase.soprafs24.constant.WinnerSide;
 import ch.uzh.ifi.hase.soprafs24.entity.Player;
 import ch.uzh.ifi.hase.soprafs24.entity.Lobby;
 import ch.uzh.ifi.hase.soprafs24.repository.RepositoryProvider;
@@ -16,6 +17,8 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import org.mockito.MockitoAnnotations;
 import org.springframework.web.server.ResponseStatusException;
@@ -57,6 +60,7 @@ public class GameServiceTest {
 
   private Player testPlayer;
 
+  @Mock
   private Lobby testLobby;
 
   // @Captor private ArgumentCaptor<Player> playerArgumentCaptor;
@@ -234,4 +238,219 @@ public class GameServiceTest {
 
   //   assertEquals(anotherPlayer.getUsername(), updatedLobby.getHostName());
   // }
+
+  @Test
+  public void goToNextPhase_ShouldNotProceedIfPlayersAreNotReady() {
+    Long lobbyId = 1L;
+    
+    when(playerService.areAllPlayersReady(lobbyId)).thenReturn(false);
+    
+    Logger logger = (Logger) LoggerFactory.getLogger(GameService.class);
+
+    ListAppender<ILoggingEvent> listAppender = new ListAppender<>();
+    listAppender.start();
+
+    logger.addAppender(listAppender);
+
+    gameService.goToNextPhase(lobbyId);
+
+    List<ILoggingEvent> logsList = listAppender.list;
+
+    boolean found = logsList.stream()
+            .anyMatch(event -> event.getMessage().contains("Not all Players are ready yet to go to next Phase"));
+    
+    assertTrue(found, "Expected log message not found");
+  }
+
+  @Test
+  public void goToNextPhase_ChangeFromWaitingroomToPrenight() {
+    Long lobbyId = 1L;
+    Lobby lobby = mock(Lobby.class);
+    Player hostPlayer = mock(Player.class);
+    hostPlayer.setIsReady(Boolean.TRUE);
+    hostPlayer.setUsername("toaster");
+
+    when(playerService.areAllPlayersReady(lobbyId)).thenReturn(true);
+    when(lobby.getGameState()).thenReturn(GameState.WAITINGROOM);
+    when(lobbyRepository.findByLobbyId(Mockito.anyLong())).thenReturn(lobby);
+    when(playerRepository.findByUsername("toaster")).thenReturn(hostPlayer);
+    when(lobby.getHostName()).thenReturn("toaster");
+
+    gameService.goToNextPhase(lobbyId);
+
+    verify(lobby).setGameState(GameState.PRENIGHT);
+    assertEquals(Boolean.FALSE, hostPlayer.getIsReady());
+    verify(lobbyRepository).save(lobby);
+  }
+
+  @Test
+  public void goToNextPhase_ChangeFromPrenightToNight() {
+    Long lobbyId = 1L;
+    Lobby lobby = mock(Lobby.class);
+
+    when(playerService.areAllPlayersReady(lobbyId)).thenReturn(true);
+    when(lobby.getGameState()).thenReturn(GameState.PRENIGHT);
+    when(lobbyRepository.findByLobbyId(Mockito.anyLong())).thenReturn(lobby);
+
+    gameService.goToNextPhase(lobbyId);
+
+    verify(lobby).setGameState(GameState.NIGHT);
+    verify(lobbyRepository).save(lobby);
+  }
+
+  @Test
+  public void goToNextPhase_ChangeFromNightToRevealnight_HostAlive() {
+    Long lobbyId = 1L;
+    Lobby lobby = mock(Lobby.class);
+    Player hostPlayer = mock(Player.class);
+    hostPlayer.setIsAlive(Boolean.TRUE);
+    hostPlayer.setUsername("toaster");
+
+    when(playerService.areAllPlayersReady(lobbyId)).thenReturn(true);
+    when(lobby.getGameState()).thenReturn(GameState.NIGHT);
+    when(lobbyRepository.findByLobbyId(Mockito.anyLong())).thenReturn(lobby);
+    when(playerRepository.findByUsername("toaster")).thenReturn(hostPlayer);
+    when(lobby.getHostName()).thenReturn("toaster");
+
+    gameService.goToNextPhase(lobbyId);
+
+    verify(lobby).setGameState(GameState.REVEALNIGHT);
+    verify(lobbyRepository).save(lobby);
+  }
+
+  @Test
+  public void goToNextPhase_ChangeFromNightToRevealnight_HostDead() {
+    //TODO
+  }
+
+  @Test
+  public void goToNextPhase_CaseRevealnightGameNotEnded_GoToDiscussion() {
+    Long lobbyId = 1L;
+    Lobby lobby = mock(Lobby.class);
+
+    when(playerService.areAllPlayersReady(lobbyId)).thenReturn(true);
+    when(lobby.getGameState()).thenReturn(GameState.REVEALNIGHT);
+    when(lobbyRepository.findByLobbyId(Mockito.anyLong())).thenReturn(lobby);
+
+    gameService.goToNextPhase(lobbyId);
+
+    verify(lobby).setGameState(GameState.DISCUSSION);
+    verify(lobbyRepository).save(lobby);
+  }
+
+  @Test
+  public void goToNextPhase_CaseRevealnightGameEnded_GoToEndgame() {
+    //TODO
+  }
+
+  @Test
+  public void goToNextPhase_ChangeFromDiscussionToVoting() {
+    Long lobbyId = 1L;
+    Lobby lobby = mock(Lobby.class);
+
+    when(playerService.areAllPlayersReady(lobbyId)).thenReturn(true);
+    when(lobby.getGameState()).thenReturn(GameState.DISCUSSION);
+    when(lobbyRepository.findByLobbyId(Mockito.anyLong())).thenReturn(lobby);
+
+    gameService.goToNextPhase(lobbyId);
+
+    verify(lobby).setGameState(GameState.VOTING);
+    verify(lobbyRepository).save(lobby);
+  }
+
+  @Test
+  public void goToNextPhase_ChangeFromVotingToRevealvoting_HostAlive() {
+    Long lobbyId = 1L;
+    Lobby lobby = mock(Lobby.class);
+    Player hostPlayer = mock(Player.class);
+    hostPlayer.setIsAlive(Boolean.TRUE);
+    hostPlayer.setUsername("toaster");
+
+    when(playerService.areAllPlayersReady(lobbyId)).thenReturn(true);
+    when(lobby.getGameState()).thenReturn(GameState.VOTING);
+    when(lobbyRepository.findByLobbyId(Mockito.anyLong())).thenReturn(lobby);
+    when(playerRepository.findByUsername("toaster")).thenReturn(hostPlayer);
+    when(lobby.getHostName()).thenReturn("toaster");
+
+    gameService.goToNextPhase(lobbyId);
+
+    verify(lobby).setGameState(GameState.REVEALVOTING);
+    verify(lobbyRepository).save(lobby);
+  }
+
+  @Test
+  public void goToNextPhase_ChangeFromVotingToRevealvoting_HostDead() {
+    //TODO
+  }
+
+  @Test
+  public void goToNextPhase_CaseRevealvotingGameNotEnded_GoToPrenight() {
+    Long lobbyId = 1L;
+    Lobby lobby = mock(Lobby.class);
+    Player hostPlayer = mock(Player.class);
+
+    when(playerService.areAllPlayersReady(lobbyId)).thenReturn(true);
+    when(lobby.getGameState()).thenReturn(GameState.REVEALVOTING);
+    when(lobbyRepository.findByLobbyId(Mockito.anyLong())).thenReturn(lobby);
+    when(playerRepository.findByUsername("toaster")).thenReturn(hostPlayer);
+    when(lobby.getHostName()).thenReturn("toaster");
+
+    gameService.goToNextPhase(lobbyId);
+
+    verify(lobby).setGameState(GameState.PRENIGHT);
+    verify(lobbyRepository).save(lobby);
+  }
+
+  @Test
+  public void goToNextPhase_CaseRevealvotingGameEnded_GoToEndgame() {
+    //TODO
+  }
+
+  @Test
+  public void goToNextPhase_CaseEndgameWerewolvesWin_GoToWaitingroom() {
+    Long lobbyId = 1L;
+    Lobby lobby = mock(Lobby.class);
+
+    when(playerService.areAllPlayersReady(lobbyId)).thenReturn(true);
+    when(lobby.getGameState()).thenReturn(GameState.ENDGAME);
+    when(lobbyRepository.findByLobbyId(Mockito.anyLong())).thenReturn(lobby);
+    when(lobby.getWinnerSide()).thenReturn(WinnerSide.WEREWOLVES);
+
+    gameService.goToNextPhase(lobbyId);
+
+    verify(lobby).setGameState(GameState.WAITINGROOM);
+    verify(lobbyRepository).save(lobby);
+  }
+
+  @Test
+  public void goToNextPhase_CaseEndgameVillagerWin_GoToWaitingroom() {
+    Long lobbyId = 1L;
+    Lobby lobby = mock(Lobby.class);
+
+    when(playerService.areAllPlayersReady(lobbyId)).thenReturn(true);
+    when(lobby.getGameState()).thenReturn(GameState.ENDGAME);
+    when(lobbyRepository.findByLobbyId(Mockito.anyLong())).thenReturn(lobby);
+    when(lobby.getWinnerSide()).thenReturn(WinnerSide.VILLAGERS);
+
+    gameService.goToNextPhase(lobbyId);
+
+    verify(lobby).setGameState(GameState.WAITINGROOM);
+    verify(lobbyRepository).save(lobby);
+  }
+
+  @Test
+  public void goToNextPhase_CaseEndgameNoWinner_GoToWaitingroom() {
+    Long lobbyId = 1L;
+    Lobby lobby = mock(Lobby.class);
+
+    when(playerService.areAllPlayersReady(lobbyId)).thenReturn(true);
+    when(lobby.getGameState()).thenReturn(GameState.ENDGAME);
+    when(lobbyRepository.findByLobbyId(Mockito.anyLong())).thenReturn(lobby);
+    when(lobby.getWinnerSide()).thenReturn(WinnerSide.NOWINNER);
+
+    gameService.goToNextPhase(lobbyId);
+
+    verify(lobby).setGameState(GameState.WAITINGROOM);
+    verify(lobbyRepository).save(lobby);
+  }
 }
