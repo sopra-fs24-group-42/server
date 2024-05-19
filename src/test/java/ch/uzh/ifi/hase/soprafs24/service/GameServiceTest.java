@@ -501,50 +501,87 @@ public class GameServiceTest {
     verify(this.werewolf, times(1)).doNightAction();
   }
 
-  // @Test
-  // public void werewolfNightAction_NoSelection_ShouldNotTriggerNightAction() {
-  //   String werewolfUsername = "player1";
-  //   String selectionUsername = "";
-  //   String roleName = "Werewolf";
+  @Test
+  public void werewolfNightAction_NoSelection_ShouldNotTriggerNightAction() {
+    String werewolfUsername = "player1";
+    String selectionUsername = "";
+    String roleName = "Werewolf";
 
-  //   SelectionRequest selectionRequest = new SelectionRequest();
-  //   selectionRequest.setUsername(werewolfUsername);
-  //   selectionRequest.setSelection(selectionUsername);
+    SelectionRequest selectionRequest = new SelectionRequest();
+    selectionRequest.setUsername(werewolfUsername);
+    selectionRequest.setSelection(selectionUsername);
 
-  //   when(this.werewolf.getSelection()).thenReturn(selectionUsername);
-  //   when(this.werewolf.getRoleName()).thenReturn(roleName);
-  //   when(this.werewolf.getUsername()).thenReturn(werewolfUsername);
+    when(this.werewolf.getSelection()).thenReturn(selectionUsername);
+    when(this.werewolf.getRoleName()).thenReturn(roleName);
+    when(this.werewolf.getUsername()).thenReturn(werewolfUsername);
 
-  //   Player werewolfPlayer = new Player();
-  //   werewolfPlayer.setUsername(werewolfUsername);
-  //   werewolfPlayer.setRoleName(roleName);
+    Player werewolfPlayer = new Player();
+    werewolfPlayer.setUsername(werewolfUsername);
+    werewolfPlayer.setRoleName(roleName);
 
-  //   Player selectedPlayer = new Player();
-  //   selectedPlayer.setUsername(selectionUsername);
+    Player selectedPlayer = new Player();
+    selectedPlayer.setUsername(selectionUsername);
 
-  //   when(playerRepository.findByUsername(werewolfUsername)).thenReturn(werewolfPlayer);
-  //   when(playerRepository.findByUsername(selectionUsername)).thenReturn(selectedPlayer);
-  //   when(playerService.playersLobbyEqual(werewolfUsername, selectionUsername)).thenReturn(true);
+    when(playerRepository.findByUsername(werewolfUsername)).thenReturn(werewolfPlayer);
+    when(playerRepository.findByUsername(selectionUsername)).thenReturn(selectedPlayer);
+    when(playerService.playersLobbyEqual(werewolfUsername, selectionUsername)).thenReturn(true);
 
-  //   Logger logger = (Logger) LoggerFactory.getLogger(LobbyService.class);
-  //   ListAppender<ILoggingEvent> listAppender = new ListAppender<>();
-  //   listAppender.start();
-  //   logger.addAppender(listAppender);
-  //   List<ILoggingEvent> logsList = listAppender.list;
-  //   boolean found = logsList.stream()
-  //               .anyMatch(event -> event.getMessage().contains("Player " + werewolfUsername + " does not select anyone"));
+    // Logger logger = (Logger) LoggerFactory.getLogger(LobbyService.class);
+    // ListAppender<ILoggingEvent> listAppender = new ListAppender<>();
+    // listAppender.start();
+    // logger.addAppender(listAppender);
+    // List<ILoggingEvent> logsList = listAppender.list;
+    // boolean found = logsList.stream()
+    //             .anyMatch(event -> event.getMessage().contains("Player " + werewolfUsername + " does not select anyone"));
 
-  //   gameService.werewolfNightAction(selectionRequest);
+    gameService.werewolfNightAction(selectionRequest);
 
-  //   verify(this.werewolf).setUsername("player1");
-  //   verify(this.werewolf).setSelection("");
-  //   verify(this.werewolf, never()).doNightAction();
-  //   assertTrue(found, "Expected log message not found");
-  // }
+    verify(this.werewolf).setUsername("player1");
+    verify(this.werewolf).setSelection("");
+    verify(this.werewolf, never()).doNightAction();
+    //assertTrue(found, "Expected log message not found");
+  }
 
   @Test
   public void werewolfNightAction_IncorrectRole_ShouldNotTriggerNightAction() {
-    //TODO
+    String werewolfUsername = "player1";
+    String selectionUsername = "player2";
+    String playerRoleName = "Villager";
+    String werewolfRoleName = "Werewolf";
+
+    SelectionRequest selectionRequest = new SelectionRequest();
+    selectionRequest.setUsername(werewolfUsername);
+    selectionRequest.setSelection(selectionUsername);
+
+    when(this.werewolf.getSelection()).thenReturn(selectionUsername);
+    when(this.werewolf.getRoleName()).thenReturn(werewolfRoleName);
+    when(this.werewolf.getUsername()).thenReturn(werewolfUsername);
+
+    Player werewolfPlayer = new Player();
+    werewolfPlayer.setUsername(werewolfUsername);
+    werewolfPlayer.setRoleName(playerRoleName);
+
+    Player selectedPlayer = new Player();
+    selectedPlayer.setUsername(selectionUsername);
+
+    when(playerRepository.findByUsername(werewolfUsername)).thenReturn(werewolfPlayer);
+    when(playerRepository.findByUsername(selectionUsername)).thenReturn(selectedPlayer);
+    when(playerService.playersLobbyEqual(werewolfUsername, selectionUsername)).thenReturn(true);
+
+    // Logger logger = (Logger) LoggerFactory.getLogger(LobbyService.class);
+    // ListAppender<ILoggingEvent> listAppender = new ListAppender<>();
+    // listAppender.start();
+    // logger.addAppender(listAppender);
+    // List<ILoggingEvent> logsList = listAppender.list;
+    // boolean found = logsList.stream()
+    //             .anyMatch(event -> event.getMessage().contains("Player " + werewolfUsername + " does not select anyone"));
+
+    gameService.werewolfNightAction(selectionRequest);
+
+    verify(this.werewolf).setUsername("player1");
+    verify(this.werewolf).setSelection("player2");
+    verify(this.werewolf, never()).doNightAction();
+    //assertTrue(found, "Expected log message not found");
   }
 
   @Test
@@ -580,13 +617,86 @@ public class GameServiceTest {
   }
 
   @Test
-  public void protectorNightAction_InvalidSelectionRequest_ShouldNotTriggerNightAction() {
-    //TODO
+  public void protectorNightAction_NoSelection_ShouldNotTriggerNightAction() {
+    String protectorUsername = "player1";
+    String selectionUsername = "";
+    String roleName = "Protector";
+
+    SelectionRequest selectionRequest = new SelectionRequest();
+    selectionRequest.setUsername(protectorUsername);
+    selectionRequest.setSelection(selectionUsername);
+
+    when(this.protector.getSelection()).thenReturn(selectionUsername);
+    when(this.protector.getRoleName()).thenReturn(roleName);
+    when(this.protector.getUsername()).thenReturn(protectorUsername);
+
+    Player protectorPlayer = new Player();
+    protectorPlayer.setUsername(protectorUsername);
+    protectorPlayer.setRoleName(roleName);
+
+    Player selectedPlayer = new Player();
+    selectedPlayer.setUsername(selectionUsername);
+
+    when(playerRepository.findByUsername(protectorUsername)).thenReturn(protectorPlayer);
+    when(playerRepository.findByUsername(selectionUsername)).thenReturn(selectedPlayer);
+    when(playerService.playersLobbyEqual(protectorUsername, selectionUsername)).thenReturn(true);
+
+    // Logger logger = (Logger) LoggerFactory.getLogger(LobbyService.class);
+    // ListAppender<ILoggingEvent> listAppender = new ListAppender<>();
+    // listAppender.start();
+    // logger.addAppender(listAppender);
+    // List<ILoggingEvent> logsList = listAppender.list;
+    // boolean found = logsList.stream()
+    //             .anyMatch(event -> event.getMessage().contains("Player " + werewolfUsername + " does not select anyone"));
+
+    gameService.protectorNightAction(selectionRequest);
+
+    verify(this.protector).setUsername("player1");
+    verify(this.protector).setSelection("");
+    verify(this.protector, never()).doNightAction();
+    //assertTrue(found, "Expected log message not found");
   }
 
   @Test
   public void protectorNightAction_IncorrectRole_ShouldNotTriggerNightAction() {
-    //TODO
+    String protectorUsername = "player1";
+    String selectionUsername = "player2";
+    String playerRoleName = "Villager";
+    String protectorRoleName = "Protector";
+
+    SelectionRequest selectionRequest = new SelectionRequest();
+    selectionRequest.setUsername(protectorUsername);
+    selectionRequest.setSelection(selectionUsername);
+
+    when(this.protector.getSelection()).thenReturn(selectionUsername);
+    when(this.protector.getRoleName()).thenReturn(protectorRoleName);
+    when(this.protector.getUsername()).thenReturn(protectorUsername);
+
+    Player protectorPlayer = new Player();
+    protectorPlayer.setUsername(protectorUsername);
+    protectorPlayer.setRoleName(playerRoleName);
+
+    Player selectedPlayer = new Player();
+    selectedPlayer.setUsername(selectionUsername);
+
+    when(playerRepository.findByUsername(protectorUsername)).thenReturn(protectorPlayer);
+    when(playerRepository.findByUsername(selectionUsername)).thenReturn(selectedPlayer);
+    when(playerService.playersLobbyEqual(protectorUsername, selectionUsername)).thenReturn(true);
+
+    // Logger logger = (Logger) LoggerFactory.getLogger(LobbyService.class);
+    // ListAppender<ILoggingEvent> listAppender = new ListAppender<>();
+    // listAppender.start();
+    // logger.addAppender(listAppender);
+    // List<ILoggingEvent> logsList = listAppender.list;
+    // boolean found = logsList.stream()
+    //             .anyMatch(event -> event.getMessage().contains("Player " + werewolfUsername + " does not select anyone"));
+
+    gameService.protectorNightAction(selectionRequest);
+
+    verify(this.protector).setUsername("player1");
+    verify(this.protector).setSelection("player2");
+    verify(this.protector, never()).doNightAction();
+    //assertTrue(found, "Expected log message not found");
   }
 
   @Test
@@ -622,12 +732,85 @@ public class GameServiceTest {
   }
 
   @Test
-  public void sacrificeNightAction_InvalidSelectionRequest_ShouldNotTriggerNightAction() {
-    //TODO
+  public void sacrificeNightAction_NoSelection_ShouldNotTriggerNightAction() {
+    String sacrificeUsername = "player1";
+    String selectionUsername = "";
+    String roleName = "Sacrifice";
+
+    SelectionRequest selectionRequest = new SelectionRequest();
+    selectionRequest.setUsername(sacrificeUsername);
+    selectionRequest.setSelection(selectionUsername);
+
+    when(this.sacrifice.getSelection()).thenReturn(selectionUsername);
+    when(this.sacrifice.getRoleName()).thenReturn(roleName);
+    when(this.sacrifice.getUsername()).thenReturn(sacrificeUsername);
+
+    Player sacrificePlayer = new Player();
+    sacrificePlayer.setUsername(sacrificeUsername);
+    sacrificePlayer.setRoleName(roleName);
+
+    Player selectedPlayer = new Player();
+    selectedPlayer.setUsername(selectionUsername);
+
+    when(playerRepository.findByUsername(sacrificeUsername)).thenReturn(sacrificePlayer);
+    when(playerRepository.findByUsername(selectionUsername)).thenReturn(selectedPlayer);
+    when(playerService.playersLobbyEqual(sacrificeUsername, selectionUsername)).thenReturn(true);
+
+    // Logger logger = (Logger) LoggerFactory.getLogger(LobbyService.class);
+    // ListAppender<ILoggingEvent> listAppender = new ListAppender<>();
+    // listAppender.start();
+    // logger.addAppender(listAppender);
+    // List<ILoggingEvent> logsList = listAppender.list;
+    // boolean found = logsList.stream()
+    //             .anyMatch(event -> event.getMessage().contains("Player " + werewolfUsername + " does not select anyone"));
+
+    gameService.sacrificeNightAction(selectionRequest);
+
+    verify(this.sacrifice).setUsername("player1");
+    verify(this.sacrifice).setSelection("");
+    verify(this.sacrifice, never()).doNightAction();
+    //assertTrue(found, "Expected log message not found");
   }
 
   @Test
   public void sacrificeNightAction_IncorrectRole_ShouldNotTriggerNightAction() {
-    //TODO
+    String sacrificeUsername = "player1";
+    String selectionUsername = "player2";
+    String playerRoleName = "Villager";
+    String sacrificeRoleName = "Sacrifice";
+
+    SelectionRequest selectionRequest = new SelectionRequest();
+    selectionRequest.setUsername(sacrificeUsername);
+    selectionRequest.setSelection(selectionUsername);
+
+    when(this.sacrifice.getSelection()).thenReturn(selectionUsername);
+    when(this.sacrifice.getRoleName()).thenReturn(sacrificeRoleName);
+    when(this.sacrifice.getUsername()).thenReturn(sacrificeUsername);
+
+    Player sacrificePlayer = new Player();
+    sacrificePlayer.setUsername(sacrificeUsername);
+    sacrificePlayer.setRoleName(playerRoleName);
+
+    Player selectedPlayer = new Player();
+    selectedPlayer.setUsername(selectionUsername);
+
+    when(playerRepository.findByUsername(sacrificeUsername)).thenReturn(sacrificePlayer);
+    when(playerRepository.findByUsername(selectionUsername)).thenReturn(selectedPlayer);
+    when(playerService.playersLobbyEqual(sacrificeUsername, selectionUsername)).thenReturn(true);
+
+    // Logger logger = (Logger) LoggerFactory.getLogger(LobbyService.class);
+    // ListAppender<ILoggingEvent> listAppender = new ListAppender<>();
+    // listAppender.start();
+    // logger.addAppender(listAppender);
+    // List<ILoggingEvent> logsList = listAppender.list;
+    // boolean found = logsList.stream()
+    //             .anyMatch(event -> event.getMessage().contains("Player " + werewolfUsername + " does not select anyone"));
+
+    gameService.sacrificeNightAction(selectionRequest);
+
+    verify(this.sacrifice).setUsername("player1");
+    verify(this.sacrifice).setSelection("player2");
+    verify(this.sacrifice, never()).doNightAction();
+    //assertTrue(found, "Expected log message not found");
   }
 }
