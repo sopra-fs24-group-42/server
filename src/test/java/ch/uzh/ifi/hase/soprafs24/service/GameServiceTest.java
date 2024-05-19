@@ -222,37 +222,41 @@ public class GameServiceTest {
     verify(playerRepository, never()).save(any(Player.class));
   }
 
-  // @Test
-  // public void test_delete_host_player_success() {
-  //   String username = "hostPlayer";
+  @Test
+  public void test_delete_host_player_success() {
+    String hostUsername = "hostPlayer";
+    String newHostUsername = "testPlayer";
     
-  //   Player hostPlayer = new Player();
-  //   hostPlayer.setUsername(username);
-  //   hostPlayer.setLobbyId(2L);
-  //   hostPlayer.setLobbyCode("NBHFY");
-    
-  //   Player anotherPlayer = new Player();
-  //   anotherPlayer.setUsername("testPLayer");
-  //   anotherPlayer.setLobbyId(2L);
-  //   anotherPlayer.setLobbyCode("NBHFY");
+    Player hostPlayer = new Player(); 
+    hostPlayer.setUsername(hostUsername);
+    hostPlayer.setLobbyId(2L);
+    hostPlayer.setLobbyCode("NBHFY");
 
-  //   Lobby lobby = new Lobby();
-  //   lobby.setLobbyId(2L);
-  //   lobby.setLobbyCode("NBHFY");
-  //   lobby.setHostName("hostPlayer");
-   
-  //   Mockito.when(playerRepository.findByUsername(username)).thenReturn(hostPlayer);
-  //   Mockito.when(lobbyRepository.findByLobbyId(hostPlayer.getLobbyId())).thenReturn(lobby);
-  //   Mockito.when(lobbyService.getListOfLobbyPlayers(lobby.getLobbyCode())).thenReturn(Arrays.asList(hostPlayer, anotherPlayer));
+    Player newPlayerHostToBe = new Player();
+    newPlayerHostToBe.setUsername(newHostUsername);
+    newPlayerHostToBe.setLobbyId(2L);
+    newPlayerHostToBe.setLobbyCode("NBHFY");
 
-  //   gameService.deletePlayer(hostPlayer.getUsername());
+    Lobby lobby = new Lobby();
+    lobby.setLobbyId(2L);
+    lobby.setLobbyCode("NBHFY");
+    lobby.setHostName(hostUsername);
+    lobby.setPlayers(Arrays.asList(hostPlayer, newPlayerHostToBe));
 
-  //   verify(lobbyService).getListOfLobbyPlayers(lobby.getLobbyCode());
-  //   verify(lobbyRepository).save(lobbyArgumentCaptor.capture());
-  //   Lobby updatedLobby = lobbyArgumentCaptor.getValue();
+    Mockito.when(playerRepository.findByUsername(hostUsername)).thenReturn(hostPlayer);
+    Mockito.when(lobbyRepository.findByLobbyId(anyLong())).thenReturn(lobby);
+    Mockito.when(lobbyService.getListOfLobbyPlayers(anyString())).thenReturn(Arrays.asList(newPlayerHostToBe));
 
-  //   assertEquals(anotherPlayer.getUsername(), updatedLobby.getHostName());
-  // }
+    gameService.deletePlayer(hostPlayer.getUsername());
+    List<Player> playersAfterDeletion = lobbyService.getListOfLobbyPlayers(lobby.getLobbyCode());
+    assertFalse(playersAfterDeletion.contains(hostPlayer));
+
+    ArgumentCaptor<Lobby> lobbyArgumentCaptor = ArgumentCaptor.forClass(Lobby.class);
+    verify(repositoryProvider.getLobbyRepository()).save(lobbyArgumentCaptor.capture());
+    Lobby savedLobby = lobbyArgumentCaptor.getValue();
+
+    assertEquals(newHostUsername, savedLobby.getHostName());
+  }
 
   @Test
   public void goToNextPhase_ShouldNotProceedIfPlayersAreNotReady() {
