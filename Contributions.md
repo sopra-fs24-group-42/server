@@ -113,6 +113,7 @@
 |---|---|---|---|
 |18.05.2024|Charlotte|[#165](https://github.com/sopra-fs24-group-42/client/issues/165), [#146](https://github.com/sopra-fs24-group-42/client/issues/146) |implemented fixes to prevent players from performing their night actions multiple times or voting multiples times by refreshing the page|
 |18./19.05.2024|Lukas|[#189](https://github.com/sopra-fs24-group-42/server/issues/189)|working on gameServiceTests|
+|16,19.05.2024|Polina|[#192](https://github.com/sopra-fs24-group-42/server/issues/192), [#191](https://github.com/sopra-fs24-group-42/server/issues/191)|created set up controller and lobby service tests|
 
 
 
