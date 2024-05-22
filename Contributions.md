@@ -98,7 +98,6 @@
 |---|---|---|---|
 |09.05.2024|Lukas|[#172](https://github.com/sopra-fs24-group-42/server/issues/172)|refactoring processNightphase|
 |13.05.2024|Lukas|[#180](https://github.com/sopra-fs24-group-42/server/issues/180), [#182](https://github.com/sopra-fs24-group-42/server/issues/182), [#183](https://github.com/sopra-fs24-group-42/server/issues/183)|Implement Leaderboard in Backend|
-|15.05.2024|Lukas|[#188](https://github.com/sopra-fs24-group-42/server/issues/188)|Work on playerServiceTests|
 |09.05.2024|Polina|[#147](https://github.com/sopra-fs24-group-42/server/issues/147),[#173](https://github.com/sopra-fs24-group-42/server/issues/173)|implemented the game settings update, edit player delete methods|
 |10-11.09.2024|Polina|[#147](https://github.com/sopra-fs24-group-42/client/issues/174), [#143](https://github.com/sopra-fs24-group-42/client/issues/143),[#142](https://github.com/sopra-fs24-group-42/client/issues/142)|implemented game settings in the frontend|
 |09.05.2024|Charlotte| |added 'abstain' button in nightAction and voting views to cancel one's selection or skip the phase, started on the implementation of showing the top three voted players during a round|
@@ -112,6 +111,7 @@
 | Date | Name | Links to Github Issues | Comments |
 |---|---|---|---|
 |18.05.2024|Charlotte|[#165](https://github.com/sopra-fs24-group-42/client/issues/165), [#146](https://github.com/sopra-fs24-group-42/client/issues/146) |implemented fixes to prevent players from performing their night actions multiple times or voting multiples times by refreshing the page|
+|16.05.2024|Lukas|[#188](https://github.com/sopra-fs24-group-42/server/issues/188)|Work on playerServiceTests|
 |18./19.05.2024|Lukas|[#189](https://github.com/sopra-fs24-group-42/server/issues/189)|working on gameServiceTests|
 |16./19.05.2024|Polina|[#192](https://github.com/sopra-fs24-group-42/server/issues/192), [#191](https://github.com/sopra-fs24-group-42/server/issues/191)|created set up controller and lobby service tests|
 |21.05.2024|Charlotte|[#167](https://github.com/sopra-fs24-group-42/server/issues/167)|catching common errros in the frontend, added general game rules|
