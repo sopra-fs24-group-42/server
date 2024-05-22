@@ -1,76 +1,39 @@
-# Project Title
+# Introduction
+In the evolving world of digital interaction, traditional role-playing games like Werewolf
+require a modern solution to bridge the gap between virtual and physical game spaces. Our
+project seeks to digitize these beloved social activities, allowing users to engage in
+immersive narrative-driven experiences from any location. By developing a web application
+that supports game setup, role assignment, and real-time interaction through voice-to-text
+technology, we aim to replicate the communal atmosphere of these games online. Utilizing
+technologies such as React for the frontend and Node.js for the backend, alongside
+WebSocket for real-time communication and third-party APIs for voice recognition, this
+project stands as a testament to the innovative application of web development skills and AI
+integration. This initiative not only aligns with the course's focus on creating cutting-edge
+web applications but also offers a solution to the limitations posed by physical distance in
+social gaming.
 
-One Paragraph of project description goes here
+## Technologies
 
-## Getting Started
+(short)
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+## High-level components
 
-### Prerequisites
+dentify your project’s 3-5 main components. What is their role?
+How are they correlated? Reference the main class, file, or function in the README text
+with a link.
 
-What things you need to install the software and how to install them
+Here i would mention -> Websocket Controller, Websocket Servive, Set up Controller, Game Service 
 
-```
-Give examples
-```
+## Launch & Deployment
 
-### Installing
+Write down the steps a new developer joining your team would
+have to take to get started with your application. What commands are required to build and run your project locally? How can they run the tests? Do you have external dependencies or a database that needs to be running? How can they do releases?
 
-A step by step series of examples that tell you how to get a development env running
 
-Say what the step will be
+## Roadmap
+The top 2-3 features that new developers who want to contribute to your project could add.
 
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
-
-## Authors
+## Authors and acknowledgment
 
 * **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
 
@@ -79,9 +42,4 @@ See also the list of [contributors](https://github.com/your/project/contributors
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+Say how your project is licensed (see License guide3).
