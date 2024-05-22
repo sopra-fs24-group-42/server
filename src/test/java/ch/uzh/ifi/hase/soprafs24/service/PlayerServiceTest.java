@@ -114,14 +114,24 @@ public class PlayerServiceTest {
                 thrownException.getReason());
     }
 
-    @Test
-    void getLobbyIdFromPlayerByUsername_throw_error_invalid_username() {
-        // mock the method findByUsername of the player repo to return null if player is not found
-        Mockito.when(playerRepository.findByUsername(Mockito.any())).thenReturn(null);
+    // @Test
+    // void getLobbyIdFromPlayerByUsername_throw_error_invalid_username() {
+    //     // mock the method findByUsername of the player repo to return null if player is not found
+    //     Mockito.when(playerRepository.findByUsername(Mockito.any())).thenReturn(null);
 
-        assertThrows(NullPointerException.class, () -> {
-            playerService.getLobbyIdFromPlayerByUsername("testPlayer2");
-        });
+    //     assertThrows(NullPointerException.class, () -> {
+    //         playerService.getLobbyIdFromPlayerByUsername("testPlayer2");
+    //     });
+    // }
+
+    @Test
+    public void testGetLobbyId_fromPlayerByUsername_whenPlayerDoesNotExist() {
+        String username = "nonExistingPlayer";
+        when(playerRepository.findByUsername(username)).thenReturn(null);
+
+        Long lobbyId = playerService.getLobbyIdFromPlayerByUsername(username);
+
+        assertEquals(Long.valueOf(-1), lobbyId);
     }
 
     @Test
