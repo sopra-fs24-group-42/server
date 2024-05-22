@@ -115,7 +115,7 @@
 |18./19.05.2024|Lukas|[#189](https://github.com/sopra-fs24-group-42/server/issues/189)|working on gameServiceTests|
 |16./19.05.2024|Polina|[#192](https://github.com/sopra-fs24-group-42/server/issues/192), [#191](https://github.com/sopra-fs24-group-42/server/issues/191)|created set up controller and lobby service tests|
 |21.05.2024|Charlotte|[#167](https://github.com/sopra-fs24-group-42/server/issues/167)|catching common errros in the frontend, added general game rules|
-
+|20.05.2024|Polina|[#193](https://github.com/sopra-fs24-group-42/server/issues/193)|integration tests|
 
 
 
