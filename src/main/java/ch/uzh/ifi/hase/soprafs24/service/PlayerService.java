@@ -46,14 +46,9 @@ public class PlayerService {
 
     public Long getLobbyIdFromPlayerByUsername(String username) {
         Player player = repositoryProvider.getPlayerRepository().findByUsername(username);
+        if(player == null){log.info("No player with such username"); return -1L;}
         return player.getLobbyId();
     }
-
-    // public Long getLobbyIdFromPlayerById(Long playerId) {
-    //     Optional<Player>  optionalPlayer = repositoryProvider.getPlayerRepository().findById(playerId);
-    //     Player player = optionalPlayer.orElseThrow(() -> new RuntimeException("Player not found with ID: " + playerId));
-    //     return player.getLobbyId();
-    // }
 
     public void assignRoles(Long lobbyId) {
         try {
@@ -84,6 +79,7 @@ public class PlayerService {
 
     public void setPlayerReady(String username, GameState clientGameState) {
         Player readyPlayer = repositoryProvider.getPlayerRepository().findByUsername(username);
+        if(readyPlayer == null){log.info("No player with such username"); return;}
         Lobby lobbyOfReadyPlayer = repositoryProvider.getLobbyRepository().findByLobbyCode(readyPlayer.getLobbyCode());
 
         //check if client and server are in same gameState
