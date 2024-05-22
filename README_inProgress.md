@@ -14,7 +14,14 @@ social gaming.
 
 ## Technologies
 
-(short)
+During the development of the back-end, we used the following technologies:
+
+* [Java](https://www.java.com/de/download/manual.jsp) - Programming language used in the server
+* [Spring Boot](https://spring.io/projects/spring-boot) - Spring Boot Framework used in the server
+* [WebSockets](https://docs.spring.io/spring-framework/reference/web/websocket.html) - WebSockets with SockJS and STOMP protocol
+* [JPA](https://spring.io/projects/spring-data-jpa) - API for object-relational mapping to databases in Java applications
+* [H2 DB](https://www.h2database.com/html/main.html) - Java SQL database
+* [Google cloud](https://cloud.google.com/?hl=en) - Handles the deployment
 
 ## High-level components
 
