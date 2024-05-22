@@ -1,87 +1,115 @@
-# Project Title
+# Introduction
+In the evolving world of digital interaction, traditional role-playing games like Werewolf
+require a modern solution to bridge the gap between virtual and physical game spaces. Our
+project seeks to digitize these beloved social activities, allowing users to engage in
+immersive narrative-driven experiences from any location. By developing a web application
+that supports game setup, role assignment, and real-time interaction through voice-to-text
+technology, we aim to replicate the communal atmosphere of these games online. Utilizing
+technologies such as React for the frontend and Node.js for the backend, alongside
+WebSocket for real-time communication and third-party APIs for voice recognition, this
+project stands as a testament to the innovative application of web development skills and AI
+integration. This initiative not only aligns with the course's focus on creating cutting-edge
+web applications but also offers a solution to the limitations posed by physical distance in
+social gaming.
 
-One Paragraph of project description goes here
+## Technologies
 
-## Getting Started
+During the development of the back-end, we used the following technologies:
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+* [Java](https://www.java.com/de/download/manual.jsp) - Programming language used in the server
+* [Spring Boot](https://spring.io/projects/spring-boot) - Spring Boot Framework used in the server
+* [WebSockets](https://docs.spring.io/spring-framework/reference/web/websocket.html) - WebSockets with SockJS and STOMP protocol
+* [JPA](https://spring.io/projects/spring-data-jpa) - API for object-relational mapping to databases in Java applications
+* [H2 DB](https://www.h2database.com/html/main.html) - Java SQL database
+* [Google cloud](https://cloud.google.com/?hl=en) - Handles the deployment
 
-### Prerequisites
+## High-level components
 
-What things you need to install the software and how to install them
+### Websocket Controller 
+### Websocket Serviver
+### Setup Controller
+### Game Service 
 
+dentify your project’s 3-5 main components. What is their role?
+How are they correlated? Reference the main class, file, or function in the README text with a link.
+
+## Launch & Deployment
+
+Write down the steps a new developer joining your team would
+have to take to get started with your application. What commands are required to build and run your project locally? How can they run the tests? Do you have external dependencies or a database that needs to be running? How can they do releases?
+
+## Building with Gradle
+You can use the local Gradle Wrapper to build the application.
+-   macOS: `./gradlew`
+-   Linux: `./gradlew`
+-   Windows: `./gradlew.bat`
+
+More Information about [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) and [Gradle](https://gradle.org/docs/).
+
+### Build
+
+```bash
+./gradlew build
 ```
-Give examples
+
+### Run
+
+```bash
+./gradlew bootRun
 ```
 
-### Installing
+You can verify that the server is running by visiting `localhost:8080` in your browser.
 
-A step by step series of examples that tell you how to get a development env running
+### Test
 
-Say what the step will be
-
-```
-Give the example
+```bash
+./gradlew test
 ```
 
-And repeat
+### Development Mode
+You can start the backend in development mode, this will automatically trigger a new build and reload the application
+once the content of a file has been changed.
 
-```
-until finished
-```
+Start two terminal windows and run:
 
-End with an example of getting some data out of the system or using it for a little demo
+`./gradlew build --continuous`
 
-## Running the tests
+and in the other one:
 
-Explain how to run the automated tests for this system
+`./gradlew bootRun`
 
-### Break down into end to end tests
+If you want to avoid running all tests with every change, use the following command instead:
 
-Explain what these tests test and why
+`./gradlew build --continuous -xtest`
 
-```
-Give an example
-```
+## Debugging
+If something is not working and/or you don't know what is going on. We recommend using a debugger and step-through the process step-by-step.
 
-### And coding style tests
+To configure a debugger for SpringBoot's Tomcat servlet (i.e. the process you start with `./gradlew bootRun` command), do the following:
 
-Explain what these tests test and why
+1. Open Tab: **Run**/Edit Configurations
+2. Add a new Remote Configuration and name it properly
+3. Start the Server in Debug mode: `./gradlew bootRun --debug-jvm`
+4. Press `Shift + F9` or the use **Run**/Debug "Name of your task"
+5. Set breakpoints in the application where you need it
+6. Step through the process one step at a time
 
-```
-Give an example
-```
+## Roadmap
+The top 2-3 features that new developers who want to contribute to your project could add.
+* add more roles 
+* leaderboard only for the cuurent lobby 
+* custom error handling
 
-## Deployment
+## Authors and acknowledgment
 
-Add additional notes about how to deploy this on a live system
-
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
-
-## Authors
-
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
+* **Lukas Niedhart** - [lukasniedh](https://github.com/lukasniedh)
+* **Charlotte Model** - [cmodel1](https://github.com/cmodel1)
+* **Rafael Urech** - [DaKnechtCoder](https://github.com/DaKnechtCoder)
+* **Polina Kuptsova** - [kuppolina](https://github.com/kuppolina)
+  
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+Say how your project is licensed (see License guide3).
