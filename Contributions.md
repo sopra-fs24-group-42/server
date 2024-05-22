@@ -89,7 +89,7 @@
 |04.05.2024|Charlotte|[#114](https://github.com/sopra-fs24-group-42/client/issues/114)|added flag to other werewolves in nightAction for werewolves (so they know who not to kill)|
 |06.05.2024|Charlotte|[#97](https://github.com/sopra-fs24-group-42/client/issues/97), [#108](https://github.com/sopra-fs24-group-42/client/issues/108)|worked on rerouting back to waitingRoom after game ends, also reworked UI of all views (each view is now mobile-friendly and scrollanble (no specific dev tasks)|
 |06.05.2024| Rafael | [#124](https://github.com/sopra-fs24-group-42/client/issues/124), [#169](https://github.com/sopra-fs24-group-42/server/issues/169), [#125](https://github.com/sopra-fs24-group-42/client/issues/125), [#36](https://github.com/sopra-fs24-group-42/client/issues/36) |
-|07.05.2024| Rafael | [#128](https://github.com/sopra-fs24-group-42/client/issues/128) | Implementing that multiple PLayers can be killed in RevealNight and that it gets handled correctly
+|07.05.2024| Rafael | [#128](https://github.com/sopra-fs24-group-42/client/issues/128) | Implementing that multiple Players can be killed in RevealNight and that it gets handled correctly
 |   |   |   |   |
 
 ## <font style="color: #00d7ff">Week 6 *(09.05 – 15.05)*</font>
@@ -116,6 +116,12 @@
 |16./19.05.2024|Polina|[#192](https://github.com/sopra-fs24-group-42/server/issues/192), [#191](https://github.com/sopra-fs24-group-42/server/issues/191)|created set up controller and lobby service tests|
 |21.05.2024|Charlotte|[#167](https://github.com/sopra-fs24-group-42/server/issues/167)|catching common errros in the frontend, added general game rules|
 |20.05.2024|Polina|[#193](https://github.com/sopra-fs24-group-42/server/issues/193)|integration tests|
+|21.05.2024|Rafael||Working on the Deliverables (readme etc)|
+|22.05.2024|Rafael|[#175](https://github.com/sopra-fs24-group-42/server/issues/175)|Working on the Errorhandling and the Correct Display|
+|22.05.2024|Rafael|[#179](https://github.com/sopra-fs24-group-42/server/issues/179)|Hide all the Scrollbars|
+|22.05.2024|Rafael|[#157](https://github.com/sopra-fs24-group-42/server/issues/157)|Adapt all the TextSamples to better fit our needs ands |
+
+
 
 
 
