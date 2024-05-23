@@ -1,16 +1,5 @@
 # Introduction
-In the evolving world of digital interaction, traditional role-playing games like Werewolf
-require a modern solution to bridge the gap between virtual and physical game spaces. Our
-project seeks to digitize these beloved social activities, allowing users to engage in
-immersive narrative-driven experiences from any location. By developing a web application
-that supports game setup, role assignment, and real-time interaction through voice-to-text
-technology, we aim to replicate the communal atmosphere of these games online. Utilizing
-technologies such as React for the frontend and Node.js for the backend, alongside
-WebSocket for real-time communication and third-party APIs for voice recognition, this
-project stands as a testament to the innovative application of web development skills and AI
-integration. This initiative not only aligns with the course's focus on creating cutting-edge
-web applications but also offers a solution to the limitations posed by physical distance in
-social gaming.
+In the evolving world of digital interaction, traditional role-playing games like <i>Werewolf</i> require a modern solution to bridge the gap between virtual and physical game spaces. Our project seeks to digitize this beloved social game to eliminate the need for physical cards, allowing users to engage in an immersive, narration-driven game experience using only their devices at any time. Our implementation stays true to the communal, social setting of the original game by preserving the colocative aspect of the game: players of <i>Survive the Night</i> must be within the same physical space at the same time to play together. Furthermore, the addition of dynamic, realistic-sounding text-to-speech technology enhances the game with an immerisive narrator, allowing all players to enjoy the experience of fully playing the game without any additional responsibilities or duties. We hope you get a kick out of our game and wish you the best of luck to survive the night!
 
 ## Technologies
 
