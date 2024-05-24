@@ -105,14 +105,14 @@ Moreover, this GameService component interacts with PlayerService, LobbyService,
 Please find a reference to a file here: [Game Service](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/service/GameService.java).
 
 ## Launch & Development <a id="launch--development"></a>
-### [Getting started](#getting-started)
+### Getting started
 To start we recommend to get familiarezed with the following documentation and resources:  
 -   Documentation: https://docs.spring.io/spring-boot/docs/current/reference/html/index.html
 -   Guides: http://spring.io/guides
 -   Building a RESTful Web Service: http://spring.io/guides/gs/rest-service/
 -   Building REST services with Spring: https://spring.io/guides/tutorials/rest/
 
-### [Prerequisites & installation](#prerequisites-installation)
+### Prerequisites & installation
 
 Download your IDE of choice (e.g., [IntelliJ](https://www.jetbrains.com/idea/download/), [Visual Studio Code](https://code.visualstudio.com/), or [Eclipse](http://www.eclipse.org/downloads/)). Make sure Java 17 is installed on your system (for Windows, please make sure your `JAVA_HOME` environment variable is set to the correct version of Java).
 
@@ -129,7 +129,7 @@ The following extensions can help you get started more easily:
 -   `vscjava.vscode-spring-boot-dashboard`
 -   `vscjava.vscode-java-pack`
 
-## [Running locally](#running-locally)
+## Running locally
 ### Building with Gradle
 Local Gradle Wrapper can be used to build the application.
 -   macOS: `./gradlew`
@@ -180,7 +180,7 @@ To configure a debugger for SpringBoot's Tomcat servlet (i.e. the process you st
 5. Set breakpoints in the application where you need it
 6. Step through the process one step at a time
 
-### Running tests
+### Running tests <a id="running-tests"></a>
 You can run test with the following command:
 ```bash
 ./gradlew test
