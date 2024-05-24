@@ -52,23 +52,56 @@ During the development of the back-end, we used the following technologies:
 ## High-Level Components <a id="high-level-components"></a>
 
 ### Stomp Controller <a id="websocket-controller"></a> 
+Stomp Controller Component cares the logic of receiving the data from client and invokes the relevant methos in order it to be process. Additionally, it calls for a method to broadcast lobby back to the client.  
 
-Please find a reference here: [Stomp Controller](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/controller/StompController.java)
+In this table we have compposed all the mappings for Stomp Controller that we have used in our application: 
+|Mapping|Method|Parameter type|Parameter|Description| 
+|/game|CONNECT|||upgrade to WebSocket connection|
+|/game|DISCONNECT|||remove WebSocket connection|
+|/topic/loby/{lobbyId}|SUBSCRIBE|Pathvariable|lobbyId|subscribes to a Lobby with lobbyId; update about the Lobby will be sent to all subscribed clients|
+|/topic/lobby/{lobbyId}|UNSUBSCRIBE|Pathvariable|lobbyId|stop receiving lobby information|
+|/app/startgame|SEND|Body|lobbyId<Long>|starts game (distributes roles) and broadcasts the lobby|
+|/app/ready|SEND|Body|username<string>, gameState<string>|sets player to ready. If all Players in a lobby are ready the Lobby goes to the next gameState and resets the player to not ready|
+|/app/{roleName}/nightaction|Send|Pathvariable, Body|roleName<string>, SelectionRequest|performs nightaction|
+|/app/voting|SEND|Body|SelectionRequest|performs vote during voting phase|
+|/app/settings/{lobbyId}|SEND|Pathvariable, Body|LobbyId<long>, UpdatedGameSettings|updates lobby settings|
+
+Please find a reference to a file 'StompController.java' here: [Stomp Controller](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/controller/StompController.java)
 
 ### Websocket Service <a id="websocket-service"></a> 
 
-Please find a reference here: [Websocket Service](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/service/WebsocketService.java)
+Please find a reference to a file 'WebsocketService.java' here: [Websocket Service](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/service/WebsocketService.java)
 
 ### Setup Controller <a id="setup-controller"></a> 
 
-Please find a reference here: [Setup Controller](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/controller/SetupController.java)
+In this table we have compposed all the mappings for Setup Controller that we have used in our application: 
+|Mapping|Method|Parameter type|Parameter|Description| 
+|/players|POST|Body|username<string>, lobbyCode<string>|creates a new player|
+|/lobbies|POST|Body|hostUsername<string>, numberOfPlayers<int>|creates a new lobby|
+|/players/{username}|DELETE|Pathvariable||deletes a player|
+|/leaderboards/{maxNumberOfTopPlayers}|GET|Pathvariable|MaxNumberOfTopPlayers<int>|gets top MaxNumberOfTopPlayers Players|
+
+Please find a reference to a file 'SetupController.java' here: [Setup Controller](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/controller/SetupController.java)
 
 ### Game Service <a id="game-controller"></a> 
+GameService is one of the most important components in our application, as it includes the main logic of the game from the creation of the lobby, processing of the user input that defines the flow of the game as well as up to concluding the outcomes of the game needed to fill in the game leaderboard.
 
-Please find a reference here: [Game Service](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/service/GameService.java)
+Here is the list of crucial methods that has to be considered before continue working on the project: 
+- goToNextPhase: this method takes as parameters the lobbyId in order to determine the players of the concrete lobby. This methods includes the switch construction that is required and helps to identify which phase processing methods to execute. In our implementation we have such phases: 
+- **WAITINGROOM**: upon creation of a new game all players are redirected to the waiting role. Here they wait until all the plyers have joined the lobby before the host can start the game. 
+- **PRENIGHT**: in this phase all users set to not ready, the flag, that helps to process the flow from one phase to another letting the server and the client be synchronized. 
+- **NIGHT**: in the Night phase the werevolwes, seeer, protectors and sacrifices make their action, whereas the villagers have to click a button to simulate an action and therefore try to keep thier identity as a secret. After their choice was made, the server receive the Selection of the players with the username of the player. Additionally, the outcomes of the has to be calculated, hence the data for the next phase which is the REVEALNIGHT is preparied. 
+- **REVEALNIGHT**: 
+- **DISCUSSION**: 
+- **VOTING**: 
+- **REVEALVOTING**: 
+- **ENDGAME**: 
 
-dentify your project’s 3-5 main components. What is their role?
-How are they correlated? Reference the main class, file, or function in the README text with a link.
+// how it is correlated with others 
+
+Moreover, this component interacts with PlayerService, LobbyService and classes for each role. These are additional smaller components that  support GameService by giving access to extra methods that process user input. 
+
+Please find a reference to a file 'GameService.java' here: [Game Service](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/service/GameService.java)
 
 ## Launch & Development <a id="launch--development"></a>
 
