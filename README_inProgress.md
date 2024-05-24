@@ -68,7 +68,7 @@ Below is a table that lists all the mappings used for the Stomp Controller in ou
 Please find a reference to a file here: [Stomp Controller](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/controller/StompController.java)
 
 ### Websocket Service <a id="websocket-service"></a> 
-
+Websocket Service includes the logic that regulates broadcast of a lobby to client. In the function broadcastLobby we check is lobby is null at first to ensure that it exists and can be found in the database. Further, the dictionary is created by mapping the player information to its username. After setting the destination we can send the data with updations back to the client so the players can see game outcomes. 
 Please find a reference to a file WebsocketService.java here: [Websocket Service](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/service/WebsocketService.java)
 
 ### Setup Controller <a id="setup-controller"></a> 
@@ -89,7 +89,6 @@ The GameService is one of the most crucial components in our application. It inc
 
 Below is a list of critical methods to consider before continuing work on the project:
 
-goToNextPhase Method
 The goToNextPhase method is a crucial part of our game implementation. It transitions the game from one phase to another, ensuring the correct flow and synchronization between the server and the client. The method takes the lobbyId as a parameter to identify the specific lobby and its players. It uses a switch statement to determine which phase processing methods to execute based on the current game state. Here are the phases included in our implementation:
 
 - WAITINGROOM: When a new game is created, all players are redirected to the waiting room. Here, they wait until all players have joined the lobby before the host can start the game.
@@ -101,9 +100,11 @@ The goToNextPhase method is a crucial part of our game implementation. It transi
 - REVEALVOTING: This phase resets the players' fields to ensure the correct flow of the game in the next round.
 - ENDGAME: The final phase of the game, ENDGAME, resets the lobby and updates the leaderboard, allowing players to see the results of the round played.
 
-// how it is correlated with others 
+In our implementation, it is imperative to specify the correlation between the GameService and smaller services, particularly PlayerService and LobbyService, in conjunction with the StompController.
 
-Moreover, this component interacts with PlayerService, LobbyService, and classes for each role. These are additional, smaller components that support GameService by providing access to extra methods for processing user input.
+The StompController class has direct access to the GameService and accesses PlayerService and LobbyService through a ServiceProvider. This design preserves modularity and encapsulation, ensuring that each component interacts seamlessly while maintaining a clear separation of concerns.
+
+Moreover, this GameService component interacts with PlayerService, LobbyService, and classes for each role. These are additional, smaller components that support GameService by providing access to extra methods for processing user input.
 
 Please find a reference to a file here: [Game Service](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/service/GameService.java)
 
