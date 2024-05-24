@@ -56,6 +56,7 @@ Stomp Controller Component cares the logic of receiving the data from client and
 In this table we have compposed all the mappings for Stomp Controller that we have used in our application: 
 
 |Mapping|Method|Parameter type|Parameter|Description| 
+|-------|------|--------------|---------|-----------|
 |/game|CONNECT|||upgrade to WebSocket connection|
 |/game|DISCONNECT|||remove WebSocket connection|
 |/topic/loby/{lobbyId}|SUBSCRIBE|Pathvariable|lobbyId|subscribes to a Lobby with lobbyId; update about the Lobby will be sent to all subscribed clients|
@@ -77,6 +78,7 @@ Please find a reference to a file 'WebsocketService.java' here: [Websocket Servi
 In this table we have compposed all the mappings for Setup Controller that we have used in our application: 
 
 |Mapping|Method|Parameter type|Parameter|Description| 
+|-------|------|--------------|---------|-----------|
 |/players|POST|Body|username<string>, lobbyCode<string>|creates a new player|
 |/lobbies|POST|Body|hostUsername<string>, numberOfPlayers<int>|creates a new lobby|
 |/players/{username}|DELETE|Pathvariable||deletes a player|
@@ -205,7 +207,7 @@ The implementation of the new classes for roles has to follow the pattern that h
 During Sprint 2, we implemented a leaderboard for all players to compare their results after each game round. However, we also believe that it is important to support competition within one lobby. This will enhance players' entertainment and bring more joy to the game. Players should be able to access the leaderboard to see the outcomes of the one game round just after it has ended. After that, players should be redirected to the waiting room, where the host can start the game or change the game settings.
 
 - **Eliminated players stay in the game as spectators**
-In the next Sprint, we expect developers to complete the user stories left in the backlog that have low priority. The functionality specified in these user stories can help improve user satisfaction by letting eliminated players track the impacts of other players still in the game. For this task, there is a prepared user story. You may follow the link here [User Story #7](https://github.com/orgs/sopra-fs24-group-42/projects/1/views/1?pane=issue&itemId=57072825) to take a closer look.
+In the next Sprint, we expect developers to complete the user stories left in the backlog that have low priority. The functionality specified in these user stories can help improve user satisfaction by letting eliminated players track the impacts of other players still in the game. For this task, there is a prepared user story. You may follow this link [User Story #7](https://github.com/orgs/sopra-fs24-group-42/projects/1/views/1?pane=issue&itemId=57072825) to take a closer look.
 
 ## Authors <a id="authors"></a>
 * [Charlotte Model](https://github.com/cmodel1)
