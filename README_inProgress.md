@@ -55,8 +55,8 @@ Stomp Controller Component cares the logic of receiving the data from client and
 
 In this table we have compposed all the mappings for Stomp Controller that we have used in our application: 
 
-|Mapping|Method|Parameter type|Parameter|Description    | 
-|-------|------|--------------|---------|---------------|
+|Mapping|Method|Parameter type|Parameter|Description| 
+|-------|------|--------------|---------|-----------|
 |/game|CONNECT|||upgrade to WebSocket connection|
 |/game|DISCONNECT|||remove WebSocket connection|
 |/topic/loby/{lobbyId}|SUBSCRIBE|Pathvariable|lobbyId|subscribes to a Lobby with lobbyId; update about the Lobby will be sent to all subscribed clients|
@@ -67,11 +67,11 @@ In this table we have compposed all the mappings for Stomp Controller that we ha
 |/app/voting|SEND|Body|SelectionRequest|performs vote during voting phase|
 |/app/settings/{lobbyId}|SEND|Pathvariable, Body|LobbyId<long>, UpdatedGameSettings|updates lobby settings|
 
-Please find a reference to a file 'StompController.java' here: [Stomp Controller](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/controller/StompController.java)
+Please find a reference to a file StompController.java here: [Stomp Controller](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/controller/StompController.java)
 
 ### Websocket Service <a id="websocket-service"></a> 
 
-Please find a reference to a file 'WebsocketService.java' here: [Websocket Service](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/service/WebsocketService.java)
+Please find a reference to a file WebsocketService.java here: [Websocket Service](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/service/WebsocketService.java)
 
 ### Setup Controller <a id="setup-controller"></a> 
 
@@ -84,7 +84,7 @@ In this table we have compposed all the mappings for Setup Controller that we ha
 |/players/{username}|DELETE|Pathvariable||deletes a player|
 |/leaderboards/{maxNumberOfTopPlayers}|GET|Pathvariable|MaxNumberOfTopPlayers<int>|gets top MaxNumberOfTopPlayers Players|
 
-Please find a reference to a file 'SetupController.java' here: [Setup Controller](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/controller/SetupController.java)
+Please find a reference to a file SetupController.java here: [Setup Controller](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/controller/SetupController.java)
 
 ### Game Service <a id="game-controller"></a> 
 GameService is one of the most important components in our application, as it includes the main logic of the game from the creation of the lobby, processing of the user input that defines the flow of the game as well as up to concluding the outcomes of the game needed to fill in the game leaderboard.
@@ -104,7 +104,7 @@ Here is the list of crucial methods that has to be considered before continue wo
 
 Moreover, this component interacts with PlayerService, LobbyService and classes for each role. These are additional smaller components that  support GameService by giving access to extra methods that process user input. 
 
-Please find a reference to a file 'GameService.java' here: [Game Service](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/service/GameService.java)
+Please find a reference to a file GameService.java here: [Game Service](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/service/GameService.java)
 
 ## Launch & Development <a id="launch--development"></a>
 ### [Getting started](#getting-started)
@@ -169,8 +169,6 @@ If you want to avoid running all tests with every change, use the following comm
 
 `./gradlew build --continuous -xtest`
 
-### [Debugging](#running-locally) 
-
 ### Debugging
 If something is not working and/or you don't know what is going on. We recommend using a debugger and step-through the process step-by-step.
 
@@ -184,12 +182,11 @@ To configure a debugger for SpringBoot's Tomcat servlet (i.e. the process you st
 6. Step through the process one step at a time
 
 
-### [Running tests](#running-tests)
-You cn run test with such command:
+### [Running tests]
+You can run test with the following command:
 ```bash
 ./gradlew test
 ```
-
 
 ## Roadmap
 In the Roadmap, we have specified the next steps that can benefit application development and be a valuable contribution to this project:
