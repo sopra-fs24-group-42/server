@@ -1,8 +1,8 @@
-![image](/resources/forest%20copy.jpg)
+![image](/resources/Header.jpg)
 # Survive the Night
 <div style="text-align: justify"> 
 
-Check out the front-end implementation [here](https://github.com/sopra-fs24-group-42/client).
+Check out the frontend implementation [here](https://github.com/sopra-fs24-group-42/client).
 
 ## Table of Contents
 
@@ -61,7 +61,7 @@ Below is a table that lists all the mappings used for the Stomp Controller in ou
 |/app/voting|SEND|Body|SelectionRequest|performs vote during voting phase|
 |/app/settings/{lobbyId}|SEND|Pathvariable, Body|LobbyId<long>, UpdatedGameSettings|updates lobby settings|
 
-Please find a reference to a file here: [Stomp Controller](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/controller/StompController.java)
+Please find a reference to a file here: [Stomp Controller](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/controller/StompController.java).
 
 ### Websocket Service <a id="websocket-service"></a> 
 Websocket Service includes the logic that regulates broadcast of a lobby to client. In the function broadcastLobby we check is lobby is null at first to ensure that it exists and can be found in the database. Further, the dictionary is created by mapping the player information to its username. After setting the destination we can send the data with updations back to the client so the players can see game outcomes. 
@@ -179,8 +179,6 @@ To configure a debugger for SpringBoot's Tomcat servlet (i.e. the process you st
 4. Press `Shift + F9` or the use **Run**/Debug "Name of your task"
 5. Set breakpoints in the application where you need it
 6. Step through the process one step at a time
-
-
 
 [Running tests](#running-tests)
 You can run test with the following command:
