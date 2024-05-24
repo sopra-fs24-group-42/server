@@ -41,7 +41,6 @@ social gaming.
 ## Technologies <a id="technologies"></a>
 
 During the development of the back-end, we used the following technologies:
-
 * [Java](https://www.java.com/de/download/manual.jsp) - Programming language used in the server
 * [Spring Boot](https://spring.io/projects/spring-boot) - Spring Boot Framework used in the server
 * [WebSockets](https://docs.spring.io/spring-framework/reference/web/websocket.html) - WebSockets with SockJS and STOMP protocol
@@ -104,37 +103,51 @@ Moreover, this component interacts with PlayerService, LobbyService and classes 
 Please find a reference to a file 'GameService.java' here: [Game Service](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/service/GameService.java)
 
 ## Launch & Development <a id="launch--development"></a>
+### [Getting started](#getting-started)
+To start we recommend to get familiarezed with the following documentation and resources:  
+-   Documentation: https://docs.spring.io/spring-boot/docs/current/reference/html/index.html
+-   Guides: http://spring.io/guides
+-   Building a RESTful Web Service: http://spring.io/guides/gs/rest-service/
+-   Building REST services with Spring: https://spring.io/guides/tutorials/rest/
 
-Write down the steps a new developer joining your team would
-have to take to get started with your application. What commands are required to build and run your project locally? How can they run the tests? Do you have external dependencies or a database that needs to be running? How can they do releases?
+### [Prerequisites & installation](#prerequisites-installation)
+Download your IDE of choice (e.g., [IntelliJ](https://www.jetbrains.com/idea/download/), [Visual Studio Code](https://code.visualstudio.com/), or [Eclipse](http://www.eclipse.org/downloads/)). Make sure Java 17 is installed on your system (for Windows, please make sure your `JAVA_HOME` environment variable is set to the correct version of Java).
 
-## Building with Gradle
-You can use the local Gradle Wrapper to build the application.
+### IntelliJ
+If you consider to use IntelliJ as your IDE of choice, you can make use of your free educational license [here](https://www.jetbrains.com/community/education/#students).
+1. File -> Open... -> SoPra server template
+2. Accept to import the project as a `gradle project`
+3. To build right click the `build.gradle` file and choose `Run Build`
+
+### VS Code
+The following extensions can help you get started more easily:
+-   `vmware.vscode-spring-boot`
+-   `vscjava.vscode-spring-initializr`
+-   `vscjava.vscode-spring-boot-dashboard`
+-   `vscjava.vscode-java-pack`
+
+### [Running locally](#running-locally)
+### Building with Gradle
+Local Gradle Wrapper can be used to build the application.
 -   macOS: `./gradlew`
 -   Linux: `./gradlew`
 -   Windows: `./gradlew.bat`
 
 More Information about [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) and [Gradle](https://gradle.org/docs/).
 
-### Build
+#### Build
 
 ```bash
 ./gradlew build
 ```
 
-### Run
+#### Run
 
 ```bash
 ./gradlew bootRun
 ```
 
 You can verify that the server is running by visiting `localhost:8080` in your browser.
-
-### Test
-
-```bash
-./gradlew test
-```
 
 ### Development Mode
 You can start the backend in development mode, this will automatically trigger a new build and reload the application
@@ -152,7 +165,9 @@ If you want to avoid running all tests with every change, use the following comm
 
 `./gradlew build --continuous -xtest`
 
-## Debugging
+### [Debugging](#running-locally) 
+
+### Debugging
 If something is not working and/or you don't know what is going on. We recommend using a debugger and step-through the process step-by-step.
 
 To configure a debugger for SpringBoot's Tomcat servlet (i.e. the process you start with `./gradlew bootRun` command), do the following:
@@ -163,6 +178,14 @@ To configure a debugger for SpringBoot's Tomcat servlet (i.e. the process you st
 4. Press `Shift + F9` or the use **Run**/Debug "Name of your task"
 5. Set breakpoints in the application where you need it
 6. Step through the process one step at a time
+
+
+### [Running tests](#running-tests)
+You cn run test with such command:
+```bash
+./gradlew test
+```
+
 
 ## Roadmap
 In the Roadmap, we have specified the next steps that can benefit application development and be a valuable contribution to this project:
