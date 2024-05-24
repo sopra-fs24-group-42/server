@@ -53,7 +53,7 @@ Below is a table that lists all the mappings used for the Stomp Controller in ou
 |-------|------|--------------|---------|-----------|
 |/game|CONNECT|||upgrade to WebSocket connection|
 |/game|DISCONNECT|||remove WebSocket connection|
-|/topic/loby/{lobbyId}|SUBSCRIBE|Pathvariable|lobbyId|subscribes to a Lobby with lobbyId; update about the Lobby will be sent to all subscribed clients|
+|/topic/lobby/{lobbyId}|SUBSCRIBE|Pathvariable|lobbyId|subscribes to a Lobby with lobbyId; update about the Lobby will be sent to all subscribed clients|
 |/topic/lobby/{lobbyId}|UNSUBSCRIBE|Pathvariable|lobbyId|stop receiving lobby information|
 |/app/startgame|SEND|Body|lobbyId<Long>|starts game (distributes roles) and broadcasts the lobby|
 |/app/ready|SEND|Body|username<string>, gameState<string>|sets player to ready. If all Players in a lobby are ready the Lobby goes to the next gameState and resets the player to not ready|
