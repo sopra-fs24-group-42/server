@@ -215,5 +215,4 @@ In the next Sprint, we expect developers to complete the user stories left in th
 We want to thank our Teaching Assistant [Marco Leder](https://github.com/marcoleder) for guiding us through the course!
   
 ## License
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-Say how your project is licensed (see License guide3).
+This project is licensed under the GNU GPLv3 License.
