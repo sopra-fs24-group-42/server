@@ -57,7 +57,7 @@ Below is a table that lists all the mappings used for the Stomp Controller in ou
 |/topic/lobby/{lobbyId}|UNSUBSCRIBE|Pathvariable|lobbyId|stop receiving lobby information|
 |/app/startgame|SEND|Body|lobbyId<Long>|starts game (distributes roles) and broadcasts the lobby|
 |/app/ready|SEND|Body|username<string>, gameState<string>|sets player to ready. If all Players in a lobby are ready the Lobby goes to the next gameState and resets the player to not ready|
-|/app/{roleName}/nightaction|Send|Pathvariable, Body|roleName<string>, SelectionRequest|performs nightaction|
+|/app/{roleName}/nightaction|SEND|Pathvariable, Body|roleName<string>, SelectionRequest|performs nightaction|
 |/app/voting|SEND|Body|SelectionRequest|performs vote during voting phase|
 |/app/settings/{lobbyId}|SEND|Pathvariable, Body|LobbyId<long>, UpdatedGameSettings|updates lobby settings|
 
