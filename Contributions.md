@@ -15,8 +15,8 @@
 |---|---|---|---|
 |08.04.2024|Lukas|   |working on websockets|
 |08.04.2024|Rafael|[#48](https://github.com/sopra-fs24-group-42/client/issues/48), [#54](https://github.com/sopra-fs24-group-42/client/issues/54)   |Working on the Text to Speech API Setting it up On the Google Cloud and Testing it regarding Responsespeed and Settings|
-|09.04.2024|Polina|[#25](https://github.com/orgs/sopra-fs24-group-42/projects/1/views/1?pane=issue&itemId=57283946), [#26](https://github.com/sopra-fs24-group-42/server/issues/26) |Created classes, set up repositories|
-|09.04.2024|Polina|[#28](https://github.com/orgs/sopra-fs24-group-42/projects/1/views/1?pane=issue&itemId=57283946), [#27](https://github.com/sopra-fs24-group-42/server/issues/27)|Implemented http post methods to support lobby and player creation|
+|09.04.2024|Polina|[#25](https://github.com/sopra-fs24-group-42/server/issues/25), [#26](https://github.com/sopra-fs24-group-42/server/issues/26) |Created classes, set up repositories|
+|09.04.2024|Polina|[#28](https://github.com/sopra-fs24-group-42/server/issues/28), [#27](https://github.com/sopra-fs24-group-42/server/issues/27)|Implemented http post methods to support lobby and player creation|
 |10.04.2024|Charlotte|[#2](https://github.com/sopra-fs24-group-42/client/issues/2)|initial setup of views and entities, working on websocket implementation|
 
 ## <font style="color: #00d7ff">Week 2 *(11.04 – 17.04)*</font>
@@ -105,7 +105,7 @@
 |13.05.2024|Charlotte|[#103](https://github.com/sopra-fs24-group-42/client/issues/103)|added customized game instructions for each role in roleReveal view with a popup|
 |14.05.2024|Polina|[#153](https://github.com/sopra-fs24-group-42/client/issues/103)|worked on view for leaderboard|
 |15.05.2024|Charlotte|[#99](https://github.com/sopra-fs24-group-42/client/issues/99)|added table for top 3 voted players in voteReveal, implemented customized EndGame view for winners & losers and handle tie cases. Refactored splitting username displays from lobbyCode.|
-|13-14.05.2024| Rafael | [#125](https://github.com/sopra-fs24-group-42/client/issues/125),[#36](https://github.com/sopra-fs24-group-42/server/issues/36) |Finishing the Implementation of the Prenighnarration on it's own view and Gamephase. Improving the Narration of the TTS API by adding manually pauses, researching and trying different voices to futher include the players.
+|13-14.05.2024| Rafael | [#125](https://github.com/sopra-fs24-group-42/client/issues/125), [#36](https://github.com/sopra-fs24-group-42/client/issues/36) |Finishing the Implementation of the Prenighnarration on it's own view and Gamephase. Improving the Narration of the TTS API by adding manually pauses, researching and trying different voices to futher include the players.
 |15.05.2024| Rafael |[#168](https://github.com/sopra-fs24-group-42/client/issues/168)| Multiple smalle fixes, like implementing the logic that the third part of the API Call does not get played if the game will end in the next Phase on the Revealnight screen. Implementing the gamewinning logic into the client |
 
 ## <font style="color: #00d7ff">Week 7 *(16.05 – 24.05)*</font>
