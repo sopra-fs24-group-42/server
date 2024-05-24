@@ -92,14 +92,14 @@ Below is a list of critical methods to consider before continuing work on the pr
 goToNextPhase Method
 The goToNextPhase method is a crucial part of our game implementation. It transitions the game from one phase to another, ensuring the correct flow and synchronization between the server and the client. The method takes the lobbyId as a parameter to identify the specific lobby and its players. It uses a switch statement to determine which phase processing methods to execute based on the current game state. Here are the phases included in our implementation:
 
-WAITINGROOM: When a new game is created, all players are redirected to the waiting room. Here, they wait until all players have joined the lobby before the host can start the game.
-PRENIGHT: In this phase, all users are set to "not ready," a flag that helps transition from one phase to another, ensuring synchronization between the server and the client.
-NIGHT: During the Night phase, the werewolves, seers, protectors, and sacrifices make their actions, while the villagers click a button to simulate an action and keep their identities secret. After choices are made, the server receives the selections with the players' usernames. The outcomes are then calculated, and data for the next phase, REVEALNIGHT, is prepared.
-REVEALNIGHT: Upon entering the REVEALNIGHT phase, additional methods from PlayerService and LobbyService are invoked. A method responsible for checking if the game has ended is also called.
-DISCUSSION: In the Discussion phase, players discuss and try to identify potential werewolves. Upon entering this phase, all players' "Ready" flags are reset to False.
-VOTING: During the Voting phase, players vote for potential werewolves. The processVoting method is invoked to calculate who received the most votes. Additionally, the method ifHostDeadSetNewHost handles the scenario where the host is eliminated.
-REVEALVOTING: This phase resets the players' fields to ensure the correct flow of the game in the next round.
-ENDGAME: The final phase of the game, ENDGAME, resets the lobby and updates the leaderboard, allowing players to see the results of the round played.
+- WAITINGROOM: When a new game is created, all players are redirected to the waiting room. Here, they wait until all players have joined the lobby before the host can start the game.
+- PRENIGHT: In this phase, all users are set to "not ready," a flag that helps transition from one phase to another, ensuring synchronization between the server and the client.
+- NIGHT: During the Night phase, the werewolves, seers, protectors, and sacrifices make their actions, while the villagers click a button to simulate an action and keep their identities secret. After choices are made, the server receives the selections with the players' usernames. The outcomes are then calculated, and data for the next phase, REVEALNIGHT, is prepared.
+- REVEALNIGHT: Upon entering the REVEALNIGHT phase, additional methods from PlayerService and LobbyService are invoked. A method responsible for checking if the game has ended is also called.
+- DISCUSSION: In the Discussion phase, players discuss and try to identify potential werewolves. Upon entering this phase, all players' "Ready" flags are reset to False.
+- VOTING: During the Voting phase, players vote for potential werewolves. The processVoting method is invoked to calculate who received the most votes. Additionally, the method ifHostDeadSetNewHost handles the scenario where the host is eliminated.
+- REVEALVOTING: This phase resets the players' fields to ensure the correct flow of the game in the next round.
+- ENDGAME: The final phase of the game, ENDGAME, resets the lobby and updates the leaderboard, allowing players to see the results of the round played.
 
 // how it is correlated with others 
 
