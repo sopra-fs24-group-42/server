@@ -49,7 +49,7 @@ During the development of the back-end, we used the following technologies:
 * [Google cloud](https://cloud.google.com/?hl=en) - Handles the deployment
 
 ## High-Level Components <a id="high-level-components"></a>
-The Stomp Controller component handles the logic for receiving data from the client and invokes the relevant methods to process this data. Additionally, it calls a method to broadcast the lobby back to the client.
+The Stomp Controller component handles the logic for receiving data from the client and invokes the relevant methods to process this data. Additionally, it calls a method to broadcast the lobby back to the client. In this controller data transmission is managed over TCP using STOMP protocol.
 
 Below is a table that lists all the mappings used for the Stomp Controller in our application:
 
@@ -72,7 +72,7 @@ Please find a reference to a file here: [Stomp Controller](https://github.com/so
 Please find a reference to a file WebsocketService.java here: [Websocket Service](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/service/WebsocketService.java)
 
 ### Setup Controller <a id="setup-controller"></a> 
-
+Setup Controller includes handels the logic for receiving data from the client and invokes the relevant methods to prcess this data. In this controller, data transmission is managed through HTTP requests using the REST API.
 In this table we have compposed all the mappings for Setup Controller that we have used in our application: 
 
 |Mapping|Method|Parameter type|Parameter|Description| 
@@ -89,24 +89,23 @@ The GameService is one of the most crucial components in our application. It inc
 
 Below is a list of critical methods to consider before continuing work on the project:
 
-goToNextPhase: This method takes the lobbyId as a parameter to determine the players in the specific lobby. It includes a switch statement to identify which phase processing methods to execute. Our implementation includes the following phases:
+goToNextPhase Method
+The goToNextPhase method is a crucial part of our game implementation. It transitions the game from one phase to another, ensuring the correct flow and synchronization between the server and the client. The method takes the lobbyId as a parameter to identify the specific lobby and its players. It uses a switch statement to determine which phase processing methods to execute based on the current game state. Here are the phases included in our implementation:
 
-- WAITINGROOM: Upon the creation of a new game, all players are redirected to the waiting room. Here, they wait until all players have joined the lobby before the host can start the game.
-
-- PRENIGHT: In this phase, all users are set to "not ready," a flag that helps process the transition from one phase to another, ensuring synchronization between the server and the client.
-
-- NIGHT: In the Night phase, the werewolves, seers, protectors, and sacrifices make their actions, while the villagers click a button to simulate an action and try to keep their identities secret. After choices are made, the server receives the selections with the players' usernames. Additionally, the outcomes are calculated, and data for the next phase, REVEALNIGHT, is prepared.
-- **REVEALNIGHT**: 
-- **DISCUSSION**: 
-- **VOTING**: 
-- **REVEALVOTING**: 
-- **ENDGAME**: 
+WAITINGROOM: When a new game is created, all players are redirected to the waiting room. Here, they wait until all players have joined the lobby before the host can start the game.
+PRENIGHT: In this phase, all users are set to "not ready," a flag that helps transition from one phase to another, ensuring synchronization between the server and the client.
+NIGHT: During the Night phase, the werewolves, seers, protectors, and sacrifices make their actions, while the villagers click a button to simulate an action and keep their identities secret. After choices are made, the server receives the selections with the players' usernames. The outcomes are then calculated, and data for the next phase, REVEALNIGHT, is prepared.
+REVEALNIGHT: Upon entering the REVEALNIGHT phase, additional methods from PlayerService and LobbyService are invoked. A method responsible for checking if the game has ended is also called.
+DISCUSSION: In the Discussion phase, players discuss and try to identify potential werewolves. Upon entering this phase, all players' "Ready" flags are reset to False.
+VOTING: During the Voting phase, players vote for potential werewolves. The processVoting method is invoked to calculate who received the most votes. Additionally, the method ifHostDeadSetNewHost handles the scenario where the host is eliminated.
+REVEALVOTING: This phase resets the players' fields to ensure the correct flow of the game in the next round.
+ENDGAME: The final phase of the game, ENDGAME, resets the lobby and updates the leaderboard, allowing players to see the results of the round played.
 
 // how it is correlated with others 
 
 Moreover, this component interacts with PlayerService, LobbyService, and classes for each role. These are additional, smaller components that support GameService by providing access to extra methods for processing user input.
 
-Please find a reference to a file GameService.java here: [Game Service](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/service/GameService.java)
+Please find a reference to a file here: [Game Service](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/service/GameService.java)
 
 ## Launch & Development <a id="launch--development"></a>
 ### [Getting started](#getting-started)
