@@ -55,8 +55,8 @@ Stomp Controller Component cares the logic of receiving the data from client and
 
 In this table we have compposed all the mappings for Stomp Controller that we have used in our application: 
 
-|Mapping|Method|Parameter type|Parameter|Description| 
-|-------|------|--------------|---------|-----------|
+|Mapping|Method|Parameter type|Parameter|Description    | 
+|-------|------|--------------|---------|---------------|
 |/game|CONNECT|||upgrade to WebSocket connection|
 |/game|DISCONNECT|||remove WebSocket connection|
 |/topic/loby/{lobbyId}|SUBSCRIBE|Pathvariable|lobbyId|subscribes to a Lobby with lobbyId; update about the Lobby will be sent to all subscribed clients|
