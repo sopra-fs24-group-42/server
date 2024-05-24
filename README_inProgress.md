@@ -4,15 +4,11 @@
 
 Check out the front-end implementation [here](https://github.com/sopra-fs24-group-42/client).
 
-## 📖 Table of Contents
+## Table of Contents
 
 1. [Introduction](#introduction)  
 2. [Technologies](#technologies) 
-3. [High-Level Components](#high-level-components) 
-    - [Websocket Controller](#websocket-controller)
-    - [Websocket Service](#websocket-service)
-    - [Setup Controller](#setup-controller)
-    - [Game Service](#game-service)
+3. [High-Level Components](#high-level-components)
 4. [Launch & Development](#launch--development)
     - [Getting started](#getting-started)
     - [Prerequisites & installation](#prerequisites-installation)
