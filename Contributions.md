@@ -88,7 +88,7 @@
 |06.05.2024|Polina/Lukas|[#171](https://github.com/sopra-fs24-group-42/server/issues/171), [#172](https://github.com/sopra-fs24-group-42/server/issues/172)||
 |04.05.2024|Charlotte|[#114](https://github.com/sopra-fs24-group-42/client/issues/114)|added flag to other werewolves in nightAction for werewolves (so they know who not to kill)|
 |06.05.2024|Charlotte|[#97](https://github.com/sopra-fs24-group-42/client/issues/97), [#108](https://github.com/sopra-fs24-group-42/client/issues/108)|worked on rerouting back to waitingRoom after game ends, also reworked UI of all views (each view is now mobile-friendly and scrollanble (no specific dev tasks)|
-|06.05.2024| Rafael | [#124](https://github.com/sopra-fs24-group-42/client/issues/124), [#169](https://github.com/sopra-fs24-group-42/server/issues/169), [#125](https://github.com/sopra-fs24-group-42/client/issues/125), [#36](https://github.com/sopra-fs24-group-42/client/issues/36) |
+|06.05.2024| Rafael | [#124](https://github.com/sopra-fs24-group-42/client/issues/124), [#169](https://github.com/sopra-fs24-group-42/server/issues/169), [#125](https://github.com/sopra-fs24-group-42/client/issues/125), [#36](https://github.com/sopra-fs24-group-42/client/issues/36) |Implementing The TTS API on its own View with a new Gamephase for the Prenight Narration, aswell as doing futher Changes|
 |07.05.2024| Rafael | [#128](https://github.com/sopra-fs24-group-42/client/issues/128) | Implementing that multiple Players can be killed in RevealNight and that it gets handled correctly
 |   |   |   |   |
 
@@ -105,6 +105,8 @@
 |13.05.2024|Charlotte|[#103](https://github.com/sopra-fs24-group-42/client/issues/103)|added customized game instructions for each role in roleReveal view with a popup|
 |14.05.2024|Polina|[#153](https://github.com/sopra-fs24-group-42/client/issues/103)|worked on view for leaderboard|
 |15.05.2024|Charlotte|[#99](https://github.com/sopra-fs24-group-42/client/issues/99)|added table for top 3 voted players in voteReveal, implemented customized EndGame view for winners & losers and handle tie cases. Refactored splitting username displays from lobbyCode.|
+|13-14.05.2024| Rafael | [#125](https://github.com/sopra-fs24-group-42/client/issues/125),[#36](https://github.com/sopra-fs24-group-42/server/issues/36) |Finishing the Implementation of the Prenighnarration on it's own view and Gamephase. Improving the Narration of the TTS API by adding manually pauses, researching and trying different voices to futher include the players.
+|15.05.2024| Rafael |[#168](https://github.com/sopra-fs24-group-42/client/issues/168)| Multiple smalle fixes, like implementing the logic that the third part of the API Call does not get played if the game will end in the next Phase on the Revealnight screen. Implementing the gamewinning logic into the client |
 
 ## <font style="color: #00d7ff">Week 7 *(16.05 – 24.05)*</font>
 
