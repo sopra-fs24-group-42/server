@@ -65,7 +65,7 @@ Please find a reference to a file here: [Stomp Controller](https://github.com/so
 
 ### Websocket Service <a id="websocket-service"></a> 
 Websocket Service includes the logic that regulates broadcast of a lobby to client. In the function broadcastLobby we check is lobby is null at first to ensure that it exists and can be found in the database. Further, the dictionary is created by mapping the player information to its username. After setting the destination we can send the data with updations back to the client so the players can see game outcomes. 
-Please find a reference to a file WebsocketService.java here: [Websocket Service](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/service/WebsocketService.java)
+Please find a reference to a file WebsocketService.java here: [Websocket Service](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/service/WebsocketService.java).
 
 ### Setup Controller <a id="setup-controller"></a> 
 Setup Controller includes handels the logic for receiving data from the client and invokes the relevant methods to prcess this data. In this controller, data transmission is managed through HTTP requests using the REST API.
@@ -78,7 +78,7 @@ In this table we have compposed all the mappings for Setup Controller that we ha
 |/players/{username}|DELETE|Pathvariable||deletes a player|
 |/leaderboards/{maxNumberOfTopPlayers}|GET|Pathvariable|MaxNumberOfTopPlayers<int>|gets top MaxNumberOfTopPlayers Players|
 
-Please find a reference to a file here: [Setup Controller](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/controller/SetupController.java)
+Please find a reference to a file here: [Setup Controller](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/controller/SetupController.java).
 
 ### Game Service <a id="game-controller"></a> 
 The GameService is one of the most crucial components in our application. It includes the core logic of the game, from creating the lobby and processing user inputs that define the game's flow to concluding the outcomes needed for the game leaderboard.
@@ -102,7 +102,7 @@ The StompController class has direct access to the GameService and accesses Play
 
 Moreover, this GameService component interacts with PlayerService, LobbyService, and classes for each role. These are additional, smaller components that support GameService by providing access to extra methods for processing user input.
 
-Please find a reference to a file here: [Game Service](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/service/GameService.java)
+Please find a reference to a file here: [Game Service](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/service/GameService.java).
 
 ## Launch & Development <a id="launch--development"></a>
 ### [Getting started](#getting-started)
@@ -113,6 +113,7 @@ To start we recommend to get familiarezed with the following documentation and r
 -   Building REST services with Spring: https://spring.io/guides/tutorials/rest/
 
 ### [Prerequisites & installation](#prerequisites-installation)
+
 Download your IDE of choice (e.g., [IntelliJ](https://www.jetbrains.com/idea/download/), [Visual Studio Code](https://code.visualstudio.com/), or [Eclipse](http://www.eclipse.org/downloads/)). Make sure Java 17 is installed on your system (for Windows, please make sure your `JAVA_HOME` environment variable is set to the correct version of Java).
 
 ### IntelliJ
@@ -167,7 +168,7 @@ If you want to avoid running all tests with every change, use the following comm
 
 `./gradlew build --continuous -xtest`
 
-[Debugging](#running-locally)    
+### [Debugging](#running-locally)    
 If something is not working and/or you don't know what is going on. We recommend using a debugger and step-through the process step-by-step.
 
 To configure a debugger for SpringBoot's Tomcat servlet (i.e. the process you start with `./gradlew bootRun` command), do the following:
@@ -191,14 +192,12 @@ You can run test with the following command:
 In the Roadmap, we have specified the next steps that can benefit application development and be a valuable contribution to this project:
 - **Adding more roles** 
 At the moment, we have developed one of the most exciting roles, including Werewolf, Sacrifice, Seer, Villager, and Protector. In the future, we plan to improve the application by implementing the logic for the following roles:
-- Mayor: The Mayor typically has additional voting power during the day. Their vote might count as two, or they might have a tie-breaking ability. The Mayor's primary goal is to lead the village and help identify and eliminate werewolves while protecting the villagers.
-- Jester: The Jester is a chaotic role that aims to get themselves eliminated by the village. The Jester does not have any special powers other than their unique win condition. The Jester wins if they are successfully lynched by the villagers during the day. They do not win if killed by other means, such as by werewolves at night.
-- Sheriff: The Sheriff is a trusted figure with an investigative role within the village. Each night, the Sheriff can investigate one player to determine if they are a werewolf or not. The Sheriff must be careful when revealing their information to avoid being targeted by the werewolves. The Sheriff's goal is to identify and help eliminate the werewolves to protect the village.
-- Amour: The Amour is a role that connects two players, making them fall in love. At the beginning of the game, the Amour chooses two players who become Lovers. If one Lover dies, the other one dies of heartbreak as well. If both Lovers are villagers, their goal is to survive together and help the village win. If one Lover is a werewolf, their goal becomes to survive together, which usually means working against their respective teams to stay alive.
-- Swapper: The Swapper is a role that can change the outcomes of votes during the day. During the day, the Swapper can swap the votes between two players. This ability can be used to save an innocent player or trick the village into eliminating someone else. The Swapper's goal aligns with the village in rooting out and eliminating werewolves, using their power to manipulate votes strategically.
+    - Mayor: The Mayor typically has additional voting power during the day. Their vote might count as two, or they might have a tie-breaking ability. The Mayor's primary goal is to lead the village and help identify and eliminate werewolves while protecting the villagers.
+    - Jester: The Jester is a chaotic role that aims to get themselves eliminated by the village. The Jester does not have any special powers other than their unique win condition. The Jester wins if they are successfully lynched by the villagers during the day. They do not win if killed by other means, such as by werewolves at night.
+    - Sheriff: The Sheriff is a trusted figure with an investigative role within the village. Each night, the Sheriff can investigate one player to determine if they are a werewolf or not. The Sheriff must be careful when revealing their information to avoid being targeted by the werewolves. The Sheriff's goal is to identify and help eliminate the werewolves to protect the village.
+    - Amour: The Amour is a role that connects two players, making them fall in love. At the beginning of the game, the Amour chooses two players who become Lovers. If one Lover dies, the other one dies of heartbreak as well. If both Lovers are villagers, their goal is to survive together and help the village win. If one Lover is a werewolf, their goal becomes to survive together, which usually means working against their respective teams to stay alive.
+    - Swapper: The Swapper is a role that can change the outcomes of votes during the day. During the day, the Swapper can swap the votes between two players. This ability can be used to save an innocent player or trick the village into eliminating someone else. The Swapper's goal aligns with the village in rooting out and eliminating werewolves, using their power to manipulate votes strategically.
  
-The implementation of the new classes for roles has to follow the pattern that has been developed earlier and requires the development of new WebSocket endpoints.
-
 - **Leaderboard only for the cuurent lobby** 
 During Sprint 2, we implemented a leaderboard for all players to compare their results after each game round. However, we also believe that it is important to support competition within one lobby. This will enhance players' entertainment and bring more joy to the game. Players should be able to access the leaderboard to see the outcomes of the one game round just after it has ended. After that, players should be redirected to the waiting room, where the host can start the game or change the game settings.
 
