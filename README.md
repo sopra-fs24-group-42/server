@@ -129,7 +129,7 @@ The following extensions can help you get started more easily:
 -   `vscjava.vscode-spring-boot-dashboard`
 -   `vscjava.vscode-java-pack`
 
-### [Running locally](#running-locally)
+## [Running locally](#running-locally)
 ### Building with Gradle
 Local Gradle Wrapper can be used to build the application.
 -   macOS: `./gradlew`
@@ -168,7 +168,7 @@ If you want to avoid running all tests with every change, use the following comm
 
 `./gradlew build --continuous -xtest`
 
-### [Debugging]<a id="debugging"></a> 
+### Debugging
 If something is not working and/or you don't know what is going on. We recommend using a debugger and step-through the process step-by-step.
 
 To configure a debugger for SpringBoot's Tomcat servlet (i.e. the process you start with `./gradlew bootRun` command), do the following:
@@ -180,7 +180,7 @@ To configure a debugger for SpringBoot's Tomcat servlet (i.e. the process you st
 5. Set breakpoints in the application where you need it
 6. Step through the process one step at a time
 
-### [Running tests]<a id="running-tests"></a> 
+### Running tests
 You can run test with the following command:
 ```bash
 ./gradlew test
