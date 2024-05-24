@@ -6,13 +6,13 @@ Check out the front-end implementation [here](https://github.com/sopra-fs24-grou
 
 ## 📖 Table of Contents
 
-1. [Introduction](#introduction)
-2. [Technologies](#technologies)
-3. [High-Level Components](#high-level-components)
-- [Websocket Controller](#websocket-controller)
-- [Websocket Service](#websocket-service)
-- [Setup Controller](#setup-controller)
-- [Game Service](#game-service)
+1. [Introduction](#introduction)  
+2. [Technologies](#technologies) 
+3. [High-Level Components](#high-level-components) 
+    - [Websocket Controller](#websocket-controller)
+    - [Websocket Service](#websocket-service)
+    - [Setup Controller](#setup-controller)
+    - [Game Service](#game-service)
 4. [Launch & Development](#launch--development)
     - [Getting started](#getting-started)
     - [Prerequisites & installation](#prerequisites-installation)
@@ -39,8 +39,8 @@ web applications but also offers a solution to the limitations posed by physical
 social gaming.
 
 ## Technologies <a id="technologies"></a>
-
 During the development of the back-end, we used the following technologies:
+
 * [Java](https://www.java.com/de/download/manual.jsp) - Programming language used in the server
 * [Spring Boot](https://spring.io/projects/spring-boot) - Spring Boot Framework used in the server
 * [WebSockets](https://docs.spring.io/spring-framework/reference/web/websocket.html) - WebSockets with SockJS and STOMP protocol
@@ -49,11 +49,9 @@ During the development of the back-end, we used the following technologies:
 * [Google cloud](https://cloud.google.com/?hl=en) - Handles the deployment
 
 ## High-Level Components <a id="high-level-components"></a>
+The Stomp Controller component handles the logic for receiving data from the client and invokes the relevant methods to process this data. Additionally, it calls a method to broadcast the lobby back to the client.
 
-### Stomp Controller <a id="websocket-controller"></a> 
-Stomp Controller Component cares the logic of receiving the data from client and invokes the relevant methos in order it to be process. Additionally, it calls for a method to broadcast lobby back to the client.  
-
-In this table we have compposed all the mappings for Stomp Controller that we have used in our application: 
+Below is a table that lists all the mappings used for the Stomp Controller in our application:
 
 |Mapping|Method|Parameter type|Parameter|Description| 
 |-------|------|--------------|---------|-----------|
@@ -67,7 +65,7 @@ In this table we have compposed all the mappings for Stomp Controller that we ha
 |/app/voting|SEND|Body|SelectionRequest|performs vote during voting phase|
 |/app/settings/{lobbyId}|SEND|Pathvariable, Body|LobbyId<long>, UpdatedGameSettings|updates lobby settings|
 
-Please find a reference to a file StompController.java here: [Stomp Controller](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/controller/StompController.java)
+Please find a reference to a file here: [Stomp Controller](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/controller/StompController.java)
 
 ### Websocket Service <a id="websocket-service"></a> 
 
@@ -84,16 +82,20 @@ In this table we have compposed all the mappings for Setup Controller that we ha
 |/players/{username}|DELETE|Pathvariable||deletes a player|
 |/leaderboards/{maxNumberOfTopPlayers}|GET|Pathvariable|MaxNumberOfTopPlayers<int>|gets top MaxNumberOfTopPlayers Players|
 
-Please find a reference to a file SetupController.java here: [Setup Controller](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/controller/SetupController.java)
+Please find a reference to a file here: [Setup Controller](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/controller/SetupController.java)
 
 ### Game Service <a id="game-controller"></a> 
-GameService is one of the most important components in our application, as it includes the main logic of the game from the creation of the lobby, processing of the user input that defines the flow of the game as well as up to concluding the outcomes of the game needed to fill in the game leaderboard.
+The GameService is one of the most crucial components in our application. It includes the core logic of the game, from creating the lobby and processing user inputs that define the game's flow to concluding the outcomes needed for the game leaderboard.
 
-Here is the list of crucial methods that has to be considered before continue working on the project: 
-- goToNextPhase: this method takes as parameters the lobbyId in order to determine the players of the concrete lobby. This methods includes the switch construction that is required and helps to identify which phase processing methods to execute. In our implementation we have such phases: 
-- **WAITINGROOM**: upon creation of a new game all players are redirected to the waiting role. Here they wait until all the plyers have joined the lobby before the host can start the game. 
-- **PRENIGHT**: in this phase all users set to not ready, the flag, that helps to process the flow from one phase to another letting the server and the client be synchronized. 
-- **NIGHT**: in the Night phase the werevolwes, seeer, protectors and sacrifices make their action, whereas the villagers have to click a button to simulate an action and therefore try to keep thier identity as a secret. After their choice was made, the server receive the Selection of the players with the username of the player. Additionally, the outcomes of the has to be calculated, hence the data for the next phase which is the REVEALNIGHT is preparied. 
+Below is a list of critical methods to consider before continuing work on the project:
+
+goToNextPhase: This method takes the lobbyId as a parameter to determine the players in the specific lobby. It includes a switch statement to identify which phase processing methods to execute. Our implementation includes the following phases:
+
+- WAITINGROOM: Upon the creation of a new game, all players are redirected to the waiting room. Here, they wait until all players have joined the lobby before the host can start the game.
+
+- PRENIGHT: In this phase, all users are set to "not ready," a flag that helps process the transition from one phase to another, ensuring synchronization between the server and the client.
+
+- NIGHT: In the Night phase, the werewolves, seers, protectors, and sacrifices make their actions, while the villagers click a button to simulate an action and try to keep their identities secret. After choices are made, the server receives the selections with the players' usernames. Additionally, the outcomes are calculated, and data for the next phase, REVEALNIGHT, is prepared.
 - **REVEALNIGHT**: 
 - **DISCUSSION**: 
 - **VOTING**: 
@@ -102,7 +104,7 @@ Here is the list of crucial methods that has to be considered before continue wo
 
 // how it is correlated with others 
 
-Moreover, this component interacts with PlayerService, LobbyService and classes for each role. These are additional smaller components that  support GameService by giving access to extra methods that process user input. 
+Moreover, this component interacts with PlayerService, LobbyService, and classes for each role. These are additional, smaller components that support GameService by providing access to extra methods for processing user input.
 
 Please find a reference to a file GameService.java here: [Game Service](https://github.com/sopra-fs24-group-42/server/blob/main/src/main/java/ch/uzh/ifi/hase/soprafs24/service/GameService.java)
 
@@ -169,7 +171,7 @@ If you want to avoid running all tests with every change, use the following comm
 
 `./gradlew build --continuous -xtest`
 
-### Debugging
+[Debugging](#running-locally)    
 If something is not working and/or you don't know what is going on. We recommend using a debugger and step-through the process step-by-step.
 
 To configure a debugger for SpringBoot's Tomcat servlet (i.e. the process you start with `./gradlew bootRun` command), do the following:
@@ -182,7 +184,8 @@ To configure a debugger for SpringBoot's Tomcat servlet (i.e. the process you st
 6. Step through the process one step at a time
 
 
-### [Running tests]
+
+[Running tests](#running-tests)
 You can run test with the following command:
 ```bash
 ./gradlew test
