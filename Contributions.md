@@ -50,11 +50,11 @@
 |21.04.2024|Charlotte|[#73](https://github.com/sopra-fs24-group-42/client/issues/73), [#68](https://github.com/sopra-fs24-group-42/client/issues/68), [#69](https://github.com/sopra-fs24-group-42/client/issues/69), [#70](https://github.com/sopra-fs24-group-42/client/issues/70), [#71](https://github.com/sopra-fs24-group-42/client/issues/71)|finished roleReveal implementation, started on nightAction view for villagers, werewolves and seers|
 |22.04.2024|Charlotte|[#76](https://github.com/sopra-fs24-group-42/client/issues/76), [#78](https://github.com/sopra-fs24-group-42/client/issues/78), [#69](https://github.com/sopra-fs24-group-42/client/issues/69), [#79](https://github.com/sopra-fs24-group-42/client/issues/79), [#80](https://github.com/sopra-fs24-group-42/client/issues/80), [#21](https://github.com/sopra-fs24-group-42/client/issues/21)|finished nightAction views for all roles, implemented nightReveal view and started on voting view|
 |24.04.2024|Charlotte|[#27](https://github.com/sopra-fs24-group-42/client/issues/27), [#29](https://github.com/sopra-fs24-group-42/client/issues/29)|finished implementataion of voting view and votingReveal view|
-|23.04.2024|Rafael|, [#62](https://github.com/sopra-fs24-group-42/client/issues/62), [#53](https://github.com/sopra-fs24-group-42/client/issues/53) |Working on the API to Send the correct Request and send it dynamically and format the recieveing Data the recieveing    |
-|23.04.2024|Rafael|, [#57](https://github.com/sopra-fs24-group-42/client/issues/57)|  Implemented a version using Web Speech API since the authentification with the| Google TTS API still causes Problems.   |
-|23.04.2024|Rafael|, [#56](https://github.com/sopra-fs24-group-42/client/issues/56), [#46](https://github.com/sopra-fs24-group-42/client/issues/46)| Creating a basic View for the Narrationphase with Button and Autoplay, setting the standard voice as default request and Adding the funcionality to dynamically change the Text that gets sent to the API (randoms selection of predefined texts)|
-|24.04.2024|Rafael|, [#101](https://github.com/sopra-fs24-group-42/client/issues/101), [#102](https://github.com/sopra-fs24-group-42/client/issues/102)| Solving having the API in plain sight on Github by making it locally a enviromental variable and to inject said variable via Actions as a Github Secret for Deployment |
-|24.04.2024|Rafael|, [#56](https://github.com/sopra-fs24-group-42/client/issues/56)| Creating a final View for the Narrationphase with Button and Autoplay, |
+|23.04.2024|Rafael| [#62](https://github.com/sopra-fs24-group-42/client/issues/62), [#53](https://github.com/sopra-fs24-group-42/client/issues/53) |Working on the API to Send the correct Request and send it dynamically and format the recieveing Data the recieveing    |
+|23.04.2024|Rafael| [#57](https://github.com/sopra-fs24-group-42/client/issues/57)|  Implemented a version using Web Speech API since the authentification with the| Google TTS API still causes Problems.   |
+|23.04.2024|Rafael| [#56](https://github.com/sopra-fs24-group-42/client/issues/56), [#46](https://github.com/sopra-fs24-group-42/client/issues/46)| Creating a basic View for the Narrationphase with Button and Autoplay, setting the standard voice as default request and Adding the funcionality to dynamically change the Text that gets sent to the API (randoms selection of predefined texts)|
+|24.04.2024|Rafael| [#101](https://github.com/sopra-fs24-group-42/client/issues/101), [#102](https://github.com/sopra-fs24-group-42/client/issues/102)| Solving having the API in plain sight on Github by making it locally a enviromental variable and to inject said variable via Actions as a Github Secret for Deployment |
+|24.04.2024|Rafael| [#56](https://github.com/sopra-fs24-group-42/client/issues/56)| Creating a final View for the Narrationphase with Button and Autoplay, |
 
 
 ## <font style="color: #00d7ff">Week 3 *(25.04 – 26.04)*</font>
@@ -64,7 +64,7 @@
 |26.04.2024|Lukas||cleanup code for M3, work on deployment|
 |25.04.2024|Charlotte|[#81](https://github.com/sopra-fs24-group-42/client/issues/81), [#26](https://github.com/sopra-fs24-group-42/client/issues/26), [#25](https://github.com/sopra-fs24-group-42/client/issues/25), [#30](https://github.com/sopra-fs24-group-42/client/issues/30)|updated voting and voting reveal logic and implemented a DeadScreen view for players who were voted out or killed|
 |26.04.2024|Rafael|[#103](https://github.com/sopra-fs24-group-42/client/issues/103), [#104](https://github.com/sopra-fs24-group-42/client/issues/104) |Working on the Clickable Infopopup regarding gmerules and the assigned role |
-|26.04.2024| Rafael |Working on the Design and Testing different Deisgns|   |
+|26.04.2024| Rafael || Working on the Design and Testing different Deisgns |
 
 ## <font style="color: #00d7ff">Week 4 *(27.04 – 03.05)*</font>
 
