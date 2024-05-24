@@ -54,6 +54,7 @@ During the development of the back-end, we used the following technologies:
 Stomp Controller Component cares the logic of receiving the data from client and invokes the relevant methos in order it to be process. Additionally, it calls for a method to broadcast lobby back to the client.  
 
 In this table we have compposed all the mappings for Stomp Controller that we have used in our application: 
+
 |Mapping|Method|Parameter type|Parameter|Description| 
 |/game|CONNECT|||upgrade to WebSocket connection|
 |/game|DISCONNECT|||remove WebSocket connection|
@@ -74,6 +75,7 @@ Please find a reference to a file 'WebsocketService.java' here: [Websocket Servi
 ### Setup Controller <a id="setup-controller"></a> 
 
 In this table we have compposed all the mappings for Setup Controller that we have used in our application: 
+
 |Mapping|Method|Parameter type|Parameter|Description| 
 |/players|POST|Body|username<string>, lobbyCode<string>|creates a new player|
 |/lobbies|POST|Body|hostUsername<string>, numberOfPlayers<int>|creates a new lobby|
